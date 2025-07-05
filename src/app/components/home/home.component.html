@@ -1,0 +1,52 @@
+<div class="home-container">
+  <div class="interface-card">
+    <div class="hero">
+      <h1>Encuentra a tu compañero emocional perfecto</h1>
+      <p>Nuestro sistema de matching emocional te ayuda a conectar con mascotas que se adaptan a tu personalidad</p>
+      
+      <div class="value-cards">
+        <div class="value-card">
+          <i class="fas fa-heartbeat"></i>
+          <h4>Matching Emocional</h4>
+          <p>Conexión basada en personalidad</p>
+        </div>
+        
+        <div class="value-card">
+          <i class="fas fa-paw"></i>
+          <h4>Adopciones Felices</h4>
+          <p>Historias de éxito garantizado</p>
+        </div>
+        
+        <div class="value-card">
+          <i class="fas fa-hand-holding-heart"></i>
+          <h4>Proceso Seguro</h4>
+          <p>Certificamos cada adopción</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="pets-grid">
+      <div *ngFor="let mascota of mascotasDestacadas" class="pet-card" (click)="scrollToSection('detalle-mascota')">
+        <div class="pet-image">
+          <i [class]="mascota.image || 'fas fa-paw'"></i>
+          <div class="pet-badge">{{ mascota.emotionalProfile }}</div>
+        </div>
+        <div class="pet-info">
+          <h3>{{ mascota.name }}</h3>
+          <div class="pet-meta">
+            <span>{{ mascota.age }} años</span>
+            <span>{{ mascota.type }}</span>
+            <span>{{ mascota.size }}</span>
+          </div>
+          <p>{{ mascota.shortDescription }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="cta-button">
+      <button class="btn btn-secondary" (click)="scrollToSection('encuesta')">
+        <i class="fas fa-clipboard-list"></i> Realizar Encuesta Emocional
+      </button>
+    </div>
+  </div>
+</div>

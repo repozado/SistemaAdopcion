@@ -1,0 +1,40 @@
+<div class="mascotas-container">
+  <div class="mascotas-grid">
+    <div class="mascota-card" *ngFor="let mascota of mascotas; let i = index">
+      <div class="mascota-header" [style.background-color]="getProfileColor(mascota.emotionalProfile)">
+        <div class="mascota-badge">
+          {{ mascota.emotionalProfile }}
+        </div>
+        <div class="mascota-image">
+          <i [class]="mascota.image || 'fas fa-paw'"></i>
+        </div>
+      </div>
+      
+      <div class="mascota-body">
+        <h3>{{ mascota.name }}</h3>
+        
+        <div class="mascota-meta">
+          <span><i class="fas fa-dog" *ngIf="mascota.type === 'Perro'"></i>
+                <i class="fas fa-cat" *ngIf="mascota.type === 'Gato'"></i>
+                {{ mascota.type }}</span>
+          <span><i class="fas fa-birthday-cake"></i> {{ mascota.age }} años</span>
+          <span><i class="fas fa-ruler-combined"></i> {{ mascota.size }}</span>
+        </div>
+        
+        <p class="mascota-description">{{ mascota.description }}</p>
+        
+        <div class="mascota-match">
+          <span>Compatibilidad:</span>
+          <div class="match-bar">
+            <div class="match-progress" [style.width.%]="mascota.compatibility"></div>
+          </div>
+          <span class="match-percent">{{ mascota.compatibility }}%</span>
+        </div>
+        
+        <button class="btn-adoptar" (click)="verDetalle(i)">
+          <i class="fas fa-heart"></i> Conocer más
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

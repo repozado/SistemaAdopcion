@@ -1,0 +1,40 @@
+<footer class="soulpet-footer" *ngIf="showFooter">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <!-- Columna 1: Logo y descripción -->
+      <div class="footer-column">
+        <div class="footer-logo" routerLink="/home">
+          <img src="logosoulpet.png" alt="Soulpet Logo">
+          <span>Soulpet</span>
+        </div>
+        <p class="footer-description">
+          Conectando corazones humanos con almas peludas desde 2023. Encuentra tu compañero emocional perfecto.
+        </p>
+        <div class="social-links">
+          <a *ngFor="let social of socialIcons" [href]="social.url" target="_blank" rel="noopener">
+            <i [class]="social.icon"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Columnas de enlaces -->
+      <div class="footer-column" *ngFor="let section of getFooterSections()">
+        <h3>{{section.title}}</h3>
+        <ul>
+          <li *ngFor="let link of section.links">
+            <a [href]="link.url">{{link.text}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {{currentYear}} Soulpet. Todos los derechos reservados.</p>
+      <div class="payment-methods">
+        <i class="fab fa-cc-visa"></i>
+        <i class="fab fa-cc-mastercard"></i>
+        <i class="fab fa-cc-paypal"></i>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,229 @@
+/* navbar.component.css */
+:host {
+  --primary: #A78BFA;       /* Color lavanda principal */
+  --secondary: #FCAFAF;     /* Color coral secundario */
+  --light: #FFF7EC;         /* Fondo crema claro */
+  --dark: #292F36;          /* Texto oscuro */
+  --text: #5E5E5E;          /* Texto gris */
+  --radius: 12px;           /* Bordes redondeados */
+  --transition: all 0.3s ease; /* Transición suave */
+}
+
+/* Estructura principal */
+.soulpet-navbar {
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Poppins', 'Baloo 2', sans-serif;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Logo */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.navbar-brand:hover {
+  opacity: 0.9;
+}
+
+.logo {
+  height: 40px;
+  transition: var(--transition);
+}
+
+/* Enlaces del menú */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 20px;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background-color: var(--primary);
+  color: white;
+}
+
+.nav-link i {
+  font-size: 0.9rem;
+}
+
+/* Enlace de administración */
+.admin-link {
+  color: var(--secondary);
+}
+
+.admin-link:hover,
+.admin-link.active {
+  background-color: var(--secondary);
+  color: white;
+}
+
+/* Botón de Login */
+.login-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+  margin-left: 10px;
+  font-size: 0.9rem;
+}
+
+.login-btn:hover {
+  background-color: #8c6df9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(167, 139, 250, 0.3);
+}
+
+.login-btn i {
+  font-size: 0.9rem;
+}
+
+/* Menú hamburguesa (mobile) */
+.navbar-toggler {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Menú móvil */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: white;
+  padding: 0 20px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+.mobile-menu.open {
+  display: flex;
+  max-height: 500px;
+}
+
+.mobile-link {
+  padding: 12px 15px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+}
+
+.mobile-link:hover,
+.mobile-link.active {
+  color: var(--primary);
+  background-color: var(--light);
+}
+
+.mobile-link i {
+  width: 20px;
+  text-align: center;
+}
+
+.mobile-login-btn {
+  width: calc(100% - 30px);
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 12px;
+  margin: 15px auto 0;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.mobile-login-btn:hover {
+  background-color: #8c6df9;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-toggler {
+    display: block;
+  }
+
+  .login-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-container {
+    padding: 12px 15px;
+  }
+
+  .navbar-brand span {
+    font-size: 1.3rem;
+  }
+
+  .logo {
+    height: 35px;
+  }
+}
+
+/* Animación para el icono del menú hamburguesa */
+.navbar-toggler i {
+  transition: transform 0.3s ease;
+}
+
+.navbar-toggler:hover i {
+  transform: scale(1.1);
+}

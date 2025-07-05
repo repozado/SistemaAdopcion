@@ -1,0 +1,156 @@
+<div class="contact-container">
+  <div class="card-header">
+    <i class="fas fa-envelope"></i>
+    <h3>Página de Contacto</h3>
+  </div>
+  
+  <div class="contact-grid">
+    <!-- Columna de Información -->
+    <div class="contact-info">
+      <!-- Dirección -->
+      <div class="info-section">
+        <div class="info-icon">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="info-content">
+          <h4>Dirección</h4>
+          <p>Paez y Sucre, Machala, Ecuador</p>
+        </div>
+      </div>
+      
+      <!-- Teléfono -->
+      <div class="info-section">
+        <div class="info-icon">
+          <i class="fas fa-phone"></i>
+        </div>
+        <div class="info-content">
+          <h4>Teléfono</h4>
+          <p>+593 98 765 4321</p>
+        </div>
+      </div>
+      
+      <!-- Email -->
+      <div class="info-section">
+        <div class="info-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="info-content">
+          <h4>Email</h4>
+          <p>contactosoulpet.org</p>
+        </div>
+      </div>
+      
+      <!-- Horario -->
+      <div class="info-section">
+        <div class="info-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="info-content">
+          <h4>Horario de Atención</h4>
+          <p>Lunes a Viernes: 9:00 - 18:00</p>
+          <p>Sábados: 9:00 - 14:00</p>
+          <p>Domingos: Cerrado</p>
+        </div>
+      </div>
+      
+      <!-- Redes Sociales -->
+      <div class="info-section">
+        <div class="info-icon">
+          <i class="fas fa-share-alt"></i>
+        </div>
+        <div class="info-content">
+          <h4>Síguenos</h4>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Columna de Formulario -->
+    <div class="contact-form">
+      <h3>Envíanos un Mensaje</h3>
+      <form (ngSubmit)="onSubmit()">
+        <!-- Nombre -->
+        <div class="form-group">
+          <label>Nombre Completo *</label>
+          <input 
+            [(ngModel)]="contactForm.name"
+            name="name"
+            class="form-control" 
+            type="text" 
+            required
+          />
+        </div>
+        
+        <!-- Email y Teléfono -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Correo Electrónico *</label>
+            <input 
+              [(ngModel)]="contactForm.email"
+              name="email"
+              class="form-control" 
+              type="email" 
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input 
+              [(ngModel)]="contactForm.phone"
+              name="phone"
+              class="form-control" 
+              type="tel"
+            />
+          </div>
+        </div>
+        
+        <!-- Asunto -->
+        <div class="form-group">
+          <label>Asunto *</label>
+          <select 
+            [(ngModel)]="contactForm.subject"
+            name="subject"
+            class="form-control" 
+            required
+          >
+            <option value="" disabled selected>Selecciona...</option>
+            <option *ngFor="let subject of subjects" [value]="subject">
+              {{ subject }}
+            </option>
+          </select>
+        </div>
+        
+        <!-- Mensaje -->
+        <div class="form-group">
+          <label>Mensaje *</label>
+          <textarea 
+            [(ngModel)]="contactForm.message"
+            name="message"
+            class="form-control" 
+            rows="5" 
+            required
+          ></textarea>
+        </div>
+        
+        <!-- Botón de enviar -->
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i> Enviar Mensaje
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Mapa (opcional) -->
+  <div class="map-section">
+    <h3>Ubícanos</h3>
+    <div class="map-placeholder">
+      <i class="fas fa-map-marked-alt"></i>
+      <p>Mapa interactivo aquí (puedes usar Google Maps)</p>
+    </div>
+  </div>
+</div>
