@@ -45,7 +45,7 @@ export class MascotasService {
 }
 
 export interface Mascota {
-  id: number;
+  id_mascota: number;
   nombre: string;
   especie: string;
   edad: number;

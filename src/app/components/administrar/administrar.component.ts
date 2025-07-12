@@ -102,13 +102,13 @@ export class AdministrarComponent  implements OnInit{
   }
 
   confirmDelete(id: number): void {
-    this.mascotaToDelete = this.mascotas.find(m => m.id === id) || null;
+    this.mascotaToDelete = this.mascotas.find(m => m.id_mascota === id) || null;
     this.showConfirmModal = true;
   }
 
   deleteMascota(): void {
     if (this.mascotaToDelete) {
-      this.mascotas = this.mascotas.filter(m => m.id !== this.mascotaToDelete?.id);
+      this.mascotas = this.mascotas.filter(m => m.id_mascota !== this.mascotaToDelete?.id_mascota);
       this.filterMascotas();
       this.showConfirmModal = false;
       this.mascotaToDelete = null;
@@ -120,7 +120,7 @@ export class AdministrarComponent  implements OnInit{
 
   private generateId(): number {
     return this.mascotas.length > 0 
-      ? Math.max(...this.mascotas.map(m => m.id)) + 1 
+      ? Math.max(...this.mascotas.map(m => m.id_mascota)) + 1 
       : 1;
   }
 }

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MascotasService } from '../../services/mascotas.service';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Mascota, MascotasService } from '../../services/mascotas.service';
 
 @Component({
   selector: 'app-petcard',
@@ -10,18 +10,24 @@ import { MascotasService } from '../../services/mascotas.service';
 })
 export class PetcardComponent {
 
-  mascota:any;
+  mascota?: Mascota;
 
-  constructor(private route: ActivatedRoute, private _MascotaService:MascotasService){
-
-  }
+  private _MascotaService = inject(MascotasService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   ngOnInit(): void {
-    const id = +this.route.snapshot.paramMap.get('id')!;
-    this.mascota = this._MascotaService.getMascotas();
-    this.mascota = this.mascota[id];
-  }
+  const id = +this.route.snapshot.paramMap.get('id')!;
+  console.log('ID de la mascota:', id);
+  this._MascotaService.getById(id).subscribe({
+    next: (data) => this.mascota = data,
+    error: (err) => console.error(err)
+  });
+}
 
+volver() {
+  this.router.navigate(['/mascotas']);
+}
    getProfileColor(profile: string): string {
     const colors: {[key: string]: string} = {
       'Aventurero': '#A78BFA',

@@ -36,8 +36,9 @@ export class MascotasComponent implements OnInit{
   return colors[profile] || '#A78BFA'; // Color por defecto
   }
 
-  verDetalle(idx: number){
-    this.router.navigate(['/mascota', idx])
-  }
+  verDetalle(mascota: Mascota) {
+  console.log('Mascota:', mascota);
+  this.router.navigate(['/mascota', mascota.id_mascota]);
+}
   
 }

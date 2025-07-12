@@ -171,6 +171,31 @@
 }
 
 .btn-primary:hover {
+  background-color: var(--accent);
+  color: var(--dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.btn-volver {
+  background-color: var(--secondary);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  margin-top: 5px;
+}
+
+.btn-volver:hover {
+  background-color: var(--accent);
+  color: var(--dark);
   transform: translateY(-2px);
   box-shadow: var(--shadow);
 }
