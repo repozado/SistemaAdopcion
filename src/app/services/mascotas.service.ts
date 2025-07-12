@@ -50,7 +50,7 @@ export interface Mascota {
   especie: string;
   edad: number;
   sexo: string;
-  raza: string;
+  tamano: string;
   imagen: string;
   descripcion: string;
   compatabilidad: number;

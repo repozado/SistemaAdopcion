@@ -48,7 +48,7 @@ export class AdministrarComponent  implements OnInit{
       result = result.filter(m => 
         m.nombre.toLowerCase().includes(term) || 
         m.perfilEmocional.toLowerCase().includes(term) ||
-        m.raza.toLowerCase().includes(term)
+        m.tamano.toLowerCase().includes(term)
       );
     }
     

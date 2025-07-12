@@ -10,7 +10,7 @@
       <div class="pet-image-container">
         <div class="pet-image">
           <i [class]="mascota.image || 'fas fa-dog'"></i>
-          <div class="pet-badge">{{ mascota.emotionalProfile }}</div>
+          <div class="pet-badge">{{ mascota.perfilEmocional }}</div>
         </div>
       </div>
       
@@ -20,9 +20,9 @@
           <h2>{{ mascota.name }}</h2>
           <div class="pet-meta">
             <span><i class="fas" [class.fa-dog]="mascota.type === 'Perro'" [class.fa-cat]="mascota.type === 'Gato'"></i> {{ mascota.type }}</span>
-            <span><i class="fas fa-birthday-cake"></i> {{ mascota.age }} años</span>
-            <span><i class="fas fa-ruler"></i> {{ mascota.size }}</span>
-            <span><i class="fas fa-venus-mars"></i> {{ mascota.sex }}</span>
+            <span><i class="fas fa-birthday-cake"></i> {{ mascota.edad }} años</span>
+            <span><i class="fas fa-ruler"></i> {{ mascota.tamano }}</span>
+            <span><i class="fas fa-venus-mars"></i> {{ mascota.sexo }}</span>
           </div>
         </div>
         
