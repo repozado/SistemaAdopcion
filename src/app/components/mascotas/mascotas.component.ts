@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Mascota, MascotasService } from '../../services/mascotas.service';
 
@@ -8,18 +8,22 @@ import { Mascota, MascotasService } from '../../services/mascotas.service';
   templateUrl: './mascotas.component.html',
   styleUrl: './mascotas.component.css'
 })
-export class MascotasComponent {
-
-  mascotas:Mascota[] = [];
-
-  constructor(private _mascotasService:MascotasService, private route: Router){
-
-  }
+export class MascotasComponent implements OnInit{
+  mascotas: Mascota[] = [];
+  private mascotaService = inject(MascotasService);
+  private router = inject(Router)
 
   ngOnInit()
   {
-    this.mascotas = this._mascotasService.getMascotas();
-    console.log("MascotasComponent initialized");
+    this.mascotaService.getAll().subscribe({
+      next: (data) => {
+        this.mascotas = data;
+        console.log('Mascotas cargadas:', this.mascotas);
+      },
+      error: (error) => {
+        console.error('Error al cargar las mascotas:', error);
+      }
+    });
   }
 
   getProfileColor(profile: string): string {
@@ -33,7 +37,7 @@ export class MascotasComponent {
   }
 
   verDetalle(idx: number){
-    this.route.navigate(['/mascota', idx])
+    this.router.navigate(['/mascota', idx])
   }
   
 }

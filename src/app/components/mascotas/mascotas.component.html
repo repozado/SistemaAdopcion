@@ -1,34 +1,34 @@
 <div class="mascotas-container">
   <div class="mascotas-grid">
     <div class="mascota-card" *ngFor="let mascota of mascotas; let i = index">
-      <div class="mascota-header" [style.background-color]="getProfileColor(mascota.emotionalProfile)">
+      <div class="mascota-header" [style.background-color]="getProfileColor(mascota.perfilEmocional)">
         <div class="mascota-badge">
-          {{ mascota.emotionalProfile }}
+          {{ mascota.perfilEmocional }}
         </div>
         <div class="mascota-image">
-          <i [class]="mascota.image || 'fas fa-paw'"></i>
+          <i [class]="mascota.imagen || 'fas fa-paw'"></i>
         </div>
       </div>
       
       <div class="mascota-body">
-        <h3>{{ mascota.name }}</h3>
+        <h3>{{ mascota.nombre }}</h3>
         
         <div class="mascota-meta">
-          <span><i class="fas fa-dog" *ngIf="mascota.type === 'Perro'"></i>
-                <i class="fas fa-cat" *ngIf="mascota.type === 'Gato'"></i>
-                {{ mascota.type }}</span>
-          <span><i class="fas fa-birthday-cake"></i> {{ mascota.age }} años</span>
-          <span><i class="fas fa-ruler-combined"></i> {{ mascota.size }}</span>
+          <span><i class="fas fa-dog" *ngIf="mascota.especie === 'Perro'"></i>
+                <i class="fas fa-cat" *ngIf="mascota.especie === 'Gato'"></i>
+                {{ mascota.especie }}</span>
+          <span><i class="fas fa-birthday-cake"></i> {{ mascota.edad }} años</span>
+          <span><i class="fas fa-ruler-combined"></i> {{ mascota.raza }}</span>
         </div>
         
-        <p class="mascota-description">{{ mascota.description }}</p>
+        <p class="mascota-description">{{ mascota.descripcion }}</p>
         
         <div class="mascota-match">
           <span>Compatibilidad:</span>
           <div class="match-bar">
-            <div class="match-progress" [style.width.%]="mascota.compatibility"></div>
+            <div class="match-progress" [style.width.%]="mascota.compatabilidad"></div>
           </div>
-          <span class="match-percent">{{ mascota.compatibility }}%</span>
+          <span class="match-percent">{{ mascota.compatabilidad}}%</span>
         </div>
         
         <button class="btn-adoptar" (click)="verDetalle(i)">

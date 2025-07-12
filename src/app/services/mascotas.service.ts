@@ -1,26 +1,39 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MascotasService {
 
-  constructor() { }
+  private http=inject(HttpClient);
+  private apiUrl= 'http://localhost:3000/api/mascotas';
+
+  getAll():Observable<Mascota[]>{
+    return this.http.get<Mascota[]>(this.apiUrl);
+  }
+
+  getById(id: number): Observable<Mascota>{
+    return this.http.get<Mascota>(`${this.apiUrl}/${id}`);
+  }
+
+  create(mascota: Mascota): Observable<Mascota>{
+    return this.http.post<Mascota>(this.apiUrl, mascota);
+  }
+
+  update(id: number, mascota: Mascota): Observable<Mascota>{
+    return this.http.put<Mascota>(`${this.apiUrl}/${id}`, mascota);
+  }
+
+  delete(id: number): Observable<any>{
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
 
   private mascotas:any[] = [
     {
-        id: 1,
-        name: "Rocky",
-        type: "Perro",
-        age: 3,
-        sex: "Macho",
-        size: "Grande",
-        emotionalProfile: "Aventurero",
-        image: 'fas fa-dog',
-        description: "Perro enérgico que ama explorar",
-        compatibility: 0,
-        requerimientos: "Necesita mucho ejercicio y espacio para correr",
-        estado: "Disponible"
+        
     }
   ]
 
@@ -33,15 +46,16 @@ export class MascotasService {
 
 export interface Mascota {
   id: number;
-  name: string;
-  type: string;
-  age: number;
+  nombre: string;
+  especie: string;
+  edad: number;
   sexo: string;
-  size: string;
-  emotionalProfile: string;
-  image: string;
-  description: string;
-  compatibility: number;
+  raza: string;
+  imagen: string;
+  descripcion: string;
+  compatabilidad: number;
   requerimientos: string;
-  status: string;
+  estado_adopcion: string;
+  lugar_actual: string;
+  perfilEmocional: string;
 }

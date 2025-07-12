@@ -15,7 +15,6 @@ export class AdministrarComponent  implements OnInit{
   showModal: boolean = false;
   showConfirmModal: boolean = false;
   isEditing: boolean = false;
-  currentMascota: Mascota = this.createEmptyMascota();
   mascotaToDelete: Mascota | null = null;
   
   // Paginación
@@ -47,15 +46,15 @@ export class AdministrarComponent  implements OnInit{
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
       result = result.filter(m => 
-        m.name.toLowerCase().includes(term) || 
-        m.emotionalProfile.toLowerCase().includes(term) ||
-        m.type.toLowerCase().includes(term)
+        m.nombre.toLowerCase().includes(term) || 
+        m.perfilEmocional.toLowerCase().includes(term) ||
+        m.raza.toLowerCase().includes(term)
       );
     }
     
     // Aplicar filtro de estado
     if (this.selectedFilter) {
-      result = result.filter(m => m.status === this.selectedFilter);
+      result = result.filter(m => m.estado_adopcion === this.selectedFilter);
     }
     
     this.filteredMascotas = result;
@@ -86,13 +85,11 @@ export class AdministrarComponent  implements OnInit{
 
   openAddModal(): void {
     this.isEditing = false;
-    this.currentMascota = this.createEmptyMascota();
     this.showModal = true;
   }
 
   openEditModal(mascota: Mascota): void {
     this.isEditing = true;
-    this.currentMascota = { ...mascota };
     this.showModal = true;
   }
 
@@ -101,18 +98,6 @@ export class AdministrarComponent  implements OnInit{
   }
 
   handleSubmit(): void {
-    if (this.isEditing) {
-      // Lógica para actualizar mascota
-      const index = this.mascotas.findIndex(m => m.id === this.currentMascota.id);
-      if (index !== -1) {
-        this.mascotas[index] = { ...this.currentMascota };
-      }
-    } else {
-      this.currentMascota.id = this.generateId();
-      this.mascotas.push({ ...this.currentMascota });
-    }
-    
-    this.filterMascotas();
     this.showModal = false;
   }
 
@@ -130,21 +115,7 @@ export class AdministrarComponent  implements OnInit{
     }
   }
 
-  private createEmptyMascota(): Mascota {
-    return {
-      id: 0,
-      name: '',
-      type: 'Perro',
-      age: 1,
-      sexo: 'Macho',
-      size: 'Mediano',
-      emotionalProfile: 'Aventurero',
-      image: 'fas fa-dog',
-      description: '',
-      compatibility: 0,
-      requerimientos: '',
-      status: 'Disponible'
-    };
+  private createEmptyMascota(): void {
   }
 
   private generateId(): number {

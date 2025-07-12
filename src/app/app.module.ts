@@ -14,6 +14,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { PetcardComponent } from './components/petcard/petcard.component';
 import { ValuecardComponent } from './components/valuecard/valuecard.component';
 import { FormsModule } from '@angular/forms';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     FormsModule
   ],
-  providers: [],
+  providers: [provideHttpClient()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
