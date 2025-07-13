@@ -59,3 +59,4 @@ export interface Mascota {
   lugar_actual: string;
   perfilEmocional: string;
 }
+
