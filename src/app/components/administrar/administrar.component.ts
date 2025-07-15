@@ -127,6 +127,7 @@ export class AdministrarComponent  implements OnInit{
       },
       error: (error) => {
         console.error('Error al crear la mascota:', error);
+        console.log('Datos enviados:', this.currentMascota);
         this.message = 'Error al crear la mascota.';
         this.closeModal();
         console.log('Error al crear la mascota:', this.currentMascota)
