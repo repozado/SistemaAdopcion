@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { AdministrarComponent } from './components/administrar/administrar.component';
@@ -7,10 +7,14 @@ import { FaqComponent } from './components/faq/faq.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { MascotasComponent } from './components/mascotas/mascotas.component';
 import { PetcardComponent } from './components/petcard/petcard.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './guarrds/auth.guard';
 
 const routes: Routes = [
+  {path: 'login', component: LoginComponent},
+
   {path: 'home', component:HomeComponent},
-  {path: 'administrar', component:AdministrarComponent},
+  {path: 'administrar', component:AdministrarComponent, canActivate: [AuthGuard]},
   {path: 'mascotas', component:MascotasComponent},
   {path: 'encuesta', component:EncuestaComponent},
   {path: 'faq', component:FaqComponent},

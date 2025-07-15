@@ -130,6 +130,7 @@ export class AdministrarComponent  implements OnInit{
         console.log('Datos enviados:', this.currentMascota);
         this.message = 'Error al crear la mascota.';
         this.closeModal();
+        console.log('Error al crear la mascota:', this.currentMascota)
         this.setMessage('Error al crear la mascota.');
       }
     });
@@ -167,6 +168,7 @@ export class AdministrarComponent  implements OnInit{
         this.idMascota = 0;
         this.closeModal();
         this.loadMascotas();
+        this.showConfirmModal = false;
         this.setMessage('Mascota eliminada correctamente.');
 
       },

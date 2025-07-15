@@ -14,10 +14,18 @@ import { FooterComponent } from './components/footer/footer.component';
 import { PetcardComponent } from './components/petcard/petcard.component';
 import { ValuecardComponent } from './components/valuecard/valuecard.component';
 import { FormsModule } from '@angular/forms';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient } from '@angular/common/http';
+
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './guarrds/auth.guard';
+import { AuthService } from './services/auth.service';
+import { Token } from '@angular/compiler';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+
 
 @NgModule({
   declarations: [
+    LoginComponent,
     AppComponent,
     HomeComponent,
     EncuestaComponent,
@@ -28,14 +36,21 @@ import { provideHttpClient } from '@angular/common/http';
     NavbarComponent,
     FooterComponent,
     PetcardComponent,
-    ValuecardComponent
+    ValuecardComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
-  providers: [provideHttpClient()],
+  providers: [AuthGuard, AuthService, provideHttpClient(),
+    {provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
