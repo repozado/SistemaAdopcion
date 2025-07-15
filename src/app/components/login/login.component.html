@@ -1,0 +1,20 @@
+// src/app/components/login/login.component.html
+<div class="login-modal">
+  <h2>Iniciar Sesión</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        placeholder="usuario@ejemplo.com"
+        required
+        class="form-control"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">Entrar</button>
+  </form>
+  <div *ngIf="error" class="alert alert-danger mt-2">{{ error }}</div>
+</div>

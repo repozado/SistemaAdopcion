@@ -20,13 +20,17 @@
       <a class="nav-link" routerLinkActive="active" [routerLink]="['/contacto']">
         <i class="fas fa-envelope"></i> Contacto
       </a>
-      <a class="nav-link admin-link" routerLinkActive="active" [routerLink]="['/administrar']">
+      <a *ngIf="auth.isLoggedIn()" class="nav-link admin-link" routerLinkActive="active"
+        [routerLink]="['/administrar']">
         <i class="fas fa-user-cog"></i> Panel Admin
       </a>
-      
-      <!-- Botón de Iniciar Sesión -->
-      <button class="login-btn" (click)="openLoginModal()">
+
+      <!-- Botones de login/logout -->
+      <button *ngIf="!auth.isLoggedIn()" class="login-btn" (click)="openLoginModal()">
         <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+      </button>
+      <button *ngIf="auth.isLoggedIn()" class="login-btn" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
       </button>
     </div>
 
@@ -38,9 +42,12 @@
 
   <!-- Menú desplegable móvil -->
   <div class="mobile-menu" [class.open]="menuOpen">
-    <!-- ... (otros links móviles) ... -->
-    <button class="mobile-login-btn" (click)="openLoginModal(); toggleMenu()">
+    <!-- links similares a los de escritorio -->
+    <button *ngIf="!auth.isLoggedIn()" class="mobile-login-btn" (click)="openLoginModal(); toggleMenu()">
       <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+    </button>
+    <button *ngIf="auth.isLoggedIn()" class="mobile-login-btn" (click)="logout(); toggleMenu()">
+      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
     </button>
   </div>
 </nav>

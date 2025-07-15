@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -9,11 +11,22 @@ import { Component } from '@angular/core';
 export class NavbarComponent {
   menuOpen = false;
 
+  constructor(
+    public auth: AuthService,
+    private router: Router
+  ) {}
+
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
   }
 
   openLoginModal(): void {
-    console.log('Abriendo modal de login...');
+    // navegamos a la ruta de login
+    this.router.navigate(['/login']);
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/home']);
   }
 }
