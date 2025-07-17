@@ -1,14 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class MascotasService {
 
   private http=inject(HttpClient);
-  private apiUrl= 'http://localhost:3000/api/mascotas';
+
+
+private apiUrl = `${environment.apiUrl}/mascotas`;
+  //private apiUrl= 'http://localhost:3000/api/mascotas';
 
   getAll():Observable<Mascota[]>{
     return this.http.get<Mascota[]>(this.apiUrl);
