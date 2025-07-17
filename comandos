@@ -1,0 +1,2 @@
+cuando se hace ngserve o ngbuild, se usa el archivo environment.ts
+cuando se hace ng build --configuration production, se usa el archivo environment.prod.ts
