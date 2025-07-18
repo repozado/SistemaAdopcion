@@ -10,15 +10,24 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   email: string = '';
+  password: string = '';
+  rememberMe: boolean = false;
   error: string = '';
 
   constructor(private auth: AuthService, private router: Router) {}
 
   onSubmit(): void {
-    this.error = '';
-    this.auth.login(this.email).subscribe({
-      next: () => this.router.navigate(['/administrar']),
-      error: () => this.error = 'Email inválido o servidor inaccesible.'
+    this.error = ''; // Clear any previous errors
+
+    this.auth.login(this.email, this.password).subscribe({
+      next: () => {
+        this.router.navigate(['/administrar']);
+      },
+      error: (err) => {
+        console.error('Login error:', err); // Log the full error for debugging
+        this.error = 'Email o contraseña inválidos. Por favor, inténtalo de nuevo.';
+      }
     });
   }
+
 }
