@@ -21,7 +21,7 @@ export class LoginComponent {
 
     this.auth.login(this.email, this.password).subscribe({
       next: () => {
-        this.router.navigate(['/administrar']);
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         console.error('Login error:', err); // Log the full error for debugging

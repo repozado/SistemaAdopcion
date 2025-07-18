@@ -17,16 +17,18 @@ import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient } from '@angular/common/http';
 
 import { LoginComponent } from './components/login/login.component';
-import { AuthGuard } from './guarrds/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
 import { Token } from '@angular/compiler';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { UsersComponent } from './components/users/users.component';
+import { RegisterComponent } from './components/register/register.component';
 
 
 @NgModule({
   declarations: [
     LoginComponent,
+    RegisterComponent,
     AppComponent,
     HomeComponent,
     EncuestaComponent,
@@ -39,7 +41,8 @@ import { UsersComponent } from './components/users/users.component';
     PetcardComponent,
     ValuecardComponent,
     LoginComponent,
-    UsersComponent
+    UsersComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

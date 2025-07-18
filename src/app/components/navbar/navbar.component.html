@@ -18,10 +18,11 @@
       <a class="nav-link" routerLinkActive="active" [routerLink]="['/contacto']">
         <i class="fas fa-envelope"></i> Contacto
       </a>
-      <a class="nav-link" routerLinkActive="active" [routerLink]="['/usuarios']">
+      <a *ngIf="auth.isAdmin()" class="nav-link" routerLinkActive="active" [routerLink]="['/usuarios']">
         <i class="fas fa-user-cog"></i> Usuarios
       </a>
-      <a *ngIf="auth.isLoggedIn()" class="nav-link admin-link" routerLinkActive="active"
+    <!--para poner usuarios y admin auth.isLoggedIn() && auth.isAdmin() -->
+      <a *ngIf="auth.isAdmin()" class="nav-link admin-link" routerLinkActive="active"
         [routerLink]="['/administrar']">
         <i class="fas fa-user-cog"></i> Panel Admin
       </a>
@@ -51,10 +52,11 @@
     <a class="mobile-link" routerLinkActive="active" [routerLink]="['/contacto']" (click)="toggleMenu()">
       <i class="fas fa-envelope"></i> Contacto
     </a>
-    <a class="mobile-link" routerLinkActive="active" [routerLink]="['/usuarios']" (click)="toggleMenu()">
+
+    <a *ngIf="auth.isAdmin()" class="mobile-link" routerLinkActive="active" [routerLink]="['/usuarios']" (click)="toggleMenu()">
       <i class="fas fa-user-cog"></i> Usuarios
       </a>
-    <a *ngIf="auth.isLoggedIn()" class="mobile-link admin-link" routerLinkActive="active"
+    <a *ngIf="auth.isAdmin()" class="mobile-link admin-link" routerLinkActive="active"
       [routerLink]="['/administrar']" (click)="toggleMenu()">
       <i class="fas fa-user-cog"></i> Panel Admin
     </a>

@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4 shadow-sm" style="max-width: 400px; width:100%">
+    <div class="text-center mb-3">
+      <img src="logosoulpet.png" alt="Soulpet Logo" class="logo mb-2" style="max-height: 60px;">
+      <h4 class="card-title">Crear Cuenta</h4>
+    </div>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="nombre" placeholder="Tu nombre"
+               [(ngModel)]="user.nombre" name="nombre" required>
+        <label for="nombre">Nombre</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input type="email" class="form-control" id="emailReg" placeholder="usuario@ejemplo.com"
+               [(ngModel)]="user.email" name="email" required>
+        <label for="emailReg">Email</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="telefono" placeholder="0981234567"
+               [(ngModel)]="user.telefono" name="telefono" required>
+        <label for="telefono">Teléfono</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="direccion" placeholder="Tu dirección"
+               [(ngModel)]="user.direccion" name="direccion" required>
+        <label for="direccion">Dirección</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input type="password" class="form-control" id="passwordReg" placeholder="Contraseña"
+               [(ngModel)]="user.password" name="password" required>
+        <label for="passwordReg">Contraseña</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="password2" placeholder="Repite tu contraseña"
+               [(ngModel)]="confirmPassword" name="confirmPassword" required>
+        <label for="password2">Repetir Contraseña</label>
+      </div>
+
+      <button class="btn btn-success w-100" type="submit" [disabled]="!passwordsMatch()">Registrarse</button>
+      <div *ngIf="error" class="alert alert-danger mt-2">{{ error }}</div>
+    </form>
+    <hr>
+    <div class="text-center">
+      ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+    </div>
+  </div>
+</div>
