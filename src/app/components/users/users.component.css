@@ -1,0 +1,274 @@
+/* user-list.component.css */
+
+/* Reuse the custom properties from :host in your home component for consistency */
+:host {
+  --primary: #A78BFA;         /* Color lavanda principal */
+  --secondary: #FCAFAF;      /* Color coral secundario */
+  --accent: #5DD5C0;         /* Color de acento (verde/azul) */
+  --light: #FFF7EC;           /* Fondo crema claro */
+  --dark: #292F36;            /* Texto oscuro */
+  --text: #5E5E5E;            /* Texto gris */
+  --border: #E0E0E0;         /* Color de borde */
+  --shadow: 0 4px 12px rgba(0,0,0,0.08); /* Sombra estándar */
+  --radius: 12px;             /* Bordes redondeados */
+  --transition: all 0.3s ease; /* Transición suave */
+  font-family: 'Poppins', 'Baloo 2', sans-serif; /* Consistent font */
+}
+
+
+.user-list-container {
+  padding: 30px; /* Slightly more padding than default */
+  max-width: 1100px; /* Wider container for better table display */
+  margin: 30px auto; /* Centered with more top/bottom margin */
+  background-color: white;
+  border-radius: var(--radius); /* Rounded corners */
+  box-shadow: var(--shadow); /* Consistent shadow */
+}
+
+h2 {
+  color: var(--dark); /* Dark text for headings */
+  margin-bottom: 30px; /* More space below heading */
+  font-size: 2rem; /* Larger heading */
+  font-weight: 700; /* Bolder */
+  display: flex;
+  align-items: center;
+  gap: 15px; /* More space between icon and text */
+}
+
+h2 i {
+  color: var(--primary); /* Icon color matches primary */
+  font-size: 1.8rem;
+}
+
+.loading-message, .no-users-message {
+  text-align: center;
+  padding: 40px; /* More padding for empty states */
+  color: var(--text);
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.loading-message i {
+  margin-right: 10px;
+  color: var(--primary); /* Loading icon color */
+  font-size: 1.5rem;
+}
+
+.alert-danger {
+  background-color: #f8d7da; /* Standard danger background */
+  color: #721c24; /* Standard danger text */
+  border: 1px solid #f5c6cb;
+  padding: 15px; /* More padding */
+  border-radius: var(--radius); /* Rounded corners */
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+.table-responsive {
+    overflow-x: auto; /* Ensures horizontal scrolling on small screens */
+    -webkit-overflow-scrolling: touch; /* Improves scrolling on iOS */
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: separate; /* Use separate to allow border-radius on cells/rows if needed */
+  border-spacing: 0; /* Remove default spacing if using separate */
+  margin-top: 20px;
+  border-radius: var(--radius); /* Rounded corners for the whole table */
+  overflow: hidden; /* Ensures content respects border-radius */
+}
+
+.user-table th, .user-table td {
+  padding: 15px 20px; /* More padding for cells */
+  text-align: left;
+  /* Use a consistent border for separation */
+  border-bottom: 1px solid var(--border);
+  color: var(--text); /* Consistent text color */
+}
+
+.user-table th {
+  background-color: var(--light); /* Light background for headers */
+  color: var(--dark); /* Darker text for headers */
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase; /* Uppercase for headers */
+  letter-spacing: 0.5px;
+}
+
+.user-table tbody tr:last-child td {
+  border-bottom: none; /* No border for the last row */
+}
+
+.user-table tbody tr:hover {
+  background-color: rgba(var(--primary-rgb, 167, 139, 250), 0.05); /* Light hover effect with primary color */
+}
+
+
+.user-table td i {
+  font-size: 1.2rem; /* Slightly larger icons */
+}
+
+/* Colors for active/inactive status - using primary/secondary for consistency */
+.text-success { /* For isActive: true */
+  color: var(--accent); /* Use accent color for "active" */
+}
+
+.text-danger { /* For isActive: false */
+  color: var(--secondary); /* Use secondary/coral color for "inactive" */
+}
+
+/* Button styling - adopting from login/navbar buttons */
+.btn {
+  padding: 8px 15px; /* Consistent button padding */
+  border-radius: 25px; /* More rounded buttons */
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600; /* Bolder text */
+  transition: var(--transition);
+  display: inline-flex; /* For icon alignment */
+  align-items: center;
+  gap: 6px;
+}
+
+.btn i {
+  font-size: 0.8rem;
+}
+
+.btn-info { /* Edit button */
+  background-color: var(--accent); /* Use accent color */
+  color: white;
+}
+
+.btn-info:hover {
+  background-color: #49B9A6; /* Slightly darker accent on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(93, 213, 192, 0.3); /* Shadow on hover */
+}
+
+.btn-danger { /* Delete button */
+  background-color: var(--secondary); /* Use secondary color */
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #f79999; /* Slightly darker secondary on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(252, 175, 175, 0.3); /* Shadow on hover */
+}
+
+.ms-2 { /* Margin Start (left) for spacing buttons */
+  margin-left: 0.75rem; /* ~12px for more space */
+}
+
+
+/* Responsive Table for Mobile (Cards instead of table) */
+@media (max-width: 768px) {
+  .user-list-container {
+    padding: 20px 15px; /* Adjust padding for smaller screens */
+    margin: 20px auto;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    gap: 10px;
+  }
+
+  h2 i {
+    font-size: 1.3rem;
+  }
+
+  .user-table {
+    border-radius: 0; /* Remove overall table radius in mobile to allow individual cards */
+    box-shadow: none; /* Remove overall table shadow */
+    overflow: visible; /* Allow "cards" to break out */
+  }
+
+  .user-table thead {
+    display: none; /* Hide table headers completely on mobile */
+  }
+
+  .user-table tbody {
+      display: flex; /* Make tbody a flex container */
+      flex-direction: column; /* Stack rows vertically */
+      gap: 20px; /* Space between each user "card" */
+  }
+
+  .user-table tr {
+    display: block; /* Make each row a block-level "card" */
+    border: 1px solid var(--border);
+    border-radius: var(--radius); /* Rounded corners for each user "card" */
+    margin-bottom: 0; /* Remove individual margins as gap handles it */
+    box-shadow: var(--shadow); /* Shadow for each card */
+    padding: 15px; /* Padding inside each card */
+    background-color: white;
+    transition: var(--transition);
+  }
+
+  .user-table tr:hover {
+    transform: translateY(-3px); /* Subtle lift on hover for cards */
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+
+  .user-table td {
+    border-bottom: 1px dashed rgba(0,0,0,0.1); /* Dashed border for individual fields */
+    position: relative;
+    padding-left: 45%; /* Space for the data-label */
+    text-align: right;
+    display: flex; /* Use flex to align label and value */
+    justify-content: space-between; /* Space out label and value */
+    align-items: center;
+    min-height: 35px; /* Ensure consistent height for rows */
+  }
+
+  .user-table td:last-of-type { /* Target the last td in each tr (Actions) */
+    border-bottom: none; /* No border for the last item */
+    padding-top: 15px; /* Add some space above action buttons */
+    justify-content: center; /* Center the buttons */
+    padding-left: 0; /* No need for padding-left from data-label */
+  }
+
+  .user-table td:before {
+    content: attr(data-label);
+    position: static; /* Change from absolute to static/inline for flex */
+    width: auto; /* Let content dictate width */
+    padding-left: 0; /* Remove extra padding */
+    font-weight: 700; /* Bolder label */
+    text-align: left;
+    color: var(--dark); /* Darker label color */
+    flex-shrink: 0; /* Prevent label from shrinking */
+    margin-right: 15px; /* Space between label and value */
+  }
+
+  .user-table td:last-of-type:before { /* Hide data-label for actions row */
+      display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .user-list-container {
+    padding: 15px;
+    margin: 15px auto;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  h2 i {
+    font-size: 1.1rem;
+  }
+
+  .user-table td {
+    padding: 10px 0; /* Reduce vertical padding for rows */
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+}

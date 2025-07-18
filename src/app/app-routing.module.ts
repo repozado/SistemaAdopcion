@@ -9,6 +9,7 @@ import { MascotasComponent } from './components/mascotas/mascotas.component';
 import { PetcardComponent } from './components/petcard/petcard.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guarrds/auth.guard';
+import { UsersComponent } from './components/users/users.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'encuesta', component:EncuestaComponent},
   {path: 'faq', component:FaqComponent},
   {path: 'contacto', component:ContactComponent},
+  {path: "usuarios", component:UsersComponent},
   {path: 'mascota/:id', component:PetcardComponent},
   {path: '**', pathMatch: 'full', redirectTo: 'home'} 
 ];

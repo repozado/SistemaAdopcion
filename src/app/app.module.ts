@@ -21,6 +21,7 @@ import { AuthGuard } from './guarrds/auth.guard';
 import { AuthService } from './services/auth.service';
 import { Token } from '@angular/compiler';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { UsersComponent } from './components/users/users.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     FooterComponent,
     PetcardComponent,
     ValuecardComponent,
-    LoginComponent
+    LoginComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

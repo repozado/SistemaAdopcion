@@ -1,12 +1,10 @@
 <nav class="soulpet-navbar">
   <div class="navbar-container">
-    <!-- Logo -->
     <div class="navbar-brand" routerLink="/home">
       <img src="logosoulpet.png" alt="Soulpet Logo" class="logo">
       <span>Soulpet</span>
     </div>
 
-    <!-- Menú para desktop -->
     <div class="navbar-links">
       <a class="nav-link" routerLinkActive="active" [routerLink]="['/home']">
         <i class="fas fa-home"></i> Inicio
@@ -20,12 +18,13 @@
       <a class="nav-link" routerLinkActive="active" [routerLink]="['/contacto']">
         <i class="fas fa-envelope"></i> Contacto
       </a>
+      <a class="nav-link" routerLinkActive="active" [routerLink]="['/usuarios']">
+        <i class="fas fa-user-cog"></i> Usuarios
+      </a>
       <a *ngIf="auth.isLoggedIn()" class="nav-link admin-link" routerLinkActive="active"
         [routerLink]="['/administrar']">
         <i class="fas fa-user-cog"></i> Panel Admin
       </a>
-
-      <!-- Botones de login/logout -->
       <button *ngIf="!auth.isLoggedIn()" class="login-btn" (click)="openLoginModal()">
         <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
       </button>
@@ -34,15 +33,31 @@
       </button>
     </div>
 
-    <!-- Menú móvil -->
     <button class="navbar-toggler" (click)="toggleMenu()">
       <i class="fas" [class.fa-bars]="!menuOpen" [class.fa-times]="menuOpen"></i>
     </button>
   </div>
 
-  <!-- Menú desplegable móvil -->
   <div class="mobile-menu" [class.open]="menuOpen">
-    <!-- links similares a los de escritorio -->
+    <a class="mobile-link" routerLinkActive="active" [routerLink]="['/home']" (click)="toggleMenu()">
+      <i class="fas fa-home"></i> Inicio
+    </a>
+    <a class="mobile-link" routerLinkActive="active" [routerLink]="['/mascotas']" (click)="toggleMenu()">
+      <i class="fas fa-paw"></i> Mascotas
+    </a>
+    <a class="mobile-link" routerLinkActive="active" [routerLink]="['/faq']" (click)="toggleMenu()">
+      <i class="fas fa-question-circle"></i> FAQ
+    </a>
+    <a class="mobile-link" routerLinkActive="active" [routerLink]="['/contacto']" (click)="toggleMenu()">
+      <i class="fas fa-envelope"></i> Contacto
+    </a>
+    <a class="mobile-link" routerLinkActive="active" [routerLink]="['/usuarios']" (click)="toggleMenu()">
+      <i class="fas fa-user-cog"></i> Usuarios
+      </a>
+    <a *ngIf="auth.isLoggedIn()" class="mobile-link admin-link" routerLinkActive="active"
+      [routerLink]="['/administrar']" (click)="toggleMenu()">
+      <i class="fas fa-user-cog"></i> Panel Admin
+    </a>
     <button *ngIf="!auth.isLoggedIn()" class="mobile-login-btn" (click)="openLoginModal(); toggleMenu()">
       <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
     </button>
