@@ -3,6 +3,7 @@
     <i class="fas fa-users"></i>
     Gestión de Usuarios
   </h2>
+
   <div *ngIf="message" class="alert success-alert">
     {{ message }}
   </div>
@@ -40,18 +41,10 @@
             <td data-label="Creado">{{ user.created_at | date:'short'}}</td>
             <td data-label="Modificado">{{ user.updated_at | date:'short'}}</td>
             <td data-label="Acciones">
-              <button
-                class="btn btn-sm btn-info"
-                title="Editar"
-                (click)="openEditModal(user)"
-              >
+              <button class="btn btn-sm btn-info" title="Editar" (click)="openEditModal(user)">
                 <i class="fas fa-edit"></i>
               </button>
-              <button
-                class="btn btn-sm btn-danger ms-2"
-                title="Eliminar"
-                (click)="confirmDelete(user)"
-              >
+              <button class="btn btn-sm btn-danger ms-2" title="Eliminar" (click)="confirmDelete(user)">
                 <i class="fas fa-trash"></i>
               </button>
             </td>
@@ -60,10 +53,12 @@
       </table>
     </div>
   </div>
+
   <div *ngIf="isLoading" class="loading-message">
     <p><i class="fas fa-spinner fa-spin"></i> Cargando usuarios...</p>
   </div>
 
+  <!-- Modal de Edición -->
   <div class="modal" *ngIf="showEditModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -71,7 +66,7 @@
         <button class="close-btn" (click)="closeEditModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="saveUserChanges()">
+        <form #editForm="ngForm" (ngSubmit)="saveUserChanges()" novalidate>
           <div class="form-group">
             <label for="editEmail">Email</label>
             <input
@@ -83,61 +78,86 @@
               readonly
             />
           </div>
+
           <div class="form-group">
             <label for="editNombre">Nombre</label>
             <input
               type="text"
               id="editNombre"
               class="form-control"
-              [(ngModel)]="currentUser.nombre"
               name="nombre"
+              [(ngModel)]="currentUser.nombre"
+              required
+              minlength="2"
+              #nombre="ngModel"
             />
+            <div *ngIf="nombre.invalid && nombre.touched" class="alert alert-danger">
+              <small *ngIf="nombre.errors?.['required']">El nombre es obligatorio.</small>
+              <small *ngIf="nombre.errors?.['minlength']">Debe tener al menos 2 caracteres.</small>
+            </div>
           </div>
+
           <div class="form-group">
             <label for="editTelefono">Teléfono</label>
             <input
               type="text"
               id="editTelefono"
               class="form-control"
-              [(ngModel)]="currentUser.telefono"
               name="telefono"
+              [(ngModel)]="currentUser.telefono"
+              required
+              pattern="^[0-9]{7,15}$"
+              #telefono="ngModel"
             />
+            <div *ngIf="telefono.invalid && telefono.touched" class="alert alert-danger">
+              <small *ngIf="telefono.errors?.['required']">El teléfono es obligatorio.</small>
+              <small *ngIf="telefono.errors?.['pattern']">Debe contener entre 7 y 15 dígitos.</small>
+            </div>
           </div>
+
           <div class="form-group">
             <label for="editDireccion">Dirección</label>
             <input
               type="text"
               id="editDireccion"
               class="form-control"
-              [(ngModel)]="currentUser.direccion"
               name="direccion"
+              [(ngModel)]="currentUser.direccion"
+              required
+              minlength="5"
+              #direccion="ngModel"
             />
+            <div *ngIf="direccion.invalid && direccion.touched" class="alert alert-danger">
+              <small *ngIf="direccion.errors?.['required']">La dirección es obligatoria.</small>
+              <small *ngIf="direccion.errors?.['minlength']">Debe tener al menos 5 caracteres.</small>
+            </div>
           </div>
+
           <div class="form-group">
             <label for="editRol">Rol</label>
             <select
               id="editRol"
               class="form-control"
-              [(ngModel)]="currentUser.role"
               name="role"
+              [(ngModel)]="currentUser.role"
+              required
+              #role="ngModel"
             >
+              <option value="" disabled>Selecciona un rol</option>
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
+            <div *ngIf="role.invalid && role.touched" class="alert alert-danger">
+              <small>El rol es obligatorio.</small>
+            </div>
           </div>
 
           <div class="form-actions">
-            <button
-              type="button"
-              class="btn btn-outline"
-              (click)="closeEditModal()"
-            >
-              Cancelar
-            </button>
+            <button type="button" class="btn btn-outline" (click)="closeEditModal()">Cancelar</button>
             <button
               type="submit"
               class="btn btn-primary"
-              [disabled]="isLoading"
+              [disabled]="editForm.invalid || isLoading"
             >
               <i class="fas fa-spinner fa-spin" *ngIf="isLoading"></i>
               {{ isLoading ? "Guardando..." : "Guardar Cambios" }}
@@ -148,6 +168,7 @@
     </div>
   </div>
 
+  <!-- Modal de Confirmación de Eliminación -->
   <div class="modal" *ngIf="showConfirmDeleteModal">
     <div class="modal-content confirm-modal">
       <div class="modal-header">
@@ -156,21 +177,13 @@
       </div>
       <div class="modal-body">
         <p>
-          ¿Estás seguro que deseas eliminar al usuario **{{
-            userToDelete?.email
-          }}**?
+          ¿Estás seguro que deseas eliminar al usuario <strong>{{ userToDelete?.email }}</strong>?
         </p>
         <p>Esta acción no se puede deshacer.</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline" (click)="cancelDelete()">
-          Cancelar
-        </button>
-        <button
-          class="btn btn-danger"
-          (click)="deleteUser()"
-          [disabled]="isLoading"
-        >
+        <button class="btn btn-outline" (click)="cancelDelete()">Cancelar</button>
+        <button class="btn btn-danger" (click)="deleteUser()" [disabled]="isLoading">
           <i class="fas fa-spinner fa-spin" *ngIf="isLoading"></i>
           {{ isLoading ? "Eliminando..." : "Eliminar" }}
         </button>
