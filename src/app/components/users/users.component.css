@@ -120,7 +120,6 @@
   background-color: var(--light);
   color: var(--dark);
   font-weight: 600;
-  text-transform: uppercase;
   font-size: 0.95rem;
   letter-spacing: 0.5px;
 }

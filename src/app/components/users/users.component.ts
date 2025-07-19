@@ -1,86 +1,63 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Usuario } from '../../services/users.service'; // Asegúrate de que esta ruta sea correcta y que 'Usuario' esté definido allí
+import { Component, inject, OnInit } from '@angular/core';
+import { UsersService, Usuario } from '../../services/users.service';
+import { CommonModule, DatePipe } from '@angular/common'; // Asegúrate de tener CommonModule importado si es standalone
 
 @Component({
   selector: 'app-users',
-  standalone: false,
+  standalone: false, // O false, dependiendo de tu configuración
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css'],
+  providers: [DatePipe], // Si es standalone y usas DatePipe
 })
 export class UsersComponent implements OnInit {
   users: Usuario[] = [];
-  isLoading: boolean = true;
   error: string | null = null;
   message: string | null = null;
+  isLoading: boolean = false;
 
   showEditModal: boolean = false;
-  currentUser: Usuario = {} as Usuario; // Asegúrate de que Usuario tenga los campos correctos
+  currentUser: Usuario = {} as Usuario;
 
   showConfirmDeleteModal: boolean = false;
-  userToDelete: Usuario | null = null;
+  userToDelete: Usuario | null = null; // Mantenemos la referencia al usuario completo para mostrar el email
 
-  constructor() { }
+  private userService = inject(UsersService);
 
   ngOnInit(): void {
-    this.loadUsersExample();
+    this.loadUsers();
   }
 
-  loadUsersExample(): void {
+  loadUsers(): void {
     this.isLoading = true;
     this.error = null;
-    this.message = null;
 
-    setTimeout(() => {
-      this.users = [
-        {
-          id: 'user001',
-          nombre: 'Juan',
-          email: 'juan.perez@soulpet.com',
-          telefono: '111-222-3333',
-          direccion: 'Calle Falsa 123',
-          rol: 'admin' // Añadido rol
-        },
-        {
-          id: 'user002',
-          nombre: 'María',
-          email: 'maria.g@example.com',
-          telefono: '444-555-6666',
-          direccion: 'Av. Siempre Viva 742',
-          rol: 'user'
-        },
-        {
-          id: 'user003',
-          nombre: 'Refugio Sol',
-          email: 'refugio.sol@example.com',
-          telefono: '777-888-9999',
-          direccion: 'Carrera 10 #20-30',
-          rol: 'shelter'
-        },
-        {
-          id: 'user004',
-          nombre: 'Carlos',
-          email: 'carlos.r@example.com',
-          telefono: '000-111-2222',
-          direccion: 'Plaza Mayor 5',
-          rol: 'user'
-        }
-      ];
-      this.isLoading = false;
-    }, 0);
+    this.userService.getAll().subscribe({
+      next: (data) => {
+        this.users = data.map((user) => ({
+          ...user,
+        }));
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar los usuarios:', error);
+        this.error =
+          'Error al cargar los usuarios. Por favor, inténtelo de nuevo.';
+        this.isLoading = false;
+      },
+    });
   }
 
   openEditModal(user: Usuario): void {
-    // Clona el usuario para no modificar el original directamente hasta que se guarde
     this.currentUser = { ...user };
+    this.message = null;
+    this.error = null;
     this.showEditModal = true;
   }
 
   closeEditModal(): void {
     this.showEditModal = false;
-    this.currentUser = {} as Usuario; // Limpia el usuario actual
-    this.message = null; // Limpiar mensajes al cerrar el modal
+    this.currentUser = {} as Usuario;
+    this.message = null;
     this.error = null;
   }
 
@@ -89,59 +66,56 @@ export class UsersComponent implements OnInit {
     this.error = null;
     this.isLoading = true;
 
-    // --- LÓGICA DE ACTUALIZACIÓN ---
-    // Aquí defines SOLO los campos que el usuario puede editar y que quieres enviar al backend.
-    const fieldsToUpdate = {
-        nombre: this.currentUser.nombre,
-        telefono: this.currentUser.telefono,
-        direccion: this.currentUser.direccion,
-        rol: this.currentUser.rol
-        // No incluyas id ni email aquí, ya que no son editables desde este modal
+    const userToUpdate: Usuario = {
+      id_usuario: this.currentUser.id_usuario,
+      email: this.currentUser.email,
+      nombre: this.currentUser.nombre,
+      telefono: this.currentUser.telefono,
+      direccion: this.currentUser.direccion,
+      role: this.currentUser.role,
+      created_at: this.currentUser.created_at,
+      updated_at: this.currentUser.updated_at,
     };
 
-    // En una aplicación real, aquí harías una llamada a tu servicio:
-    // this.userService.updateUser(this.currentUser.id, fieldsToUpdate).subscribe(
-    //   (response) => {
-    //     // Manejar éxito
-    //     const index = this.users.findIndex(u => u.id === this.currentUser.id);
-    //     if (index !== -1) {
-    //         // Actualiza solo los campos modificados en la lista local
-    //         this.users[index] = { ...this.users[index], ...fieldsToUpdate };
-    //         this.message = `Usuario "${this.currentUser.email}" actualizado con éxito.`;
-    //     }
-    //     this.isLoading = false;
-    //     this.closeEditModal();
-    //   },
-    //   (error) => {
-    //     // Manejar error
-    //     this.error = 'Error al actualizar el usuario.'; // o error.message
-    //     this.isLoading = false;
-    //   }
-    // );
-
-    // Ejemplo ficticio (simula la actualización localmente):
-    setTimeout(() => {
-      const index = this.users.findIndex(u => u.id === this.currentUser.id);
-      if (index !== -1) {
-        // Actualiza el usuario en la lista local de usuarios con los campos modificados
-        this.users[index] = { ...this.users[index], ...fieldsToUpdate };
-        this.message = `Usuario "${this.currentUser.email}" actualizado con éxito.`;
-      } else {
-        this.error = 'Error: No se encontró el usuario para actualizar.';
-      }
-      this.isLoading = false;
-      this.closeEditModal(); // Cierra el modal después de guardar
-    }, 0); // Simula el tiempo de una llamada a la API
+    this.userService
+      .update(this.currentUser.id_usuario, userToUpdate)
+      .subscribe(
+        (response) => {
+          const index = this.users.findIndex(
+            (u) => u.id_usuario === this.currentUser.id_usuario
+          );
+          if (index !== -1) {
+            this.users[index] = response;
+          }
+          this.message = `Usuario "${this.currentUser.email}" actualizado con éxito.`;
+          this.isLoading = false;
+          this.closeEditModal();
+        },
+        (error) => {
+          console.error('Error al actualizar el usuario:', error);
+          this.error =
+            'Error al actualizar el usuario. Por favor, inténtelo de nuevo.';
+          if (error.error && error.error.message) {
+            this.error = `Error: ${error.error.message}`;
+          } else if (error.message) {
+            this.error = `Error: ${error.message}`;
+          }
+          this.isLoading = false;
+        }
+      );
   }
 
-  confirmDelete(userId: string): void {
+  confirmDelete(user: Usuario): void {
     this.message = null;
     this.error = null;
-    this.userToDelete = this.users.find(u => u.id === userId) || null;
-    if (this.userToDelete) {
+    console.log('Usuario a eliminar:', user);
+
+    if (user && user.id_usuario !== undefined && user.id_usuario !== null) {
+      this.userToDelete = { ...user };
       this.showConfirmDeleteModal = true;
     } else {
-      this.error = 'Error: Usuario no encontrado para eliminar.';
+      this.error = 'Error: Usuario no válido para eliminar.';
+      this.userToDelete = null;
     }
   }
 
@@ -151,28 +125,48 @@ export class UsersComponent implements OnInit {
     this.message = null;
     this.error = null;
   }
-
   deleteUser(): void {
-    if (!this.userToDelete) {
-      this.error = 'No hay usuario seleccionado para eliminar.';
+    if (
+      !this.userToDelete ||
+      this.userToDelete.id_usuario === undefined ||
+      this.userToDelete.id_usuario === null
+    ) {
+      this.error = 'No se ha seleccionado ningún usuario válido para eliminar.';
+      this.showConfirmDeleteModal = false; // Cerrar el modal si no hay usuario válido
       return;
     }
 
+    this.isLoading = true;
     this.message = null;
     this.error = null;
-    this.isLoading = true;
 
-    // Lógica de eliminación (simulada)
-    setTimeout(() => {
-      const initialLength = this.users.length;
-      this.users = this.users.filter(u => u.id !== this.userToDelete?.id);
-      if (this.users.length < initialLength) {
-        this.message = `Usuario "${this.userToDelete?.email}" eliminado con éxito.`;
-      } else {
-        this.error = 'Error: No se pudo eliminar el usuario.';
-      }
-      this.isLoading = false;
-      this.cancelDelete();
-    }, 0);
+    const idToDelete = this.userToDelete.id_usuario; // Almacena el ID antes de que userToDelete se pueda limpiar
+
+    this.userService.delete(idToDelete).subscribe({
+      next: () => {
+        const deletedUserEmail = this.userToDelete?.email || 'desconocido';
+        this.message = `Usuario "${deletedUserEmail}" eliminado con éxito.`;
+        setTimeout(() => {
+          this.message = '';
+        }, 3000);
+        this.userToDelete = null; // Limpiar userToDelete después de la eliminación exitosa
+        this.showConfirmDeleteModal = false;
+        this.isLoading = false;
+        this.loadUsers(); // Recargar la lista para reflejar el cambio
+      },
+      error: (error) => {
+        console.error('Error al eliminar el usuario:', error);
+        this.error =
+          'Error al eliminar el usuario. Por favor, inténtelo de nuevo.';
+        if (error.error && error.error.message) {
+          this.error = `Error: ${error.error.message}`;
+        } else if (error.message) {
+          this.error = `Error: ${error.message}`;
+        }
+        this.isLoading = false;
+        this.userToDelete = null; // También limpiar en caso de error para evitar que persista un usuario incorrecto
+        this.showConfirmDeleteModal = false; // Cerrar el modal incluso con error
+      },
+    });
   }
 }

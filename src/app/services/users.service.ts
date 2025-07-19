@@ -10,9 +10,8 @@ export class UsersService {
 
   private http = inject(HttpClient);
   
-    private apiUrl = `${environment.apiUrl}/mascotas`;
-    //private apiUrl= 'http://localhost:3000/api/mascotas';
-  
+    private apiUrl = `${environment.apiUrl}/users`;
+
     getAll(): Observable<Usuario[]> {
       return this.http.get<Usuario[]>(this.apiUrl);
     }
@@ -35,12 +34,12 @@ export class UsersService {
 }
 
 export interface Usuario {
-  id: string; // O number, dependiendo de tu backend (es crucial para identificar al usuario)
+  id_usuario: number; 
   nombre: string;
   email: string;
-  rol: string; 
-  telefono?: string; // Opcional si no siempre está presente
-  direccion?: string; // Opcional si no siempre está presente
-  createdAt?: string;
-  updatedAt?: string;
+  role: string; 
+  telefono?: string; 
+  direccion?: string; 
+  created_at?: Date;
+  updated_at?: Date;
 }

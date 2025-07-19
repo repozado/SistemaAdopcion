@@ -1,12 +1,8 @@
 <div class="user-list-container">
- <h2 class="section-header">
+  <h2 class="section-header">
     <i class="fas fa-users"></i>
     Gestión de Usuarios
   </h2>
-  <div *ngIf="isLoading" class="loading-message">
-    <i class="fas fa-spinner fa-spin"></i> Cargando usuarios...
-  </div>
-
   <div *ngIf="message" class="alert success-alert">
     {{ message }}
   </div>
@@ -29,21 +25,33 @@
             <th>Teléfono</th>
             <th>Dirección</th>
             <th>Rol</th>
+            <th>Creado</th>
+            <th>Modificado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let user of users">
             <td data-label="Email">{{ user.email }}</td>
-            <td data-label="Nombre">{{ user.nombre || 'N/A' }}</td>
-            <td data-label="Teléfono">{{ user.telefono || 'N/A' }}</td>
-            <td data-label="Dirección">{{ user.direccion || 'N/A' }}</td>
-            <td data-label="Rol">{{ user.rol || 'Usuario' }}</td>
+            <td data-label="Nombre">{{ user.nombre || "N/A" }}</td>
+            <td data-label="Teléfono">{{ user.telefono || "N/A" }}</td>
+            <td data-label="Dirección">{{ user.direccion || "N/A" }}</td>
+            <td data-label="Rol">{{ user.role || "Usuario" }}</td>
+            <td data-label="Creado">{{ user.created_at | date:'short'}}</td>
+            <td data-label="Modificado">{{ user.updated_at | date:'short'}}</td>
             <td data-label="Acciones">
-              <button class="btn btn-sm btn-info" title="Editar" (click)="openEditModal(user)">
+              <button
+                class="btn btn-sm btn-info"
+                title="Editar"
+                (click)="openEditModal(user)"
+              >
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn btn-sm btn-danger ms-2" title="Eliminar" (click)="confirmDelete(user.id)">
+              <button
+                class="btn btn-sm btn-danger ms-2"
+                title="Eliminar"
+                (click)="confirmDelete(user)"
+              >
                 <i class="fas fa-trash"></i>
               </button>
             </td>
@@ -51,6 +59,9 @@
         </tbody>
       </table>
     </div>
+  </div>
+  <div *ngIf="isLoading" class="loading-message">
+    <p><i class="fas fa-spinner fa-spin"></i> Cargando usuarios...</p>
   </div>
 
   <div class="modal" *ngIf="showEditModal">
@@ -63,32 +74,74 @@
         <form (ngSubmit)="saveUserChanges()">
           <div class="form-group">
             <label for="editEmail">Email</label>
-            <input type="email" id="editEmail" class="form-control" [ngModel]="currentUser.email" name="email" readonly>
+            <input
+              type="email"
+              id="editEmail"
+              class="form-control"
+              [ngModel]="currentUser.email"
+              name="email"
+              readonly
+            />
           </div>
           <div class="form-group">
             <label for="editNombre">Nombre</label>
-            <input type="text" id="editNombre" class="form-control" [(ngModel)]="currentUser.nombre" name="nombre">
+            <input
+              type="text"
+              id="editNombre"
+              class="form-control"
+              [(ngModel)]="currentUser.nombre"
+              name="nombre"
+            />
           </div>
           <div class="form-group">
             <label for="editTelefono">Teléfono</label>
-            <input type="text" id="editTelefono" class="form-control" [(ngModel)]="currentUser.telefono" name="telefono">
+            <input
+              type="text"
+              id="editTelefono"
+              class="form-control"
+              [(ngModel)]="currentUser.telefono"
+              name="telefono"
+            />
           </div>
           <div class="form-group">
             <label for="editDireccion">Dirección</label>
-            <input type="text" id="editDireccion" class="form-control" [(ngModel)]="currentUser.direccion" name="direccion">
+            <input
+              type="text"
+              id="editDireccion"
+              class="form-control"
+              [(ngModel)]="currentUser.direccion"
+              name="direccion"
+            />
           </div>
           <div class="form-group">
             <label for="editRol">Rol</label>
-            <select id="editRol" class="form-control" [(ngModel)]="currentUser.rol" name="rol">
-              <option value="user">Usuario</option>
-              <option value="shelter">Refugio</option>
-              <option value="admin">Administrador</option>
+            <select
+              id="editRol"
+              class="form-control"
+              [(ngModel)]="currentUser.role"
+              name="role"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
-          
+
           <div class="form-actions">
-            <button type="button" class="btn btn-outline" (click)="closeEditModal()">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <button
+              type="button"
+              class="btn btn-outline"
+              (click)="closeEditModal()"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="isLoading"
+            >
+              <i class="fas fa-spinner fa-spin" *ngIf="isLoading"></i>
+              {{ isLoading ? "Guardando..." : "Guardar Cambios" }}
+            </button>
           </div>
         </form>
       </div>
@@ -102,14 +155,26 @@
         <button class="close-btn" (click)="cancelDelete()">&times;</button>
       </div>
       <div class="modal-body">
-        <p>¿Estás seguro que deseas eliminar al usuario **{{ userToDelete?.email }}**?</p>
+        <p>
+          ¿Estás seguro que deseas eliminar al usuario **{{
+            userToDelete?.email
+          }}**?
+        </p>
         <p>Esta acción no se puede deshacer.</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline" (click)="cancelDelete()">Cancelar</button>
-        <button class="btn btn-danger" (click)="deleteUser()">Eliminar</button>
+        <button class="btn btn-outline" (click)="cancelDelete()">
+          Cancelar
+        </button>
+        <button
+          class="btn btn-danger"
+          (click)="deleteUser()"
+          [disabled]="isLoading"
+        >
+          <i class="fas fa-spinner fa-spin" *ngIf="isLoading"></i>
+          {{ isLoading ? "Eliminando..." : "Eliminar" }}
+        </button>
       </div>
     </div>
   </div>
-
 </div>
