@@ -38,13 +38,23 @@
             <td data-label="Teléfono">{{ user.telefono || "N/A" }}</td>
             <td data-label="Dirección">{{ user.direccion || "N/A" }}</td>
             <td data-label="Rol">{{ user.role || "Usuario" }}</td>
-            <td data-label="Creado">{{ user.created_at | date:'short'}}</td>
-            <td data-label="Modificado">{{ user.updated_at | date:'short'}}</td>
+            <td data-label="Creado">{{ user.created_at | date : "short" }}</td>
+            <td data-label="Modificado">
+              {{ user.updated_at | date : "short" }}
+            </td>
             <td data-label="Acciones">
-              <button class="btn btn-sm btn-info" title="Editar" (click)="openEditModal(user)">
+              <button
+                class="btn btn-sm btn-info"
+                title="Editar"
+                (click)="openEditModal(user)"
+              >
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn btn-sm btn-danger ms-2" title="Eliminar" (click)="confirmDelete(user)">
+              <button
+                class="btn btn-sm btn-danger ms-2"
+                title="Eliminar"
+                (click)="confirmDelete(user)"
+              >
                 <i class="fas fa-trash"></i>
               </button>
             </td>
@@ -91,9 +101,16 @@
               minlength="2"
               #nombre="ngModel"
             />
-            <div *ngIf="nombre.invalid && nombre.touched" class="alert alert-danger">
-              <small *ngIf="nombre.errors?.['required']">El nombre es obligatorio.</small>
-              <small *ngIf="nombre.errors?.['minlength']">Debe tener al menos 2 caracteres.</small>
+            <div
+              *ngIf="nombre.invalid && nombre.touched"
+              class="alert alert-danger"
+            >
+              <small *ngIf="nombre.errors?.['required']"
+                >El nombre es obligatorio.</small
+              >
+              <small *ngIf="nombre.errors?.['minlength']"
+                >Debe tener al menos 2 caracteres.</small
+              >
             </div>
           </div>
 
@@ -109,9 +126,16 @@
               pattern="^[0-9]{7,15}$"
               #telefono="ngModel"
             />
-            <div *ngIf="telefono.invalid && telefono.touched" class="alert alert-danger">
-              <small *ngIf="telefono.errors?.['required']">El teléfono es obligatorio.</small>
-              <small *ngIf="telefono.errors?.['pattern']">Debe contener entre 7 y 15 dígitos.</small>
+            <div
+              *ngIf="telefono.invalid && telefono.touched"
+              class="alert alert-danger"
+            >
+              <small *ngIf="telefono.errors?.['required']"
+                >El teléfono es obligatorio.</small
+              >
+              <small *ngIf="telefono.errors?.['pattern']"
+                >Debe contener entre 7 y 15 dígitos.</small
+              >
             </div>
           </div>
 
@@ -127,9 +151,16 @@
               minlength="5"
               #direccion="ngModel"
             />
-            <div *ngIf="direccion.invalid && direccion.touched" class="alert alert-danger">
-              <small *ngIf="direccion.errors?.['required']">La dirección es obligatoria.</small>
-              <small *ngIf="direccion.errors?.['minlength']">Debe tener al menos 5 caracteres.</small>
+            <div
+              *ngIf="direccion.invalid && direccion.touched"
+              class="alert alert-danger"
+            >
+              <small *ngIf="direccion.errors?.['required']"
+                >La dirección es obligatoria.</small
+              >
+              <small *ngIf="direccion.errors?.['minlength']"
+                >Debe tener al menos 5 caracteres.</small
+              >
             </div>
           </div>
 
@@ -147,13 +178,22 @@
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
-            <div *ngIf="role.invalid && role.touched" class="alert alert-danger">
+            <div
+              *ngIf="role.invalid && role.touched"
+              class="alert alert-danger"
+            >
               <small>El rol es obligatorio.</small>
             </div>
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn btn-outline" (click)="closeEditModal()">Cancelar</button>
+            <button
+              type="button"
+              class="btn btn-outline"
+              (click)="closeEditModal()"
+            >
+              Cancelar
+            </button>
             <button
               type="submit"
               class="btn btn-primary"
@@ -177,13 +217,21 @@
       </div>
       <div class="modal-body">
         <p>
-          ¿Estás seguro que deseas eliminar al usuario <strong>{{ userToDelete?.email }}</strong>?
+          ¿Estás seguro que deseas eliminar al usuario
+          <strong>{{ userToDelete?.email }}</strong
+          >?
         </p>
         <p>Esta acción no se puede deshacer.</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline" (click)="cancelDelete()">Cancelar</button>
-        <button class="btn btn-danger" (click)="deleteUser()" [disabled]="isLoading">
+        <button class="btn btn-outline" (click)="cancelDelete()">
+          Cancelar
+        </button>
+        <button
+          class="btn btn-danger"
+          (click)="deleteUser()"
+          [disabled]="isLoading"
+        >
           <i class="fas fa-spinner fa-spin" *ngIf="isLoading"></i>
           {{ isLoading ? "Eliminando..." : "Eliminar" }}
         </button>

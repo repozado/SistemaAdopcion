@@ -41,7 +41,7 @@ export class UsersComponent implements OnInit {
       error: (error) => {
         console.error('Error al cargar los usuarios:', error);
         this.error =
-          'Error al cargar los usuarios. Por favor, inténtelo de nuevo.';
+          'Error al cargar los usuarios. Por favor, inténtelo de nuevo o vuelva a iniciar sesión.';
         this.isLoading = false;
       },
     });
