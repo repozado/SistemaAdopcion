@@ -14,16 +14,6 @@ export class UsersService {
 private apiUrl = `${environment.apiUrl}/usuarios`;
   //private apiUrl= 'http://localhost:3000/api/mascotas';
 
-
-  private mascotas:any[] = [
-    {
-        
-    }
-  ]
-
-  getMascotas() {
-    return this.mascotas;
-  }
 }
 
 export interface Usuarios {
