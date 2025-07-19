@@ -13,7 +13,6 @@ mascotasDestacadas: any[] = [];
   constructor(private mascotasService: MascotasService) {}
 
   ngOnInit(): void {
-    this.mascotasDestacadas = this.mascotasService.getMascotas();
   }
 
   scrollToSection(sectionId: string): void {
