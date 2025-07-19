@@ -77,6 +77,6 @@ export class UsersComponent implements OnInit { // <-- Cambia 'Users' por 'Users
         }
       ];
       this.isLoading = false; // La carga ha terminado
-    }, 1500); // Retraso de 1.5 segundos
+    }, 0); // Retraso de 1.5 segundos
   }
 }
