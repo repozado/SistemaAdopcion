@@ -84,7 +84,6 @@
 .admin-link {
   color: var(--secondary);
 }
-
 .admin-link:hover,
 .admin-link.active {
   background-color: var(--secondary);
