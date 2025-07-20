@@ -4,6 +4,29 @@
     Gestión de Usuarios
   </h2>
 
+  <div class="user-toolbar">
+    <div class="search-group">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar usuarios por nombre o email..."
+        [(ngModel)]="searchTerm"
+        (input)="applyFilters()"
+      />
+      <button class="btn btn-primary" (click)="applyFilters()">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+
+    <div class="filter-group">
+      <select class="form-control" [(ngModel)]="selectedRoleFilter" (change)="applyFilters()">
+        <option value="">Todos los Roles</option>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+  </div>
+
   <div *ngIf="message" class="alert success-alert">
     {{ message }}
   </div>
@@ -13,11 +36,11 @@
   </div>
 
   <div *ngIf="!isLoading && !error">
-    <div *ngIf="users.length === 0" class="no-users-message">
-      <p>No hay usuarios registrados.</p>
+    <div *ngIf="filteredUsers.length === 0" class="no-users-message">
+      <p>No hay usuarios registrados que coincidan con los criterios.</p>
     </div>
 
-    <div *ngIf="users.length > 0" class="table-responsive">
+    <div *ngIf="filteredUsers.length > 0" class="table-responsive">
       <table class="user-table">
         <thead>
           <tr>
@@ -32,7 +55,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users">
+          <tr *ngFor="let user of filteredUsers">
             <td data-label="Email">{{ user.email }}</td>
             <td data-label="Nombre">{{ user.nombre || "N/A" }}</td>
             <td data-label="Teléfono">{{ user.telefono || "N/A" }}</td>
@@ -68,7 +91,6 @@
     <p><i class="fas fa-spinner fa-spin"></i> Cargando usuarios...</p>
   </div>
 
-  <!-- Modal de Edición -->
   <div class="modal" *ngIf="showEditModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -208,7 +230,6 @@
     </div>
   </div>
 
-  <!-- Modal de Confirmación de Eliminación -->
   <div class="modal" *ngIf="showConfirmDeleteModal">
     <div class="modal-content confirm-modal">
       <div class="modal-header">

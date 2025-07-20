@@ -1,27 +1,33 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UsersService, Usuario } from '../../services/users.service';
-import { CommonModule, DatePipe } from '@angular/common'; // Asegúrate de tener CommonModule importado si es standalone
+import { CommonModule, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users',
-  standalone: false, // O false, dependiendo de tu configuración
+  standalone: false, // Assuming you want it standalone for this example
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css'],
-  providers: [DatePipe], // Si es standalone y usas DatePipe
+  providers: [DatePipe],
 })
 export class UsersComponent implements OnInit {
   users: Usuario[] = [];
+  filteredUsers: Usuario[] = []; // New array for filtered users
   error: string | null = null;
   message: string | null = null;
   isLoading: boolean = false;
+
+  searchTerm: string = ''; // For search input
+  selectedRoleFilter: string = ''; // For role filter
 
   showEditModal: boolean = false;
   currentUser: Usuario = {} as Usuario;
 
   showConfirmDeleteModal: boolean = false;
-  userToDelete: Usuario | null = null; // Mantenemos la referencia al usuario completo para mostrar el email
+  userToDelete: Usuario | null = null;
 
   private userService = inject(UsersService);
+  private router: Router = inject(Router);
 
   ngOnInit(): void {
     this.loadUsers();
@@ -36,15 +42,43 @@ export class UsersComponent implements OnInit {
         this.users = data.map((user) => ({
           ...user,
         }));
+        this.applyFilters(); // Apply filters once users are loaded
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error al cargar los usuarios:', error);
+        this.router.navigate(['/sesionexpirada']);
         this.error =
           'Error al cargar los usuarios. Por favor, inténtelo de nuevo o vuelva a iniciar sesión.';
         this.isLoading = false;
       },
     });
+  }
+
+  /**
+   * Applies search and role filters to the users list.
+   */
+  applyFilters(): void {
+    let tempUsers = [...this.users];
+
+    // Apply search term filter
+    if (this.searchTerm) {
+      const lowerCaseSearchTerm = this.searchTerm.toLowerCase();
+      tempUsers = tempUsers.filter(
+        (user) =>
+          user.nombre?.toLowerCase().includes(lowerCaseSearchTerm) ||
+          user.email.toLowerCase().includes(lowerCaseSearchTerm)
+      );
+    }
+
+    // Apply role filter
+    if (this.selectedRoleFilter) {
+      tempUsers = tempUsers.filter(
+        (user) => user.role === this.selectedRoleFilter
+      );
+    }
+
+    this.filteredUsers = tempUsers;
   }
 
   openEditModal(user: Usuario): void {
@@ -77,32 +111,30 @@ export class UsersComponent implements OnInit {
       updated_at: this.currentUser.updated_at,
     };
 
-    this.userService
-      .update(this.currentUser.id_usuario, userToUpdate)
-      .subscribe(
-        (response) => {
-          const index = this.users.findIndex(
-            (u) => u.id_usuario === this.currentUser.id_usuario
-          );
-          if (index !== -1) {
-            this.users[index] = response;
-          }
-          this.message = `Usuario "${this.currentUser.email}" actualizado con éxito.`;
-          this.isLoading = false;
-          this.closeEditModal();
-        },
-        (error) => {
-          console.error('Error al actualizar el usuario:', error);
-          this.error =
-            'Error al actualizar el usuario. Por favor, inténtelo de nuevo.';
-          if (error.error && error.error.message) {
-            this.error = `Error: ${error.error.message}`;
-          } else if (error.message) {
-            this.error = `Error: ${error.message}`;
-          }
-          this.isLoading = false;
+    this.userService.update(this.currentUser.id_usuario, userToUpdate).subscribe(
+      (response) => {
+        const index = this.users.findIndex(
+          (u) => u.id_usuario === this.currentUser.id_usuario
+        );
+        if (index !== -1) {
+          this.users[index] = response;
         }
-      );
+        this.message = `Usuario "${this.currentUser.email}" actualizado con éxito.`;
+        this.isLoading = false;
+        this.closeEditModal();
+        this.applyFilters(); // Re-apply filters to update the displayed list
+      },
+      (error) => {
+        console.error('Error al actualizar el usuario:', error);
+        this.error = 'Error al actualizar el usuario. Por favor, inténtelo de nuevo.';
+        if (error.error && error.error.message) {
+          this.error = `Error: ${error.error.message}`;
+        } else if (error.message) {
+          this.error = `Error: ${error.message}`;
+        }
+        this.isLoading = false;
+      }
+    );
   }
 
   confirmDelete(user: Usuario): void {
@@ -125,6 +157,7 @@ export class UsersComponent implements OnInit {
     this.message = null;
     this.error = null;
   }
+
   deleteUser(): void {
     if (
       !this.userToDelete ||
@@ -132,7 +165,7 @@ export class UsersComponent implements OnInit {
       this.userToDelete.id_usuario === null
     ) {
       this.error = 'No se ha seleccionado ningún usuario válido para eliminar.';
-      this.showConfirmDeleteModal = false; // Cerrar el modal si no hay usuario válido
+      this.showConfirmDeleteModal = false;
       return;
     }
 
@@ -140,32 +173,31 @@ export class UsersComponent implements OnInit {
     this.message = null;
     this.error = null;
 
-    const idToDelete = this.userToDelete.id_usuario; // Almacena el ID antes de que userToDelete se pueda limpiar
+    const idToDelete = this.userToDelete.id_usuario;
 
     this.userService.delete(idToDelete).subscribe({
       next: () => {
         const deletedUserEmail = this.userToDelete?.email || 'desconocido';
         this.message = `Usuario "${deletedUserEmail}" eliminado con éxito.`;
         setTimeout(() => {
-          this.message = '';
+          this.message = null; // Changed to null to clear the message
         }, 3000);
-        this.userToDelete = null; // Limpiar userToDelete después de la eliminación exitosa
+        this.userToDelete = null;
         this.showConfirmDeleteModal = false;
         this.isLoading = false;
-        this.loadUsers(); // Recargar la lista para reflejar el cambio
+        this.loadUsers(); // Recargar la lista para reflejar el cambio y re-apply filters
       },
       error: (error) => {
         console.error('Error al eliminar el usuario:', error);
-        this.error =
-          'Error al eliminar el usuario. Por favor, inténtelo de nuevo.';
+        this.error = 'Error al eliminar el usuario. Por favor, inténtelo de nuevo.';
         if (error.error && error.error.message) {
           this.error = `Error: ${error.error.message}`;
         } else if (error.message) {
           this.error = `Error: ${error.message}`;
         }
         this.isLoading = false;
-        this.userToDelete = null; // También limpiar en caso de error para evitar que persista un usuario incorrecto
-        this.showConfirmDeleteModal = false; // Cerrar el modal incluso con error
+        this.userToDelete = null;
+        this.showConfirmDeleteModal = false;
       },
     });
   }

@@ -18,20 +18,18 @@
   font-family: 'Baloo 2', 'Poppins' sans-serif;
 }
 
-/* Contenedor principal - AHORA SÍ, IGUAL QUE TU .admin-container original */
+/* Contenedor principal */
 .user-list-container {
   margin: 20px auto;
-  padding: 30px; /* Correcto: 30px */
+  padding: 30px;
   background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  /* Las siguientes líneas se mantienen para asegurar la herencia de fuente y color general en el contenedor */
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
   font-family: inherit;
   color: var(--text);
-  /* ELIMINADO: max-width: 1100px; - para que coincida exactamente con .admin-container */
 }
 
-/* Encabezado con ícono - CAMBIOS REALIZADOS ANTERIORMENTE (solo font-size y font-weight) */
+/* Encabezado con ícono */
 .user-list-container h2 {
   display: flex;
   align-items: center;
@@ -40,12 +38,12 @@
   padding-bottom: 15px;
   border-bottom: 2px solid var(--light);
   color: var(--dark);
-  font-size: 1.8rem; /* Ajustado para coincidir con el h3 del otro panel */
+  font-size: 1.8rem;
   line-height: 1;
 }
 
 .user-list-container h2 i {
-  font-size: 1.8rem; /* Tamaño del ícono consistente con el título */
+  font-size: 1.8rem;
   color: var(--primary);
   background-color: rgba(var(--primary-rgb), 0.1);
   width: 50px;
@@ -56,22 +54,92 @@
   justify-content: center;
 }
 
-/* Mensajes vacíos o de carga */
-.loading-message, .no-users-message {
-  text-align: center;
-  padding: 40px;
-  font-style: italic;
-  font-size: 1.1rem;
+/* Barra de herramientas - user-toolbar (equivalent to admin-toolbar) */
+.user-toolbar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Search Group - Modified to match admin-panel */
+.search-group {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  gap: 10px;
+}
+
+.search-group .form-control {
+  /* Input specific styles */
+  flex-grow: 1;
+  border-radius: var(--radius) 0 0 var(--radius); /* Rounded left, sharp right */
+  border: 1px solid var(--border);
+  background-color: white; /* Changed to white from var(--light) to match admin panel */
+  padding: 12px 15px; /* Ensure consistent padding with other form controls */
+  font-size: 1rem;
   color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.loading-message i {
-  margin-right: 10px;
-  color: var(--primary);
-  font-size: 1.5rem;
+.search-group .form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
 }
 
-/* Alerta */
+.search-group .btn-primary {
+  /* Search button specific styles */
+  border-radius: 0 var(--radius) var(--radius) 0; /* Sharp left, rounded right */
+  padding: 0 20px; /* Adjust padding for better visual alignment with input height */
+  height: 50px; 
+  display: flex; /* To center the icon */
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary); /* Primary color for button */
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.search-group .btn-primary:hover {
+  background-color: #8c6df9; /* Darker primary on hover */
+  transform: none; /* Remove transform from here, it's not present in admin search button */
+  box-shadow: none; /* Remove shadow from here, it's not present in admin search button */
+}
+
+.search-group .btn-primary i {
+  font-size: 1rem; /* Adjust icon size if needed */
+}
+
+
+/* Filter Group - Modified to match admin-panel */
+.filter-group {
+  min-width: 250px;
+}
+
+.filter-group .form-control { /* Targeting the select within filter-group */
+  width: 250px;
+  min-width: 150px;
+  border-radius: var(--radius); /* Full rounded corners */
+  background-color: white; /* Changed to white from var(--light) to match admin panel */
+  border: 1px solid var(--border);
+  padding: 12px 15px; /* Ensure consistent padding */
+  font-size: 1rem;
+  color: var(--text);
+  appearance: none; /* Remove default dropdown arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>'); /* Custom arrow */
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+}
+
+
+/* Mensajes de alerta */
 .alert {
   margin: 15px 0;
   padding: 15px 20px;
@@ -92,6 +160,21 @@
   background-color: #d4edda;
   color: #155724;
   border: 1px solid #c3e6cb;
+}
+
+/* Mensajes vacíos o de carga */
+.loading-message, .no-users-message {
+  text-align: center;
+  padding: 40px;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.loading-message i {
+  margin-right: 10px;
+  color: var(--primary);
+  font-size: 1.5rem;
 }
 
 /* Tabla */
@@ -260,12 +343,13 @@
   color: var(--dark);
 }
 
+/* Global form-control (for inputs, selects, textareas) */
 .form-control {
   width: 100%;
   padding: 12px 15px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background-color: var(--light);
+  background-color: var(--light); /* Use light for general form controls outside toolbar */
   color: var(--text);
   font-size: 1rem;
   transition: 0.2s;
@@ -338,7 +422,7 @@ textarea.form-control {
   }
 
   .user-list-container h2 {
-    font-size: 1.5rem; /* Ajuste para el encabezado en pantallas pequeñas */
+    font-size: 1.5rem;
     gap: 10px;
     margin-bottom: 25px;
   }
@@ -347,7 +431,33 @@ textarea.form-control {
     font-size: 1.3rem;
   }
 
-  /* Tabla responsiva (modo tarjeta) */
+  .user-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-group {
+    width: 100%;
+    min-width: unset;
+  }
+  /* Ensure search input and button maintain their rounded corners on mobile */
+  .search-group .form-control {
+    border-radius: var(--radius) 0 0 var(--radius);
+  }
+  .search-group .btn-primary {
+    border-radius: 0 var(--radius) var(--radius) 0;
+    height: auto; /* Allow height to adjust naturally if needed, or keep explicit */
+  }
+
+  .filter-group {
+    width: 100%;
+    min-width: unset;
+  }
+  /* Ensure filter dropdown maintains its rounded corners on mobile */
+  .filter-group .form-control {
+    border-radius: var(--radius);
+  }
+
   .user-table {
     border-radius: 0;
     box-shadow: none;

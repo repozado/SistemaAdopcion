@@ -150,6 +150,7 @@ export class AdministrarComponent  implements OnInit{
           this.message = 'Error al actualizar la mascota.';
           this.closeModal();
           this.setMessage('Error al modificar la mascota.');
+          console.log('Error al actualizar la mascota:', this.currentMascota);
         }
       });
     }
