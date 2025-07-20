@@ -1,28 +1,49 @@
 <div class="questionnaire-container">
   <div class="header">
-  <h2 style="margin-bottom: 5px;">Cuestionario de Compatibilidad</h2>
-  <p style="margin-top: 0;">Responde estas preguntas para encontrar a tu mascota ideal</p>
-</div>
+    <h2 style="margin-bottom: 5px">Cuestionario de Compatibilidad</h2>
+    <p style="margin-top: 0">
+      Responde estas preguntas para encontrar a tu mascota ideal
+    </p>
+  </div>
   <div class="progress-container">
-    <div class="progress-bar" [style.width]="(getAnsweredCount() / preguntas.length) * 100 + '%'"></div>
-    <span class="progress-text">{{getAnsweredCount()}}/{{preguntas.length}} respondidas</span>
+    <div
+      class="progress-bar"
+      [style.width]="(getAnsweredCount() / preguntas.length) * 100 + '%'"
+    ></div>
+    <span class="progress-text"
+      >{{ getAnsweredCount() }}/{{ preguntas.length }} respondidas</span
+    >
   </div>
 
   <div class="questions-wrapper">
-    <div *ngFor="let pregunta of preguntas" class="question-card" 
-         [class.active]="isCurrentQuestion(pregunta.id)">
+    <div
+      *ngFor="let pregunta of preguntas"
+      class="question-card"
+      [class.active]="isCurrentQuestion(pregunta.id)"
+    >
       <div class="question-header">
-        <span class="question-number">Pregunta {{pregunta.id}}</span>
-        <h3 class="question-text">{{pregunta.texto}}</h3>
+        <span class="question-number">Pregunta {{ pregunta.id }}</span>
+        <h3 class="question-text">{{ pregunta.texto }}</h3>
       </div>
 
       <div class="options-container">
-        <div *ngFor="let opcion of pregunta.opciones" 
-             class="option" 
-             [class.selected]="respuestas[pregunta.id] === opcion.id"
-             (click)="selectOption(pregunta.id, opcion.id)">
-          <span class="option-text">{{opcion.texto}}</span>
+        <div
+          *ngFor="let opcion of pregunta.opciones"
+          class="option"
+          [class.selected]="respuestas[pregunta.id] === opcion.id"
+          (click)="selectOption(pregunta.id, opcion.id)"
+        >
+          <span class="option-text">{{ opcion.texto }}</span>
         </div>
+      </div>
+      <div class="navigation-buttons" *ngIf="isCurrentQuestion(pregunta.id)">
+        <button
+          class="nav-btn"
+          (click)="anteriorPregunta()"
+          [disabled]="currentQuestionId === 1"
+        >
+          Pregunta Anterior
+        </button>
       </div>
     </div>
   </div>
@@ -31,8 +52,8 @@
     <div class="error-content">
       <i class="fas fa-exclamation-circle"></i>
       <div>
-        <h4>{{mensajeError.titulo}}</h4>
-        <p>{{mensajeError.texto}}</p>
+        <h4>{{ mensajeError.titulo }}</h4>
+        <p>{{ mensajeError.texto }}</p>
       </div>
     </div>
   </div>
