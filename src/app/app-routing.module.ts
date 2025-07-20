@@ -12,6 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { UsersComponent } from './components/users/users.component';
 import { RegisterComponent } from './components/register/register.component';
+import { CuestionarioComponent } from './components/cuestionario/cuestionario.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -24,6 +25,8 @@ const routes: Routes = [
   {path: 'contacto', component:ContactComponent},
   {path: "usuarios", component:UsersComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: 'mascota/:id', component:PetcardComponent},
+  {path: 'cuestionario', component:CuestionarioComponent},
+  {path: 'yo', component:EncuestaComponent},
   {path: '**', pathMatch: 'full', redirectTo: 'home'} 
 ];
 

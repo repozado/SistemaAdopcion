@@ -1,0 +1,22 @@
+<div class="container-cuestionario">
+  <h2>Cuestionario de Compatibilidad</h2>
+  <form (ngSubmit)="enviarRespuestas()">
+    <div *ngFor="let pregunta of preguntas; let i = index" class="pregunta">
+      <p><strong>Pregunta {{ i + 1 }}:</strong> {{ pregunta.texto }}</p>
+      <div class="opciones">
+        <label *ngFor="let opcion of pregunta.opciones">
+          <input 
+            type="radio" 
+            [name]="'pregunta' + pregunta.id" 
+            [value]="opcion.id" 
+            [(ngModel)]="respuestas[pregunta.id]"
+            required
+            [ngModelOptions]="{ standalone: true }"
+          />
+          {{ opcion.texto }}
+        </label>
+      </div>
+    </div>
+    <button type="submit" class="enviar-btn">Enviar respuestas</button>
+  </form>
+</div>

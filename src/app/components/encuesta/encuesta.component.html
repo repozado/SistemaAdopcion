@@ -1,1 +1,34 @@
-<p>encuesta works!</p>
+<div class="encuesta-wrapper">
+  <div class="encuesta-card" *ngIf="!cargando && resultado; else cargandoTemplate">
+    <h2 class="encuesta-titulo">Resultado de tu Encuesta Emocional</h2>
+
+    <div class="encuesta-info">
+      <p><strong>Tipo emocional:</strong> {{ resultado.descripcion }}</p>
+      <p><strong>Fecha:</strong> {{ resultado.fecha_resultado | date: 'fullDate' }}</p>
+      <p><strong>Compatibilidad:</strong> {{ resultado.compatibilidad }}</p>
+    </div>
+
+    <div class="encuesta-recomendacion" [ngClass]="{
+      'alta': resultado.compatibilidad >= 3,
+      'baja': resultado.compatibilidad < 3
+    }">
+      <p *ngIf="resultado.compatibilidad >= 3">
+        ¡Eres altamente compatible con muchas mascotas!
+      </p>
+      <p *ngIf="resultado.compatibilidad < 3">
+        Te sugerimos una mascota tranquila y paciente.
+      </p>
+    </div>
+
+    <button class="btn-volver" routerLink="/">← Volver al inicio</button>
+  </div>
+
+  <ng-template #cargandoTemplate>
+    <div *ngIf="cargando" class="encuesta-cargando">
+      <p>Cargando resultado emocional...</p>
+    </div>
+    <div *ngIf="!cargando && error" class="encuesta-error">
+      <p>{{ error }}</p>
+    </div>
+  </ng-template>
+</div>

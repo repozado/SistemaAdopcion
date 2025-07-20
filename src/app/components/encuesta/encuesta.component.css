@@ -1,0 +1,71 @@
+.encuesta-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 2rem 1rem;
+}
+
+.encuesta-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.encuesta-titulo {
+  font-size: 2rem;
+  margin-bottom: 1.8rem;
+  color: #4a4a4a;
+}
+
+.encuesta-info p {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  color: #333;
+}
+
+.encuesta-recomendacion {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.encuesta-recomendacion.alta {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.encuesta-recomendacion.baja {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.btn-volver {
+  margin-top: 2rem;
+  background-color: #a78bfa;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-volver:hover {
+  background-color: #8b5cf6;
+}
+
+.encuesta-cargando,
+.encuesta-error {
+  text-align: center;
+  font-style: italic;
+  color: red;
+  font-size: 1.1rem;
+}
