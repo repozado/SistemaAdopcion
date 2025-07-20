@@ -1,11 +1,8 @@
+/* IMPORTACIÓN DE FUENTE */
+/* IMPORTACIÓN DE FUENTE */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap');
-.hero-subtitle {
-  color: #ffffff; /* Blanco puro */
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  text-align: center;
-}
 
+/* VARIABLES CSS CENTRALIZADAS */
 :host {
   --primary: #A78BFA;
   --secondary: #FCAFAF;
@@ -18,10 +15,9 @@
   --radius: 12px;
   --transition: all 0.3s ease;
   display: block;
-  overflow-x: hidden;
 }
 
-/* === RESET GLOBAL === */
+/* RESET GLOBAL MEJORADO - Elimina espacios en blanco laterales */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -31,64 +27,73 @@
 html, body {
   width: 100%;
   height: 100%;
-  overflow-x: hidden; /* ✨ elimina scroll horizontal */
+  overflow-x: hidden; /* Elimina scroll horizontal global */
+  scroll-behavior: smooth; /* Scroll suave para navegación */
 }
 
-/* === HERO SECTION CORREGIDO Y CENTRADO === */
-.hero-section {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  min-height: 100vh;
+/* CONTENEDOR UNIVERSAL - Centra contenido y elimina desbordamientos */
+.container {
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* === HERO SECTION - ALTURA OPTIMIZADA PARA NAVEGADOR === */
+.hero-section {
+  /* CAMBIO PRINCIPAL: Altura ajustada para que coincida exactamente con el viewport visible */
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  height: 90vh; /* Cambiado de min-height a height fijo */
+  width: 90vw; /* Ancho del viewport completo */
+ /* Espacio superior e inferior para evitar corte de contenido */
+
+  /* Centrado perfecto vertical y horizontal */
   display: flex;
-  flex-direction: column;
-  justify-content: center;  /* ✨ centra vertical */
-  align-items: center;      /* ✨ centra horizontal */
-  text-align: center;
+  align-items: center;
+  justify-content: center;
+
   position: relative;
   overflow: hidden;
-  padding: 60px 20px;
-  width: 100% !important; /* ✨ asegura que ocupe todo el ancho */
-  background-size: cover;
-  background-position: center;
+  text-align: center;
 
-
+  /* SOLUCIÓN: Elimina cualquier margen o padding del body que pueda afectar */
+  margin-left: calc(-50vw + 50%);
+  width: 100vw;
 
 }
 
-/* Animación suave y fondo dinámico */
+/* Animación de fondo dinámico */
 .hero-section::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   background: radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent 70%);
   animation: float 6s ease-in-out infinite;
   z-index: 0;
 }
 
-.hero-content {
-  z-index: 1;
-  max-width: 960px;
-  padding: 0 20px;
+.hero-wrapper {
   width: 100%;
+  max-width: 100vw;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 
-.hero-wrapper {
-  width: 100%;
-  max-width: none;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-/* Navbar centrada con isotipo */
+/* === NAVBAR SOULPET - CENTRADA Y OPTIMIZADA === */
 .soulpet-navbar {
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* Reducido para optimizar espacio */
   z-index: 2;
+  position: relative;
 }
 
 .navbar-container {
@@ -96,37 +101,54 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  animation: containerPulse 4s ease-in-out infinite;
 }
 
-/* Logo más grande */
+/* Logo optimizado */
 .logo {
-  height: 120px;
-  width: auto;
-  margin-bottom: 10px;
+  height: 170px; /* Reducido de 150px para mejor proporción */
+
+  margin-bottom: 5px;
+  transition: var(--transition);
+  animation: logoFloat 3s ease-in-out infinite;
 }
 
-/* Texto SoulPet grande y legible */
+/* Texto SoulPet - Optimizado */
 .Soulpet {
-  font-size: 3rem;
+  font-size: 4rem; /* Reducido de 4rem para mejor proporción */
   font-weight: 900;
   font-family: 'Nunito', sans-serif;
   color: white;
   text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-  margin-bottom: 20px;
+  margin-bottom: 0px;
+  animation: textGlow 2s ease-in-out infinite alternate;
+
+}
+
+.hero-content {
+  width: 100%;
+  max-width: 960px;       /* evita que se expanda más de la cuenta */
+  padding: 0 20px;         /* espacio lateral para móviles */
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* centra horizontalmente */
+  justify-content: center; /* centra verticalmente dentro de .hero-wrapper */
+  text-align: center;
+  z-index: 2;
+
 }
 
 
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-
-/* === HERO SUBTITULO Y BOTONES === */
 .hero-subtitle {
-  font-size: 1.5rem;
-  margin-bottom: 40px;
+  color: #ffffff;
+  font-size: 1.8rem; /* Ligeramente reducido para mejor proporción */
+  margin-bottom: 35px; /* Reducido de 40px */
+  text-align: center;
+  line-height: 1.4;
   animation: fadeInUp 1s ease-out 0.2s both;
+  max-width: 800px; /* Limita el ancho para mejor legibilidad */
 }
 
 .hero-cta {
@@ -137,6 +159,7 @@ html, body {
   animation: fadeInUp 1s ease-out 0.4s both;
 }
 
+/* === BOTONES HERO === */
 .btn-hero-primary, .btn-hero-secondary {
   padding: 16px 32px;
   border-radius: 50px;
@@ -173,21 +196,27 @@ html, body {
   background: rgba(255,255,255,0.2);
 }
 
-/* === VALUE PROPOSITION === */
+/* === VALUE PROPOSITION - FONDO COMPLETO === */
 .value-section {
+  /* Fondo completo sin desbordamiento */
   background-color: var(--light);
-  padding: 80px 20px;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  padding: 80px 0;
+  box-sizing: border-box;
 }
 
 .section-title {
   text-align: center;
   margin-bottom: 60px;
+  padding: 0 20px;
 }
 
 .section-title h2 {
   font-size: 2.5rem;
   font-weight: bold;
   color: var(--dark);
+  margin-bottom: 10px;
 }
 
 .section-title p {
@@ -195,12 +224,16 @@ html, body {
   color: var(--text);
   max-width: 600px;
   margin: 0 auto;
+  line-height: 1.5;
 }
 
 .value-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .value-card {
@@ -210,7 +243,6 @@ html, body {
   box-shadow: var(--shadow);
   text-align: center;
   transition: var(--transition);
-  position: relative;
 }
 
 .value-card:hover {
@@ -234,17 +266,28 @@ html, body {
 .value-card h3 {
   color: var(--dark);
   margin-bottom: 10px;
+  font-size: 1.2rem;
 }
 
 .value-card p {
   color: var(--text);
   font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 /* === HOW IT WORKS === */
 .how-it-works {
-  padding: 80px 20px;
+  padding: 80px 0;
   background: white;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  box-sizing: border-box;
+}
+
+.steps-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .step {
@@ -269,6 +312,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .step-content h3 {
@@ -287,13 +331,19 @@ html, body {
 /* === MASCOTAS DESTACADAS === */
 .featured-pets {
   background: var(--light);
-  padding: 80px 20px;
+  padding: 80px 0;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  box-sizing: border-box;
 }
 
 .pets-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .pet-card {
@@ -319,6 +369,13 @@ html, body {
   justify-content: center;
   font-size: 3rem;
   position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.pet-image.has-image i {
+  display: none;
 }
 
 .pet-badge {
@@ -356,21 +413,53 @@ html, body {
   font-size: 0.95rem;
   margin-bottom: 10px;
   color: var(--text);
+  line-height: 1.4;
 }
 
-/* === CTA FINAL (agrandado verticalmente) === */
-.cta-section {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+.pet-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-info, .btn-adopt {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-info {
+  background: var(--border);
+  color: var(--text);
+}
+
+.btn-adopt {
+  background: var(--primary);
   color: white;
-  text-align: center;
-  padding: 140px 20px 120px; /* 🔧 Altura mayor */
 }
 
-/* === STATS SECTION === */
+.text-center {
+  text-align: center;
+}
+
+.mt-5 {
+  margin-top: 3rem;
+}
+
+/* === ESTADÍSTICAS === */
 .stats-section {
   background: var(--dark);
   color: white;
-  padding: 60px 20px;
+  padding: 60px 0;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  box-sizing: border-box;
 }
 
 .stats-grid {
@@ -378,12 +467,21 @@ html, body {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   text-align: center;
   gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.stat-item {
+  padding: 0 10px;
 }
 
 .stat-number {
   font-size: 2.5rem;
   font-weight: bold;
   color: var(--accent);
+  display: block;
+  margin-bottom: 5px;
 }
 
 .stat-label {
@@ -391,26 +489,153 @@ html, body {
   opacity: 0.85;
 }
 
-/* === ANIMATIONS === */
+/* === CTA FINAL - ALTURA OPTIMIZADA === */
+.cta-section {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  width: 105vw;
+  margin-left: calc(-50vw + 50%);
+  height: 105vh; /* Altura fija igual al hero */
+  box-sizing: border-box;
+
+  /* Centrado igual al hero */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.cta-wrapper {
+  width: 100%;
+  max-width: 960px;
+  padding: 0 20px;
+}
+
+.cta-content h2 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.cta-content p {
+  font-size: 1.5rem;
+  margin-bottom: 40px;
+  line-height: 1.4;
+}
+
+/* === ANIMACIONES === */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* === RESPONSIVE === */
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+@keyframes textGlow {
+  0% {
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+  }
+  100% {
+    text-shadow: 2px 2px 12px rgba(255,255,255,0.4), 0 0 20px rgba(255,255,255,0.2);
+  }
+}
+
+@keyframes containerPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+/* === RESPONSIVE DESIGN === */
 @media (max-width: 768px) {
-  .hero-title { font-size: 2.2rem; }
-  .step { flex-direction: column !important; text-align: center; }
-  .pets-grid { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .Soulpet {
+    font-size: 2.8rem; /* Ajustado proporcionalmente */
+  }
+
+  .logo {
+    height: 110px; /* Ajustado proporcionalmente */
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+
+  .section-title h2 {
+    font-size: 2rem;
+  }
+
+  .step {
+    flex-direction: column !important;
+    text-align: center;
+  }
+
+  .pets-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .value-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-content h2 {
+    font-size: 1.8rem;
+  }
+
+  /* Ajuste de espaciado para móviles */
+  .soulpet-navbar {
+    margin-bottom: 20px;
+  }
 }
 
 @media (max-width: 480px) {
-  .hero-title { font-size: 1.8rem; }
-  .hero-cta { flex-direction: column; }
-  .stats-grid { grid-template-columns: 1fr; }
-}
+  .Soulpet {
+    font-size: 2.2rem;
+  }
 
-html {
-  scroll-behavior: smooth;
+  .logo {
+    height: 90px;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-hero-primary, .btn-hero-secondary {
+    padding: 14px 24px;
+    font-size: 0.95rem;
+  }
+
+  .soulpet-navbar {
+    margin-bottom: 15px;
+  }
 }
