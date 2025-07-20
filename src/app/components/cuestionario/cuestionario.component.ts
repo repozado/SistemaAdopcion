@@ -144,7 +144,7 @@ export class CuestionarioComponent implements OnInit {
 
     this.CuestionarioService.enviarRespuestas(respuestasFormateadas).subscribe({
       next: (data) => {
-        this.router.navigate(['/mascotas']);
+        this.router.navigate(['/yo']);
       },
       error: (err) => {
         console.error(err);
