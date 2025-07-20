@@ -1,52 +1,164 @@
-<div class="home-container">
-  <div class="interface-card">
-    <div class="hero">
-      <h1>Encuentra a tu compañero emocional perfecto</h1>
-      <p>Nuestro sistema de matching emocional te ayuda a conectar con mascotas que se adaptan a tu personalidad</p>
-      
-      <div class="value-cards">
-        <div class="value-card">
-          <i class="fas fa-heartbeat"></i>
-          <h4>Matching Emocional</h4>
-          <p>Conexión basada en personalidad</p>
-        </div>
-        
-        <div class="value-card">
-          <i class="fas fa-paw"></i>
-          <h4>Adopciones Felices</h4>
-          <p>Historias de éxito garantizado</p>
-        </div>
-        
-        <div class="value-card">
-          <i class="fas fa-hand-holding-heart"></i>
-          <h4>Proceso Seguro</h4>
-          <p>Certificamos cada adopción</p>
-        </div>
+<!-- HERO SECTION con navbar -->
+<section class="hero-section">
+  <div class="hero-wrapper">
+    <!-- Navbar personalizada con isotipo -->
+    <nav class="soulpet-navbar mb-4">
+      <div class="navbar-container" routerLink="/home">
+        <img src="logosoulpet.png" alt="SoulPet Logo" class="logo">
+        <span class="Soulpet">SoulPet</span>
       </div>
-    </div>
-    
-    <div class="pets-grid">
-      <div *ngFor="let mascota of mascotasDestacadas" class="pet-card" (click)="scrollToSection('detalle-mascota')">
-        <div class="pet-image">
-          <i [class]="mascota.image || 'fas fa-paw'"></i>
-          <div class="pet-badge">{{ mascota.emotionalProfile }}</div>
-        </div>
-        <div class="pet-info">
-          <h3>{{ mascota.name }}</h3>
-          <div class="pet-meta">
-            <span>{{ mascota.age }} años</span>
-            <span>{{ mascota.type }}</span>
-            <span>{{ mascota.size }}</span>
-          </div>
-          <p>{{ mascota.shortDescription }}</p>
-        </div>
+    </nav>
+
+    <div class="hero-content">
+      <p class="hero-subtitle">
+        El primer sistema de matching emocional que conecta tu alma con la mascota perfecta
+      </p>
+      <div class="hero-cta">
+        <a (click)="scrollToSection('encuesta')" class="btn-hero-primary">
+          <i class="fas fa-heart"></i> Encuentra tu Match
+        </a>
+        <a (click)="scrollToSection('como-funciona')" class="btn-hero-secondary">
+          <i class="fas fa-play-circle"></i> Ver cómo funciona
+        </a>
       </div>
-    </div>
-    
-    <div class="cta-button">
-      <button class="btn btn-secondary" (click)="scrollToSection('encuesta')">
-        <i class="fas fa-clipboard-list"></i> Realizar Encuesta Emocional
-      </button>
     </div>
   </div>
-</div>
+</section>
+
+<!-- VALUE PROPOSITION SECTION -->
+<section class="value-section">
+  <div class="container">
+    <div class="section-title">
+      <h2>¿Por qué SoulPet es diferente?</h2>
+      <p>No solo conectamos personas con mascotas, creamos vínculos emocionales duraderos</p>
+    </div>
+
+    <div class="value-cards">
+      <div class="value-card" *ngFor="let valor of [
+        { icon: 'fa-brain', titulo: 'Inteligencia Emocional', desc: 'Analizamos tu personalidad y estilo de vida para encontrar el match ideal.' },
+        { icon: 'fa-shield-heart', titulo: 'Adopciones Exitosas', desc: '97% de éxito gracias a la compatibilidad emocional.' },
+        { icon: 'fa-hands-helping', titulo: 'Seguimiento Integral', desc: 'Acompañamiento post-adopción para ti y tu mascota.' },
+        { icon: 'fa-certificate', titulo: 'Proceso Certificado', desc: 'Evaluaciones veterinarias y de comportamiento incluidas.' },
+        { icon: 'fa-mobile-alt', titulo: 'Experiencia Digital', desc: 'Fácil, moderna, transparente y emocionante.' },
+        { icon: 'fa-heart-pulse', titulo: 'Bienestar Animal', desc: 'Trabajamos con refugios certificados.' }
+      ]">
+        <div class="value-card-icon">
+          <i class="fas" [ngClass]="valor.icon"></i>
+        </div>
+        <h3>{{ valor.titulo }}</h3>
+        <p>{{ valor.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="como-funciona">
+  <div class="container">
+    <div class="section-title">
+      <h2>¿Cómo funciona el matching?</h2>
+      <p>Un proceso simple de 4 pasos para encontrar a tu compañero ideal</p>
+    </div>
+
+    <div class="steps-container">
+      <div class="step" *ngFor="let paso of [
+        { n: 1, t: 'Completa tu perfil emocional', d: 'Responde un cuestionario gratuito que analiza tu personalidad, experiencia y estilo de vida.' },
+        { n: 2, t: 'Nuestro algoritmo trabaja por ti', d: 'Usamos IA y psicología animal para identificar coincidencias reales.' },
+        { n: 3, t: 'Recibe tus matches personalizados', d: 'Te mostramos mascotas compatibles contigo, con explicaciones detalladas.' },
+        { n: 4, t: 'Conecta y adopta', d: 'Agenda un encuentro y completa la adopción con acompañamiento especializado.' }
+      ]">
+        <div class="step-number">{{ paso.n }}</div>
+        <div class="step-content">
+          <h3>{{ paso.t }}</h3>
+          <p>{{ paso.d }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PETS -->
+<section class="featured-pets" id="mascotas">
+  <div class="container">
+    <div class="section-title">
+      <h2>Mascotas esperando por ti</h2>
+      <p>Conoce a algunos de nuestros compañeros especiales</p>
+    </div>
+
+    <div class="pets-grid">
+      <div class="pet-card" *ngFor="let mascota of mascotasDestacadas">
+        <div class="pet-image">
+          <i class="fas" [ngClass]="mascota.especie === 'Gato' ? 'fa-cat' : 'fa-dog'"></i>
+          <div class="pet-badge">{{ mascota.perfilEmocional }}</div>
+        </div>
+        <div class="pet-info">
+          <h3>{{ mascota.nombre }}</h3>
+          <div class="pet-meta">
+            <span>{{ mascota.edad }} años</span>
+            <span>{{ mascota.tamano }}</span>
+            <span>{{ mascota.especie }}</span>
+          </div>
+          <p class="pet-description">
+            {{ mascota.descripcion | slice:0:100 }}...
+          </p>
+          <div class="pet-actions">
+            <a [routerLink]="['/mascota', mascota.id_mascota]" class="btn-info">
+              <i class="fas fa-info-circle"></i> Ver más
+            </a>
+            <a [routerLink]="['/encuesta']" class="btn-adopt">
+              <i class="fas fa-heart"></i> Adoptar
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <a routerLink="/mascotas" class="btn-hero-primary">
+        <i class="fas fa-paw"></i> Ver todas las mascotas
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STATISTICS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-number" id="stat-adoptions">1247</span>
+        <div class="stat-label">Adopciones Exitosas</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="stat-success">97</span>
+        <div class="stat-label">Tasa de Éxito</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="stat-pets">856</span>
+        <div class="stat-label">Mascotas Disponibles</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="stat-shelters">43</span>
+        <div class="stat-label">Refugios Aliados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section" id="encuesta">
+  <div class="container">
+    <div class="cta-content">
+      <h2>¿Listo para encontrar a tu alma gemela perruna?</h2>
+      <p>Comienza tu viaje hacia una adopción perfecta con nuestro cuestionario emocional gratuito</p>
+      <div class="hero-cta">
+        <a routerLink="/encuesta" class="btn-hero-primary">
+          <i class="fas fa-clipboard-list"></i> Comenzar Encuesta Gratis
+        </a>
+        <a routerLink="/faq" class="btn-hero-secondary">
+          <i class="fas fa-question-circle"></i> Preguntas Frecuentes
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
