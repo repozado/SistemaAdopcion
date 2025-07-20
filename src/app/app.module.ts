@@ -23,6 +23,7 @@ import { Token } from '@angular/compiler';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { UsersComponent } from './components/users/users.component';
 import { RegisterComponent } from './components/register/register.component';
+import { CuestionarioComponent } from './components/cuestionario/cuestionario.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { RegisterComponent } from './components/register/register.component';
     ValuecardComponent,
     LoginComponent,
     UsersComponent,
-    RegisterComponent
+    RegisterComponent,
+    CuestionarioComponent
   ],
   imports: [
     BrowserModule,
