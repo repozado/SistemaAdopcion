@@ -1,28 +1,44 @@
-<div class="container-cuestionario">
-  <h2>Cuestionario de Compatibilidad</h2>
-  <form (ngSubmit)="enviarRespuestas()">
-    <div *ngFor="let pregunta of preguntas; let i = index" class="pregunta">
-      <p>
-        <strong>Pregunta {{ i + 1 }}:</strong> {{ pregunta.texto }}
-      </p>
-      <div class="opciones">
-        <label *ngFor="let opcion of pregunta.opciones">
-          <input
-            type="radio"
-            [name]="'pregunta' + pregunta.id"
-            [value]="opcion.id"
-            [(ngModel)]="respuestas[pregunta.id]"
-            required
-            [ngModelOptions]="{ standalone: true }"
-          />
-          {{ opcion.texto }}
-        </label>
+<div class="questionnaire-container">
+  <div class="header">
+  <h2 style="margin-bottom: 5px;">Cuestionario de Compatibilidad</h2>
+  <p style="margin-top: 0;">Responde estas preguntas para encontrar a tu mascota ideal</p>
+</div>
+  <div class="progress-container">
+    <div class="progress-bar" [style.width]="(getAnsweredCount() / preguntas.length) * 100 + '%'"></div>
+    <span class="progress-text">{{getAnsweredCount()}}/{{preguntas.length}} respondidas</span>
+  </div>
+
+  <div class="questions-wrapper">
+    <div *ngFor="let pregunta of preguntas" class="question-card" 
+         [class.active]="isCurrentQuestion(pregunta.id)">
+      <div class="question-header">
+        <span class="question-number">Pregunta {{pregunta.id}}</span>
+        <h3 class="question-text">{{pregunta.texto}}</h3>
+      </div>
+
+      <div class="options-container">
+        <div *ngFor="let opcion of pregunta.opciones" 
+             class="option" 
+             [class.selected]="respuestas[pregunta.id] === opcion.id"
+             (click)="selectOption(pregunta.id, opcion.id)">
+          <span class="option-text">{{opcion.texto}}</span>
+        </div>
       </div>
     </div>
-    <button type="submit" class="enviar-btn">Enviar respuestas</button>
-    <div *ngIf="mensajeError" class="mensaje-error" #mensajeErrorDiv>
-      <h3>{{ mensajeError.titulo }}</h3>
-      <p>{{ mensajeError.texto }}</p>
+  </div>
+
+  <div *ngIf="mensajeError" class="error-message" #mensajeErrorDiv>
+    <div class="error-content">
+      <i class="fas fa-exclamation-circle"></i>
+      <div>
+        <h4>{{mensajeError.titulo}}</h4>
+        <p>{{mensajeError.texto}}</p>
+      </div>
     </div>
-  </form>
+  </div>
+
+  <button class="submit-btn" (click)="enviarRespuestas()">
+    Enviar respuestas
+    <i class="fas fa-paw"></i>
+  </button>
 </div>
