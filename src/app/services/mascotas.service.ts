@@ -13,7 +13,6 @@ export interface Mascota {
   descripcion: string;
   estado_adopcion: string;
   lugar_actual: string;
-  compatibilidad: number;
   requerimientos: string;
   perfil_emocional: string;
   imagen: string | null;
@@ -46,7 +45,6 @@ export class MascotasService {
         descripcion:     item.descripcion,
         estado_adopcion: item.estado_adopcion,
         lugar_actual:    item.lugar_actual,
-        compatibilidad:  item.compatibilidad,
         requerimientos:  item.requerimientos,
         perfil_emocional: item.perfil_emocional,
         // aquí garantizamos que siempre exista "imagen" (puede ser null)

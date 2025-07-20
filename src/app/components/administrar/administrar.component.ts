@@ -207,7 +207,6 @@ export class AdministrarComponent  implements OnInit{
       perfil_emocional: '',
       imagen: 'fas fa-dog',
       descripcion: '',
-      compatibilidad: 0,
       requerimientos: '',
       estado_adopcion: 'Disponible',
       lugar_actual: ''

@@ -31,14 +31,18 @@
 
         <p class="mascota-description">{{ mascota.descripcion }}</p>
 
+        <!--
         <div class="mascota-match">
           <span>Compatibilidad:</span>
-          <div class="compat-stars">
-            <!-- Dibujamos 3 patitas; si index<compatibilidad, llevan la clase 'filled' -->
-            <i class="fas fa-paw" *ngFor="let _ of [0,1,2]; let idx = index"
+          <div class="compat-stars"> -->
+           <!-- Dibujamos 3 patitas; si index<compatibilidad, llevan la clase 'filled' -->
+           <!---
+           <i class="fas fa-paw" *ngFor="let _ of [0,1,2]; let idx = index"
               [class.filled]="idx < mascota.compatibilidad"></i>
           </div>
-        </div>
+        </div> -->
+
+
 
         <button class="btn-adoptar" (click)="verDetalle(mascota)">
           <i class="fas fa-heart"></i> Conocer más

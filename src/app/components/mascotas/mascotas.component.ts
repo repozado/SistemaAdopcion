@@ -26,15 +26,15 @@ export class MascotasComponent implements OnInit {
     });
   }*/
 
-ngOnInit() {
-  this.mascotaService.getAll().subscribe({
-    next: (data) => {
-      this.mascotas = data;
-      console.log('Mascotas cargadas:', this.mascotas);
-    },
-    error: (err) => console.error(err)
-  });
-}
+  ngOnInit() {
+    this.mascotaService.getAll().subscribe({
+      next: (data) => {
+        this.mascotas = data;
+        console.log('Mascotas cargadas:', this.mascotas);
+      },
+      error: (err) => console.error(err),
+    });
+  }
 
   getProfileColor(profile: string): string {
     const colors: { [key: string]: string } = {
@@ -52,13 +52,13 @@ ngOnInit() {
   }
 
   /** Devuelve 'X meses' si edad < 1, o 'Y años' si ≥1 */
-formatAge(age: number): string {
-  if (age < 1) {
-    const months = Math.round(age * 12);
-    return `${months} mes${months === 1 ? '' : 'es'}`;
-  } else {
-    const years = Math.floor(age);
-    return `${years} año${years === 1 ? '' : 's'}`;
+  formatAge(age: number): string {
+    if (age < 1) {
+      const months = Math.round(age * 12);
+      return `${months} mes${months === 1 ? '' : 'es'}`;
+    } else {
+      const years = Math.floor(age);
+      return `${years} año${years === 1 ? '' : 's'}`;
+    }
   }
-}
 }

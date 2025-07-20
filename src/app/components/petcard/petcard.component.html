@@ -1,62 +1,94 @@
-<div class="pet-detail-container">
+<div class="pet-detail-container" *ngIf="mascota">
   <div class="pet-detail-card">
     <div class="card-header">
       <i class="fas fa-paw"></i>
       <h3>Ficha Detallada de Mascota</h3>
     </div>
-    
+    <button class="btn-volver" (click)="volver()">
+      <i class="fas fa-arrow-left"></i> Volver
+    </button>
+
     <div class="pet-content-wrapper">
-      <!-- Columna izquierda - Imagen -->
+      <!-- === COLUMNA IZQUIERDA: CARRUSEL DE IMÁGENES === -->
       <div class="pet-image-container">
-        <div class="pet-image">
-          <i [class]="mascota?.imagen || 'fas fa-dog'"></i>
-          <div class="pet-badge">{{ mascota?.perfil_emocional }}</div>
+        <div class="carousel">
+          <!-- Flecha izquierda -->
+          <button class="nav prev" (click)="prevImage()" [class.hidden]="imagenes.length < 2">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <!-- Si no hay imágenes, mostramos icono de pata -->
+          <ng-container *ngIf="imagenes.length > 0; else noImage">
+            <div class="slides" [style.transform]="slideTransform">
+              <img 
+                *ngFor="let img of imagenes; let i = index" 
+                [src]="'data:image/jpeg;base64,' + img.imagen"
+                [alt]="mascota.nombre + ' #' + (i+1)" 
+                (click)="openLightbox(i)" 
+                class="slide" />
+            </div>
+          </ng-container>
+          <ng-template #noImage>
+            <div class="default-icon">
+              <i class="fas fa-paw"></i>
+            </div>
+          </ng-template>
+
+          <!-- Flecha derecha -->
+          <button class="nav next" (click)="nextImage()" [class.hidden]="imagenes.length < 2">
+            <i class="fas fa-chevron-right"></i>
+          </button>
         </div>
       </div>
-      
-      <!-- Columna derecha - Información -->
+
+
+      <!-- === COLUMNA DERECHA: INFO DETALLADA === -->
       <div class="pet-info-container">
         <div class="pet-header">
-          <h2>{{ mascota?.nombre }}</h2>
+          <h2>{{ mascota.nombre }}</h2>
           <div class="pet-meta">
-            <span><i class="fas" [class.fa-dog]="mascota?.especie === 'Perro'" [class.fa-cat]="mascota?.especie === 'Gato'"></i> {{ mascota?.especie }}</span>
-            <span><i class="fas fa-birthday-cake"></i> {{ mascota?.edad }} años</span>
-            <span><i class="fas fa-ruler"></i> {{ mascota?.tamano }}</span>
-            <span><i class="fas fa-venus-mars"></i> {{ mascota?.sexo }}</span>
+            <span><i class="fas" [class.fa-dog]="mascota.especie==='Perro'"
+                [class.fa-cat]="mascota.especie==='Gato'"></i>
+              {{ mascota.especie }}
+            </span>
+            <span><i class="fas fa-birthday-cake"></i> {{ formatAge(mascota.edad) }}</span>
+            <span><i class="fas fa-ruler"></i> {{ mascota.tamano }}</span>
+            <span><i class="fas fa-venus-mars"></i> {{ mascota.sexo }}</span>
+            <span><i class="fas fa-map-marker-alt"></i> {{ mascota.lugar_actual }}</span>
           </div>
         </div>
-        
-        <div class="pet-match">
-          <span>Compatibilidad:</span>
-          <div class="match-bar">
-            <div class="match-fill" [style.width.%]="mascota?.compatibilidad"></div>
-          </div>
-          <div class="match-percent">{{ mascota?.compatibilidad }}%</div>
-        </div>
-        
+
         <div class="pet-section">
-          <h4>Sobre {{mascota?.nombre}}</h4>
-          <p>{{ mascota?.descripcion }}</p>
+          <h4>Descripción</h4>
+          <p>{{ mascota.descripcion }}</p>
         </div>
-        
+
         <div class="pet-section">
           <h4>Requerimientos</h4>
           <ul>
-            <li *ngFor="let req of mascota?.requerimientos">{{ req }}</li>
+            <li *ngFor="let req of petReqList">{{ req }}</li>
           </ul>
         </div>
-        
-        <div class="pet-actions">
-          <button class="btn btn-primary" style="width: 100%;">
-            <i class="fas fa-heart"></i> Solicitar Adopción
-          </button>
+
+        <!--
+        <div class="pet-section">
+          <h4>Compatibilidad</h4>
+          <div class="compat-stars">
+            <i class="fas fa-paw" *ngFor="let _ of [0,1,2]; let idx = index"
+              [class.filled]="idx < mascota.compatibilidad"></i>
+          </div>
         </div>
-        
-        <div class="pet-actions">
-          <button class="btn-volver" (click)="volver()">
-            <i class="fas fa-arrow-left"></i> Volver
-          </button>
+        -->
+
+        <button class="btn btn-primary" style="width:100%">
+          <i class="fas fa-heart"></i> Solicitar Adopción
+        </button>
       </div>
     </div>
+  </div>
+
+  <!-- === LIGHTBOX === -->
+  <div class="lightbox" *ngIf="lightboxOpen" (click)="closeLightbox()">
+    <img [src]="'data:image/jpeg;base64,' + imagenes[currentIndex].imagen" />
   </div>
 </div>
