@@ -26,6 +26,7 @@ const routes: Routes = [
   {path: "usuarios", component:UsersComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: 'mascota/:id', component:PetcardComponent},
   {path: 'cuestionario', component:CuestionarioComponent},
+  {path: 'yo', component:EncuestaComponent},
   {path: '**', pathMatch: 'full', redirectTo: 'home'} 
 ];
 

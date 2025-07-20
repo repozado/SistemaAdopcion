@@ -15,8 +15,8 @@
       <a class="nav-link" routerLinkActive="active" [routerLink]="['/faq']">
         <i class="fas fa-question-circle"></i> FAQ
       </a>
-      <a class="nav-link" routerLinkActive="active" [routerLink]="['/contacto']">
-        <i class="fas fa-envelope"></i> Contacto
+      <a *ngIf="auth.isLoggedIn()" class="nav-link" routerLinkActive="active" [routerLink]="['/yo']">
+        <i class="fas fa-envelope"></i> yo
       </a>
       <a *ngIf="auth.isAdmin()" class="nav-link admin-link" routerLinkActive="active" [routerLink]="['/usuarios']">
         <i class="fas fa-user-cog"></i> Panel Usuarios
