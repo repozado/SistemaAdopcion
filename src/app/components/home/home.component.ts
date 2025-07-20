@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
       next: (data) => {
         // Aquí puedes aplicar la lógica que tú determines como "destacadas"
         this.mascotasDestacadas = data
-          .filter(m => m.especie === 'Perro' || m.perfilEmocional === 'Juguetón' || m.perfilEmocional === 'Tranquilo')
+          .filter(m => m.especie === 'Perro' || m.perfil_emocional === 'Juguetón' || m.perfil_emocional === 'Tranquilo')
           .slice(0, 6); // limitamos a 6 resultados por estética
       },
       error: (err) => {
