@@ -17,7 +17,7 @@
 
 .mascotas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 25px;
 }
 
@@ -35,12 +35,12 @@
 }
 
 .mascota-header {
-  height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 200px;
+  overflow: hidden;
   position: relative;
   color: white;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
 }
 
 .mascota-badge {
@@ -53,6 +53,26 @@
   border-radius: 20px;
   font-weight: 600;
   font-size: 0.9rem;
+}
+
+.mascota-image {
+  width: 100%;
+  height: 180px;     /* mismo alto que .mascota-header */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5; /* opcional, para un fondo neutro */
+}
+
+.mascota-image img {
+  /* Contain en lugar de cover para que toda la imagen quepa */
+  object-fit: contain;
+  object-position: center;
+  /* Asegura que no supere el contenedor */
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
 }
 
 .mascota-image i {
@@ -160,4 +180,19 @@
   .mascotas-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Estilos para las patitas (stars) */
+.compat-stars {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0;
+}
+.compat-stars i {
+  font-size: 1.2rem;
+  color: #ccc;               /* patita vacía */
+  transition: color 0.3s ease;
+}
+.compat-stars i.filled {
+  color: var(--secondary);   /* patita llena */
 }

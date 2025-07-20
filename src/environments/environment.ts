@@ -13,8 +13,9 @@ export const environment = {
 export const authapi = {
   production: false,
   apiUrl: 'http://localhost:3000/api/auth'
-};
-*/
+};*/
+
+
 export const environment = {
   production: true,
   apiUrl: 'https://sistema-adopcion-backend.onrender.com/api'

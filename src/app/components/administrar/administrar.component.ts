@@ -58,7 +58,7 @@ export class AdministrarComponent  implements OnInit{
       const term = this.searchTerm.toLowerCase();
       result = result.filter(m => 
         m.nombre.toLowerCase().includes(term) || 
-        m.perfilEmocional.toLowerCase().includes(term) ||
+        m.perfil_emocional.toLowerCase().includes(term) ||
         m.tamano.toLowerCase().includes(term)
       );
     }
@@ -203,10 +203,10 @@ export class AdministrarComponent  implements OnInit{
       edad: 0,
       sexo: '',
       tamano: '',
-      perfilEmocional: '',
+      perfil_emocional: '',
       imagen: 'fas fa-dog',
       descripcion: '',
-      compatabilidad: 0,
+      compatibilidad: 0,
       requerimientos: '',
       estado_adopcion: 'Disponible',
       lugar_actual: ''

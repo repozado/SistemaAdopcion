@@ -10,7 +10,7 @@
       <div class="pet-image-container">
         <div class="pet-image">
           <i [class]="mascota?.imagen || 'fas fa-dog'"></i>
-          <div class="pet-badge">{{ mascota?.perfilEmocional }}</div>
+          <div class="pet-badge">{{ mascota?.perfil_emocional }}</div>
         </div>
       </div>
       
@@ -29,9 +29,9 @@
         <div class="pet-match">
           <span>Compatibilidad:</span>
           <div class="match-bar">
-            <div class="match-fill" [style.width.%]="mascota?.compatabilidad"></div>
+            <div class="match-fill" [style.width.%]="mascota?.compatibilidad"></div>
           </div>
-          <div class="match-percent">{{ mascota?.compatabilidad }}%</div>
+          <div class="match-percent">{{ mascota?.compatibilidad }}%</div>
         </div>
         
         <div class="pet-section">

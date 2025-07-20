@@ -1,36 +1,45 @@
 <div class="mascotas-container">
   <div class="mascotas-grid">
     <div class="mascota-card" *ngFor="let mascota of mascotas; let i = index">
-      <div class="mascota-header" [style.background-color]="getProfileColor(mascota.perfilEmocional)">
+      <div class="mascota-header" [style.background-color]="getProfileColor(mascota.perfil_emocional)">
         <div class="mascota-badge">
-          {{ mascota.perfilEmocional }}
+          {{ mascota.perfil_emocional }}
         </div>
+
         <div class="mascota-image">
-          <i [class]="mascota.imagen || 'fas fa-paw'"></i>
+          <ng-container *ngIf="mascota.imagen; else fallbackIcon">
+            <img *ngIf="mascota.imagen; else fallbackIcon" [src]="'data:image/jpeg;base64,' + mascota.imagen"
+              [alt]="mascota.nombre" />
+
+          </ng-container>
+          <ng-template #fallbackIcon>
+            <i class="fas fa-paw"></i>
+          </ng-template>
         </div>
       </div>
-      
+
       <div class="mascota-body">
         <h3>{{ mascota.nombre }}</h3>
-        
+
         <div class="mascota-meta">
           <span><i class="fas fa-dog" *ngIf="mascota.especie === 'Perro'"></i>
-                <i class="fas fa-cat" *ngIf="mascota.especie === 'Gato'"></i>
-                {{ mascota.especie }}</span>
-          <span><i class="fas fa-birthday-cake"></i> {{ mascota.edad }} años</span>
+            <i class="fas fa-cat" *ngIf="mascota.especie === 'Gato'"></i>
+            {{ mascota.especie }}</span>
+          <span><i class="fas fa-birthday-cake"></i>  {{ formatAge(mascota.edad) }} </span>
           <span><i class="fas fa-ruler-combined"></i> {{ mascota.tamano }}</span>
         </div>
-        
+
         <p class="mascota-description">{{ mascota.descripcion }}</p>
-        
+
         <div class="mascota-match">
           <span>Compatibilidad:</span>
-          <div class="match-bar">
-            <div class="match-progress" [style.width.%]="mascota.compatabilidad"></div>
+          <div class="compat-stars">
+            <!-- Dibujamos 3 patitas; si index<compatibilidad, llevan la clase 'filled' -->
+            <i class="fas fa-paw" *ngFor="let _ of [0,1,2]; let idx = index"
+              [class.filled]="idx < mascota.compatibilidad"></i>
           </div>
-          <span class="match-percent">{{ mascota.compatabilidad}}%</span>
         </div>
-        
+
         <button class="btn-adoptar" (click)="verDetalle(mascota)">
           <i class="fas fa-heart"></i> Conocer más
         </button>
