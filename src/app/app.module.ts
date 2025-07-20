@@ -21,9 +21,11 @@ import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
 import { Token } from '@angular/compiler';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { UsersComponent } from './components/users/users.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CuestionarioComponent } from './components/cuestionario/cuestionario.component';
+import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpirada.component';
 
 
 @NgModule({
@@ -44,7 +46,8 @@ import { CuestionarioComponent } from './components/cuestionario/cuestionario.co
     LoginComponent,
     UsersComponent,
     RegisterComponent,
-    CuestionarioComponent
+    CuestionarioComponent,
+    SesionexpiradaComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +58,11 @@ import { CuestionarioComponent } from './components/cuestionario/cuestionario.co
   providers: [AuthGuard, AuthService, provideHttpClient(),
     {provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
       multi: true
     }
   ],

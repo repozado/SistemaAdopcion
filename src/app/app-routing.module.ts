@@ -13,14 +13,15 @@ import { AdminGuard } from './guards/admin.guard';
 import { UsersComponent } from './components/users/users.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CuestionarioComponent } from './components/cuestionario/cuestionario.component';
+import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpirada.component';
 
 const routes: Routes = [
+  { path: 'sesionexpirada', component: SesionexpiradaComponent },
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'home', component:HomeComponent},
   {path: 'administrar', component:AdministrarComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: 'mascotas', component:MascotasComponent},
-  {path: 'encuesta', component:EncuestaComponent},
   {path: 'faq', component:FaqComponent},
   {path: 'contacto', component:ContactComponent},
   {path: "usuarios", component:UsersComponent, canActivate: [AuthGuard, AdminGuard]},
