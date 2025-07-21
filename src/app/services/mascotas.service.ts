@@ -16,6 +16,7 @@ export interface Mascota {
   requerimientos: string;
   perfil_emocional: string;
   imagen: string | null;
+  id_emocional: number;
 }
 
 export interface MascotaImagen {
@@ -34,21 +35,22 @@ export class MascotasService {
 
   getAll(): Observable<Mascota[]> {
     return this.http.get<Mascota[]>(this.apiUrl).pipe(
-      map( arr =>
-        arr.map(item => ({
-          id_mascota:      item.id_mascota,
-        nombre:          item.nombre,
-        especie:         item.especie,
-        tamano:          item.tamano,
-        edad:            Number(item.edad),
-        sexo:            item.sexo,
-        descripcion:     item.descripcion,
-        estado_adopcion: item.estado_adopcion,
-        lugar_actual:    item.lugar_actual,
-        requerimientos:  item.requerimientos,
-        perfil_emocional: item.perfil_emocional,
-        // aquí garantizamos que siempre exista "imagen" (puede ser null)
-        imagen:          item.imagen ?? null
+      map((arr) =>
+        arr.map((item) => ({
+          id_mascota: item.id_mascota,
+          nombre: item.nombre,
+          especie: item.especie,
+          tamano: item.tamano,
+          edad: Number(item.edad),
+          sexo: item.sexo,
+          descripcion: item.descripcion,
+          estado_adopcion: item.estado_adopcion,
+          lugar_actual: item.lugar_actual,
+          requerimientos: item.requerimientos,
+          perfil_emocional: item.perfil_emocional,
+          // aquí garantizamos que siempre exista "imagen" (puede ser null)
+          imagen: item.imagen ?? null,
+          id_emocional:    item.id_emocional
         }))
       )
     );
@@ -70,13 +72,15 @@ export class MascotasService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-    /** Recupera todas las imágenes de una mascota */
+  /** Recupera todas las imágenes de una mascota */
   getImages(mascotaId: number): Observable<MascotaImagen[]> {
     return this.http.get<MascotaImagen[]>(
       `${this.apiUrl}/${mascotaId}/imagenes`
     );
   }
+
+  /** Envío de imágenes a la API */
+  uploadImages(id: number, form: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${id}/imagenes`, form);
+  }
 }
-
-
-

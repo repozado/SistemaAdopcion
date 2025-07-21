@@ -12,23 +12,23 @@
         <i class="fas fa-search"></i>
       </button>
     </div>
-    
+
     <div class="filter-group">
       <select class="form-control" [(ngModel)]="selectedFilter">
         <option value="">Todas las mascotas</option>
         <option *ngFor="let filter of filters" [value]="filter.value">{{filter.label}}</option>
       </select>
     </div>
-    
+
     <button class="btn btn-primary" (click)="openAddModal()">
       <i class="fas fa-plus"></i> Añadir Mascota
     </button>
   </div>
 
   <!-- Mensaje de confirmación -->
-<div *ngIf="message" class="alert success-alert">
-  {{message}}
-</div>
+  <div *ngIf="message" class="alert success-alert">
+    {{message}}
+  </div>
 
 
   <!-- Tabla de mascotas -->
@@ -48,7 +48,8 @@
         <tr *ngFor="let mascota of paginatedMascotas">
           <td>
             <div class="pet-info-cell">
-              <div class="pet-avatar" [ngClass]="{'dog': mascota.especie === 'Perro', 'cat': mascota.especie === 'Gato'}">
+              <div class="pet-avatar"
+                [ngClass]="{'dog': mascota.especie === 'Perro', 'cat': mascota.especie === 'Gato'}">
                 <i [class]="mascota.imagen"></i>
               </div>
               <div>
@@ -96,110 +97,132 @@
   </div>
 
   <!-- Modal para añadir/editar -->
-<div class="modal" *ngIf="showModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>{{isEditing ? 'Editar Mascota' : 'Añadir Nueva Mascota'}}</h3>
-      <button class="close-btn" (click)="closeModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <form (ngSubmit)="handleSubmit()">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" class="form-control" [(ngModel)]="currentMascota.nombre" name="nombre" required>
+  <div class="modal" *ngIf="showModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{isEditing ? 'Editar Mascota' : 'Añadir Nueva Mascota'}}</h3>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="handleSubmit()">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" class="form-control" [(ngModel)]="currentMascota.nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+              <label>Tipo</label>
+              <select class="form-control" [(ngModel)]="currentMascota.especie" name="especie" required>
+                <option value="Perro">Perro</option>
+                <option value="Gato">Gato</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
           </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Edad</label>
+              <input type="number" class="form-control" [(ngModel)]="currentMascota.edad" name="edad" required>
+            </div>
+            <div class="form-group">
+              <label>Tamaño</label>
+              <select class="form-control" [(ngModel)]="currentMascota.tamano" name="tamano" required>
+                <option value="Pequeño">Pequeño</option>
+                <option value="Mediano">Mediano</option>
+                <option value="Grande">Grande</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Sexo</label>
+              <select class="form-control" [(ngModel)]="currentMascota.sexo" name="sexo" required>
+                <option value="Macho">Macho</option>
+                <option value="Hembra">Hembra</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Estado</label>
+              <select class="form-control" [(ngModel)]="currentMascota.estado_adopcion" name="estado_adopcion" required>
+                <option value="Disponible">Disponible</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Adoptado">Adoptado</option>
+              </select>
+            </div>
+          </div>
+
           <div class="form-group">
-            <label>Tipo</label>
-            <select class="form-control" [(ngModel)]="currentMascota.especie" name="especie" required>
-              <option value="Perro">Perro</option>
-              <option value="Gato">Gato</option>
-              <option value="Otro">Otro</option>
+            <label>Perfil Emocional</label>
+            <select class="form-control" [(ngModel)]="currentMascota.id_emocional" name="id_emocional" required>
+              <option value="" disabled>-- Selecciona perfil --</option>
+              <option *ngFor="let tipo of tiposEmocionales" [value]="tipo.id_emocional">
+                {{ tipo.descripcion }}
+              </option>
             </select>
           </div>
-        </div>
 
-        <div class="form-row">
           <div class="form-group">
-            <label>Edad</label>
-            <input type="number" class="form-control" [(ngModel)]="currentMascota.edad" name="edad" required>
+            <label>Descripción</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="currentMascota.descripcion" name="descripcion"
+              required></textarea>
           </div>
+
           <div class="form-group">
-            <label>Tamaño</label>
-            <select class="form-control" [(ngModel)]="currentMascota.tamano" name="tamano" required>
-              <option value="Pequeño">Pequeño</option>
-              <option value="Mediano">Mediano</option>
-              <option value="Grande">Grande</option>
-            </select>
+            <label>Requerimientos</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="currentMascota.requerimientos"
+              name="requerimientos"></textarea>
           </div>
-        </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Sexo</label>
-            <select class="form-control" [(ngModel)]="currentMascota.sexo" name="sexo" required>
-              <option value="Macho">Macho</option>
-              <option value="Hembra">Hembra</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Estado</label>
-            <select class="form-control" [(ngModel)]="currentMascota.estado_adopcion" name="estado_adopcion" required>
-              <option value="Disponible">Disponible</option>
-              <option value="En proceso">En proceso</option>
-              <option value="Adoptado">Adoptado</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Perfil Emocional</label>
-          <select class="form-control" [(ngModel)]="currentMascota.perfil_emocional" name="perfil_emocional" required>
-            <option value="Aventurero">Aventurero</option>
-            <option value="Tranquilo">Tranquilo</option>
-            <option value="Juguetón">Juguetón</option>
-            <option value="Sociable">Sociable</option>
-            <option value="Independiente">Independiente</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Descripción</label>
-          <textarea class="form-control" rows="3" [(ngModel)]="currentMascota.descripcion" name="descripcion" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Requerimientos</label>
-          <textarea class="form-control" rows="2" [(ngModel)]="currentMascota.requerimientos" name="requerimientos"></textarea>
-        </div>
-
-        <!--
+          <!--
         <div class="form-group">
           <label>Compatibilidad</label>
           <input type="number" min="0" max="100" class="form-control" [(ngModel)]="currentMascota.compatibilidad" name="compatibilidad">
         </div>
         -->
 
-        <div class="form-group">
-          <label>Lugar actual</label>
-          <input type="text" class="form-control" [(ngModel)]="currentMascota.lugar_actual" name="lugar_actual">
-        </div>
+          <div class="form-group">
+            <label>Lugar actual</label>
+            <input type="text" class="form-control" [(ngModel)]="currentMascota.lugar_actual" name="lugar_actual">
+          </div>
 
-        <div class="form-group">
-          <label>Ícono (clase FontAwesome)</label>
-          <input type="text" class="form-control" [(ngModel)]="currentMascota.imagen" name="imagen" placeholder="Ej: fas fa-dog">
-        </div>
 
-        <div class="form-actions">
-          <button type="button" class="btn btn-outline" (click)="closeModal()">Cancelar</button>
-          <button type="submit" class="btn btn-primary">
-            {{isEditing ? 'Actualizar' : 'Guardar'}}
-          </button>
-        </div>
-      </form>
+          <div class="form-group image-picker-container">
+            <h3>Seleccionar imágenes</h3>
+            <input #fileInput type="file" multiple accept="image/*" (change)="onFileSelected($event)" hidden>
+            <button type="button" class="select-btn" (click)="fileInput.click()">
+              <i class="fas fa-folder-open"></i> Seleccionar imágenes
+            </button>
+
+            <div class="image-list" *ngIf="base64Images.length">
+              <h4>Imágenes seleccionadas:</h4>
+              <div class="image-previews">
+                <div class="image-preview" *ngFor="let img of base64Images; let i = index">
+                  <!-- Botón para eliminar individual -->
+                  <button type="button" class="remove-btn" (click)="removeImage(i)">✕</button>
+                  <img [src]="img.data" [alt]="img.name">
+                </div>
+              </div>
+            </div>
+
+            <div class="empty-message" *ngIf="!base64Images.length">
+              <i class="fas fa-images"></i>
+              <p>No se han seleccionado imágenes</p>
+            </div>
+          </div>
+
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" (click)="closeModal()">Cancelar</button>
+            <button type="submit" class="btn btn-primary">
+              {{isEditing ? 'Actualizar' : 'Guardar'}}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
   <!-- Modal de confirmación -->
   <div class="modal" *ngIf="showConfirmModal">
