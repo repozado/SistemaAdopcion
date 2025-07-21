@@ -30,7 +30,6 @@ const routes: Routes = [
   {path: 'mascota/:id', component:PetcardComponent},
   {path: 'cuestionario', component:CuestionarioComponent, canActivate: [AuthGuard]},
   {path: 'yo', component:EncuestaComponent},
-  // ¡Nueva línea: Ruta para Adopciones, protegida para administradores!
   {path: 'adopciones', component: AdopcionComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: 'perfilemocional', component:EncuestaComponent},
   {path: 'solicitudes', component: SolicitudesComponent, canActivate: [AuthGuard, AdminGuard]},
