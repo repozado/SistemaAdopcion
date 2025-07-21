@@ -3,6 +3,7 @@
     <h2 class="encuesta-titulo">Resultado de tu Encuesta Emocional</h2>
 
     <div class="encuesta-info">
+      <p *ngIf="userEmail" class="usuario-info">👤 Usuario: {{ userEmail }}</p>
       <p><strong>Tipo emocional:</strong> {{ resultado.descripcion }}</p>
       <p><strong>Fecha:</strong> {{ resultado.fecha_resultado | date: 'fullDate' }}</p>
       <p><strong>Compatibilidad:</strong> {{ resultado.compatibilidad }}</p>
