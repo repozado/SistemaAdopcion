@@ -3,9 +3,16 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 // Importa las interfaces y el servicio con los nombres actualizados
-import { Mascota, MascotasService, MascotaImagen } from '../../services/mascotas.service';
+import {
+  Mascota,
+  MascotasService,
+  MascotaImagen,
+} from '../../services/mascotas.service';
 import { AuthService } from '../../services/auth.service';
-import { SolicitudesService, Solicitud } from '../../services/solicitudes.service';
+import {
+  SolicitudesService,
+  Solicitud,
+} from '../../services/solicitudes.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -16,7 +23,7 @@ import { EncuestaService } from '../../services/encuesta.service';
   selector: 'app-petcard',
   standalone: false,
   templateUrl: './petcard.component.html',
-  styleUrls: ['./petcard.component.css']
+  styleUrls: ['./petcard.component.css'],
 })
 export class PetcardComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -25,8 +32,8 @@ export class PetcardComponent implements OnInit {
   public authService = inject(AuthService);
   public solicitudesService = inject(SolicitudesService);
   public compatibilidadUsuario: any = {};
-public tipoEmocionalUsuario: string = '';
-private encuestaService = inject(EncuestaService);
+  public tipoEmocionalUsuario: string = '';
+  private encuestaService = inject(EncuestaService);
 
   mascota: Mascota | undefined;
   imagenes: MascotaImagen[] = []; // Usaremos este array para la galería
@@ -60,33 +67,42 @@ private encuestaService = inject(EncuestaService);
 
   constructor() {
     // Suscribirse a los cambios en el estado de autenticación
-    this.authSubscription = this.authService.isLoggedIn$.subscribe(loggedIn => {
-      this.isLoggedIn = loggedIn; // Actualiza el estado de isLoggedIn
-      // Si el estado de login cambia y la mascota ya está cargada, verificar solicitudes
-      if (this.mascota && loggedIn) {
-        this.checkPendingRequest();
-      } else if (!loggedIn) {
-        this.hasAlreadyRequested = false; // Si no está logueado, no hay solicitudes pendientes
-        this.requestErrorMessage = 'Inicia sesión para solicitar la adopción de esta mascota.';
+    this.authSubscription = this.authService.isLoggedIn$.subscribe(
+      (loggedIn) => {
+        this.isLoggedIn = loggedIn; // Actualiza el estado de isLoggedIn
+        // Si el estado de login cambia y la mascota ya está cargada, verificar solicitudes
+        if (this.mascota && loggedIn) {
+          this.checkPendingRequest();
+        } else if (!loggedIn) {
+          this.hasAlreadyRequested = false; // Si no está logueado, no hay solicitudes pendientes
+          this.requestErrorMessage =
+            'Inicia sesión para solicitar la adopción de esta mascota.';
+        }
       }
-    });
+    );
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const id = Number(params.get('id'));
       if (id) {
         this.loadMascotaDetails(id);
         this.encuestaService.obtenerMiResultado().subscribe({
-  next: (resultado) => {
-    this.tipoEmocionalUsuario = resultado.descripcion;
-    this.compatibilidadUsuario = resultado.compatibilidad;
-    console.log('Compatibilidad emocional del usuario:', this.compatibilidadUsuario);
-  },
-  error: (err) => {
-    console.error('Error al obtener resultado emocional del usuario:', err);
-  }
-});
+          next: (resultado) => {
+            this.tipoEmocionalUsuario = resultado.descripcion;
+            this.compatibilidadUsuario = resultado.compatibilidad;
+            console.log(
+              'Compatibilidad emocional del usuario:',
+              this.compatibilidadUsuario
+            );
+          },
+          error: (err) => {
+            console.error(
+              'Error al obtener resultado emocional del usuario:',
+              err
+            );
+          },
+        });
       } else {
         this.error = 'ID de mascota no proporcionado.';
         this.isLoading = false;
@@ -119,28 +135,37 @@ private encuestaService = inject(EncuestaService);
         this.mascota = data;
         // Normalizar el estado de adopción a minúsculas y quitar espacios
         if (this.mascota && this.mascota.estado_adopcion) {
-          this.mascota.estado_adopcion = this.mascota.estado_adopcion.trim().toLowerCase();
+          this.mascota.estado_adopcion = this.mascota.estado_adopcion
+            .trim()
+            .toLowerCase();
         }
 
         // Parsear los requerimientos especiales si existen
-        if (this.mascota?.requerimientos) { // Usar optional chaining para seguridad
-          this.petReqList = this.mascota.requerimientos.split(',').map(req => req.trim());
+        if (this.mascota?.requerimientos) {
+          // Usar optional chaining para seguridad
+          this.petReqList = this.mascota.requerimientos
+            .split(',')
+            .map((req) => req.trim());
         } else {
           this.petReqList = ['No hay requerimientos especiales especificados.'];
         }
         this.loadMascotaImages(id); // Cargar imágenes después de obtener los detalles de la mascota
-        if (this.authService.isLoggedIn()) { // Usar this.authService.isLoggedIn() directamente
+        if (this.authService.isLoggedIn()) {
+          // Usar this.authService.isLoggedIn() directamente
           this.checkPendingRequest(); // Verificar si ya tiene una solicitud pendiente
-        } else { // Si no está logueado
-          this.requestErrorMessage = 'Inicia sesión para solicitar la adopción de esta mascota.';
+        } else {
+          // Si no está logueado
+          this.requestErrorMessage =
+            'Inicia sesión para solicitar la adopción de esta mascota.';
         }
         this.isLoading = false;
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error al cargar detalles de la mascota:', err);
-        this.error = 'Error al cargar los detalles de la mascota. Intenta de nuevo más tarde.';
+        this.error =
+          'Error al cargar los detalles de la mascota. Intenta de nuevo más tarde.';
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -151,13 +176,21 @@ private encuestaService = inject(EncuestaService);
   loadMascotaImages(mascotaId: number): void {
     this.mascotasService.getImages(mascotaId).subscribe({
       next: (images) => {
-        this.imagenes = images.map(img => ({
-          imagen: img.imagen ? `data:image/jpeg;base64,${img.imagen}` : null,
-          orden: img.orden
-        })).sort((a, b) => a.orden - b.orden);
+        this.imagenes = images
+          .map((img) => ({
+            imagen: img.imagen ? `data:image/jpeg;base64,${img.imagen}` : null,
+            orden: img.orden,
+          }))
+          .sort((a, b) => a.orden - b.orden);
 
-        if (this.mascota?.imagen && !this.imagenes.some(img => img.imagen === this.mascota?.imagen)) {
-          this.imagenes.unshift({ imagen: `data:image/jpeg;base64,${this.mascota.imagen}`, orden: 0 });
+        if (
+          this.mascota?.imagen &&
+          !this.imagenes.some((img) => img.imagen === this.mascota?.imagen)
+        ) {
+          this.imagenes.unshift({
+            imagen: `data:image/jpeg;base64,${this.mascota.imagen}`,
+            orden: 0,
+          });
         }
 
         if (this.imagenes.length > 0) {
@@ -169,7 +202,7 @@ private encuestaService = inject(EncuestaService);
       error: (err: HttpErrorResponse) => {
         console.error('Error al cargar imágenes de la mascota:', err);
         this.imagenes = [];
-      }
+      },
     });
   }
 
@@ -188,7 +221,8 @@ private encuestaService = inject(EncuestaService);
    */
   prevImage(): void {
     if (this.imagenes.length > 1) {
-      this.currentIndex = (this.currentIndex - 1 + this.imagenes.length) % this.imagenes.length;
+      this.currentIndex =
+        (this.currentIndex - 1 + this.imagenes.length) % this.imagenes.length;
       this.updateSlideTransform();
     }
   }
@@ -248,17 +282,20 @@ private encuestaService = inject(EncuestaService);
     this.solicitudesService.getMySolicitudes(token).subscribe({
       next: (solicitudes: Solicitud[]) => {
         this.hasAlreadyRequested = solicitudes.some(
-          s => s.id_mascota === this.mascota!.id_mascota &&
-               (s.estado_solicitud === 'en_revision' || s.estado_solicitud === 'aceptada')
+          (s) =>
+            s.id_mascota === this.mascota!.id_mascota &&
+            (s.estado_solicitud === 'en_revision' ||
+              s.estado_solicitud === 'aceptada')
         );
         if (this.hasAlreadyRequested) {
-          this.requestSuccessMessage = 'Ya tienes una solicitud pendiente o aceptada para esta mascota.';
+          this.requestSuccessMessage =
+            'Ya tienes una solicitud pendiente o aceptada para esta mascota.';
         }
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error al verificar solicitudes pendientes:', err);
         this.hasAlreadyRequested = false;
-      }
+      },
     });
   }
 
@@ -306,19 +343,24 @@ private encuestaService = inject(EncuestaService);
     this.requestSuccessMessage = null;
     this.requestErrorMessage = null;
 
-    if (!this.authService.isLoggedIn()) { // Usar this.authService.isLoggedIn() directamente
-      this.requestErrorMessage = 'Debes iniciar sesión para solicitar una adopción.';
+    if (!this.authService.isLoggedIn()) {
+      // Usar this.authService.isLoggedIn() directamente
+      this.requestErrorMessage =
+        'Debes iniciar sesión para solicitar una adopción.';
       this.router.navigate(['/login']); // Redirigir al login si no está logueado
       return;
     }
 
     if (!this.mascota || !this.mascota.id_mascota) {
-      this.requestErrorMessage = 'No se pudo obtener la información de la mascota para la solicitud.';
+      this.requestErrorMessage =
+        'No se pudo obtener la información de la mascota para la solicitud.';
       return;
     }
 
     // Asegurarse de que el estado de adopción esté normalizado antes de la verificación final
-    const estadoAdopcionNormalizado = this.mascota.estado_adopcion ? this.mascota.estado_adopcion.trim().toLowerCase() : '';
+    const estadoAdopcionNormalizado = this.mascota.estado_adopcion
+      ? this.mascota.estado_adopcion.trim().toLowerCase()
+      : '';
 
     if (estadoAdopcionNormalizado !== 'disponible') {
       this.requestErrorMessage = `Esta mascota no está disponible para adopción (Estado: ${this.mascota.estado_adopcion}).`;
@@ -326,7 +368,8 @@ private encuestaService = inject(EncuestaService);
     }
 
     if (this.hasAlreadyRequested) {
-      this.requestErrorMessage = 'Ya tienes una solicitud pendiente o aceptada para esta mascota.';
+      this.requestErrorMessage =
+        'Ya tienes una solicitud pendiente o aceptada para esta mascota.';
       return;
     }
 
@@ -345,21 +388,29 @@ private encuestaService = inject(EncuestaService);
     const token = this.authService.getToken(); // Usar this.authService.getToken()
 
     if (token) {
-      this.solicitudesService.createSolicitud(this.mascota!.id_mascota, token).subscribe({
-        next: (response: Solicitud) => { // Tipado explícito
-          console.log('Solicitud creada con éxito:', response);
-          this.requestSuccessMessage = '¡Solicitud de adopción enviada con éxito! Será revisada pronto.';
-          this.isRequesting = false;
-          this.hasAlreadyRequested = true; // Actualizar el estado para deshabilitar el botón
-        },
-        error: (err: HttpErrorResponse) => { // Tipado explícito
-          console.error('Error al crear solicitud:', err);
-          this.requestErrorMessage = err.error?.error || 'Error al enviar la solicitud de adopción. Intenta de nuevo.';
-          this.isRequesting = false;
-        },
-      });
+      this.solicitudesService
+        .createSolicitud(this.mascota!.id_mascota, token)
+        .subscribe({
+          next: (response: Solicitud) => {
+            // Tipado explícito
+            console.log('Solicitud creada con éxito:', response);
+            this.requestSuccessMessage =
+              '¡Solicitud de adopción enviada con éxito! Será revisada pronto.';
+            this.isRequesting = false;
+            this.hasAlreadyRequested = true; // Actualizar el estado para deshabilitar el botón
+          },
+          error: (err: HttpErrorResponse) => {
+            // Tipado explícito
+            console.error('Error al crear solicitud:', err);
+            this.requestErrorMessage =
+              err.error?.error ||
+              'Error al enviar la solicitud de adopción. Intenta de nuevo.';
+            this.isRequesting = false;
+          },
+        });
     } else {
-      this.requestErrorMessage = 'No se pudo obtener el token de autenticación.';
+      this.requestErrorMessage =
+        'No se pudo obtener el token de autenticación.';
       this.isRequesting = false;
     }
   }
@@ -370,8 +421,6 @@ private encuestaService = inject(EncuestaService);
   volver(): void {
     this.router.navigate(['/mascotas']);
   }
-
-
 
   getProfileColor(profile: string): string {
     const colors: { [key: string]: string } = {
