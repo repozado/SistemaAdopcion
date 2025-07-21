@@ -29,6 +29,7 @@ import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpir
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 import { AdopcionComponent } from './components/adopcion/adopcion.component';
 import { MisadopcionesComponent } from './components/misadopciones/misadopciones.component';
+import { MissolicitudesComponent } from './components/missolicitudes/missolicitudes.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { MisadopcionesComponent } from './components/misadopciones/misadopciones
     SolicitudesComponent,
     AdopcionComponent,
     MisadopcionesComponent,
+    MissolicitudesComponent,
 
   ],
   imports: [

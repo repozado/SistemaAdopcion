@@ -3,7 +3,8 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { AdopcionesService } from '../../services/adopciones.service'; // Importa el servicio de adopciones
+import { AdopcionesService } from '../../services/adopciones.service';
+import { SolicitudesService } from '../../services/solicitudes.service';
 import { Subscription } from 'rxjs'; // Para manejar la suscripción
 
 @Component({
@@ -14,31 +15,43 @@ import { Subscription } from 'rxjs'; // Para manejar la suscripción
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   menuOpen = false;
-  hasMyAdopciones: boolean = false; // Nueva propiedad para controlar la visibilidad del enlace
-  // private authSubscription: Subscription | undefined; // Ya no es necesario si AuthService no tiene isLoggedIn$
+  hasMyAdopciones: boolean = false;
+  hasMySolicitudes: boolean = false;
+  private authSubscription: Subscription | undefined; // Para la suscripción al AuthService
 
   // Inyección de servicios
-  public auth: AuthService = inject(AuthService); // Hacerlo público para acceso en la plantilla
+  public auth: AuthService = inject(AuthService);
   private router: Router = inject(Router);
-  private adopcionesService: AdopcionesService = inject(AdopcionesService); // Inyecta AdopcionesService
+  private adopcionesService: AdopcionesService = inject(AdopcionesService);
+  private solicitudesService: SolicitudesService = inject(SolicitudesService);
 
   ngOnInit(): void {
-    // Si el usuario ya está logueado al cargar el componente, verificar sus adopciones
+    // Suscribirse al observable isLoggedIn$ del AuthService
+    this.authSubscription = this.auth.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        // Si el usuario acaba de iniciar sesión o ya estaba logueado
+        this.checkMyAdopciones();
+        this.checkMySolicitudes();
+      } else {
+        // Si el usuario acaba de cerrar sesión
+        this.hasMyAdopciones = false;
+        this.hasMySolicitudes = false;
+      }
+    });
+
+    // También verificar al inicio por si el observable ya emitió el valor inicial antes de la suscripción
+    // Esto es útil para el estado inicial de la página si el token ya existe.
     if (this.auth.isLoggedIn()) {
       this.checkMyAdopciones();
+      this.checkMySolicitudes();
     }
-    // NOTA: Para que 'hasMyAdopciones' se actualice dinámicamente al iniciar/cerrar sesión
-    // sin recargar la página, tu AuthService debería exponer un Observable (ej. isLoggedIn$)
-    // al que este componente pueda suscribirse. Si no lo tienes, la actualización
-    // solo ocurrirá al cargar la página o al navegar a este componente.
   }
 
   ngOnDestroy(): void {
-    // Si decides implementar isLoggedIn$ en AuthService y te suscribes aquí,
-    // asegúrate de desuscribirte en ngOnDestroy para evitar fugas de memoria.
-    // if (this.authSubscription) {
-    //   this.authSubscription.unsubscribe();
-    // }
+    // Asegurarse de desuscribirse para evitar fugas de memoria
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   /**
@@ -53,11 +66,31 @@ export class NavbarComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           console.error('Error al verificar mis adopciones para el navbar:', err);
-          this.hasMyAdopciones = false; // En caso de error, asumimos que no tiene adopciones
+          this.hasMyAdopciones = false;
         }
       });
     } else {
       this.hasMyAdopciones = false;
+    }
+  }
+
+  /**
+   * Verifica si el usuario actual tiene solicitudes de adopción.
+   */
+  checkMySolicitudes(): void {
+    const token = this.auth.getToken();
+    if (token) {
+      this.solicitudesService.getMySolicitudes(token).subscribe({
+        next: (solicitudes) => {
+          this.hasMySolicitudes = solicitudes && solicitudes.length > 0;
+        },
+        error: (err) => {
+          console.error('Error al verificar mis solicitudes para el navbar:', err);
+          this.hasMySolicitudes = false;
+        }
+      });
+    } else {
+      this.hasMySolicitudes = false;
     }
   }
 
@@ -71,8 +104,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.auth.logout();
+    // La suscripción a isLoggedIn$ en ngOnInit manejará la actualización de hasMyAdopciones y hasMySolicitudes
     this.router.navigate(['/home']);
-    // Después de cerrar sesión, también actualiza el estado de las adopciones
-    this.hasMyAdopciones = false;
   }
 }

@@ -15,10 +15,10 @@ import { RegisterComponent } from './components/register/register.component';
 import { CuestionarioComponent } from './components/cuestionario/cuestionario.component';
 import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpirada.component';
 import { AdopcionComponent } from './components/adopcion/adopcion.component';
-import { SolicitudesComponent } from './components/solicitudes/solicitudes.component'; // ¡Importa el componente Solicitudes!
+import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 import { MisadopcionesComponent } from './components/misadopciones/misadopciones.component';
+import { MissolicitudesComponent } from './components/missolicitudes/missolicitudes.component'; // ¡NUEVO! Importa el componente MisSolicitudes
 
-import { ValuecardComponent } from './components/valuecard/valuecard.component';
 
 const routes: Routes = [
   {path: 'sesionexpirada', component: SesionexpiradaComponent },
@@ -35,10 +35,10 @@ const routes: Routes = [
   {path: 'yo', component:EncuestaComponent},
   {path: 'adopciones', component: AdopcionComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: 'perfilemocional', component:EncuestaComponent},
-  // ¡Nueva línea: Ruta para Solicitudes, protegida para administradores!
   {path: 'solicitudes', component: SolicitudesComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: 'mis-adopciones', component: MisadopcionesComponent, canActivate: [AuthGuard]},
-  {path: 'valuecard', component: ValuecardComponent},
+  // ¡NUEVA LÍNEA: Ruta para Mis Solicitudes, protegida solo por AuthGuard!
+  {path: 'mis-solicitudes', component: MissolicitudesComponent, canActivate: [AuthGuard]},
   {path: '**', pathMatch: 'full', redirectTo: 'home'}
 ];
 

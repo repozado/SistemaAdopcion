@@ -1,116 +1,110 @@
 // frontend/src/app/services/solicitudes.service.ts
 
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment'; // Asegúrate de que tu environment.ts tenga apiUrl
+import { environment } from '../../environments/environment';
 
-/**
- * @interface Solicitud
- * @description Define la estructura de un registro de solicitud de adopción tal como se recibe del backend.
- * Incluye datos relacionados de 'usuario' y 'mascota'.
- */
+// Interfaz para la estructura de una Solicitud de Adopción
+// ¡IMPORTANTE: Asegúrate de que esta interfaz coincida con la respuesta de tu backend!
 export interface Solicitud {
   id_solicitud: number;
   id_usuario: number;
-  nombre_usuario: string;
+  nombre_usuario: string; // Nombre del usuario que realiza la solicitud
   id_mascota: number;
-  nombre_mascota: string;
-  fecha_solicitud: string; // ISO string (YYYY-MM-DDTHH:MM:SS.sssZ)
+  nombre_mascota: string; // Nombre de la mascota solicitada
+  fecha_solicitud: string; // Formato ISO 8601 (ej. 'YYYY-MM-DDTHH:mm:ss.sssZ')
   estado_solicitud: 'en_revision' | 'aceptada' | 'rechazada';
-  motivo_rechazo: string | null;
-  fecha_revision: string | null; // ISO string (YYYY-MM-DDTHH:MM:SS.sssZ)
+  motivo_rechazo?: string | null; // Opcional, solo si el estado es 'rechazada'
+  fecha_revision?: string | null; // Opcional, fecha en que se revisó la solicitud
+
+  // ¡NUEVO! Propiedad para la imagen de la mascota
+  imagen_mascota?: string | null; // URL o base64 de la imagen principal de la mascota
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SolicitudesService {
+  private apiUrl = `${environment.apiUrl}/solicitudes`;
   private http = inject(HttpClient);
 
-  // URL base para el endpoint de solicitudes en el backend
-  private apiUrl = `${environment.apiUrl}/solicitudes`;
-  // private apiUrl = 'http://localhost:3000/api/solicitudes'; // Para pruebas locales si environment.ts no está configurado
-
-  /**
-   * Helper para crear HttpHeaders con el token de autorización.
-   * @param token El token JWT del usuario.
-   * @returns HttpHeaders con el Content-Type y Authorization.
-   */
-  private getAuthHeaders(token: string): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-  }
+  constructor() { }
 
   /**
    * Crea una nueva solicitud de adopción.
-   * @param id_mascota El ID de la mascota para la cual se crea la solicitud.
-   * @param token El token JWT del usuario autenticado.
-   * @returns Un Observable de la solicitud creada.
+   * @param id_mascota El ID de la mascota para la que se solicita la adopción.
+   * @param token El token de autenticación del usuario.
+   * @returns Un Observable con la respuesta de la API.
    */
-  createSolicitud(id_mascota: number, token: string): Observable<Solicitud> {
-    // El id_usuario se obtiene en el backend desde el token
-    return this.http.post<Solicitud>(this.apiUrl, { id_mascota }, { headers: this.getAuthHeaders(token) });
+  createSolicitud(id_mascota: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    // Asumimos que el backend obtiene el id_usuario del token
+    return this.http.post<any>(this.apiUrl, { id_mascota }, { headers });
   }
 
   /**
-   * Obtiene todas las solicitudes de adopción. Requiere token de administrador.
-   * @param token El token JWT del usuario administrador.
-   * @returns Un Observable de un array de objetos Solicitud.
+   * Obtiene todas las solicitudes de adopción (para administradores).
+   * @param token El token de autenticación del administrador.
+   * @returns Un Observable con un array de solicitudes.
    */
   getAllSolicitudes(token: string): Observable<Solicitud[]> {
-    return this.http.get<Solicitud[]>(this.apiUrl, { headers: this.getAuthHeaders(token) });
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<Solicitud[]>(this.apiUrl, { headers });
   }
 
   /**
-   * Obtiene las solicitudes de adopción asociadas al usuario autenticado.
-   * @param token El token JWT del usuario.
-   * @returns Un Observable de un array de objetos Solicitud.
+   * Obtiene las solicitudes de adopción del usuario autenticado.
+   * @param token El token de autenticación del usuario.
+   * @returns Un Observable con un array de solicitudes del usuario.
    */
   getMySolicitudes(token: string): Observable<Solicitud[]> {
-    return this.http.get<Solicitud[]>(`${this.apiUrl}/my`, { headers: this.getAuthHeaders(token) });
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<Solicitud[]>(`${this.apiUrl}/my`, { headers });
   }
 
   /**
-   * Obtiene una solicitud de adopción por su ID. Requiere token de administrador.
-   * @param id El ID del registro de solicitud.
-   * @param token El token JWT del usuario administrador.
-   * @returns Un Observable de un objeto Solicitud.
-   */
-  getSolicitudById(id: number, token: string): Observable<Solicitud> {
-    return this.http.get<Solicitud>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders(token) });
-  }
-
-  /**
-   * Actualiza el estado de una solicitud de adopción. Requiere token de administrador.
-   * @param id El ID de la solicitud a actualizar.
-   * @param estado_solicitud El nuevo estado de la solicitud ('en_revision', 'aceptada', 'rechazada').
-   * @param motivo_rechazo El motivo del rechazo (opcional, solo si el estado es 'rechazada').
-   * @param token El token JWT del usuario administrador.
-   * @returns Un Observable de la solicitud actualizada.
+   * Actualiza el estado de una solicitud de adopción (para administradores).
+   * @param id_solicitud El ID de la solicitud a actualizar.
+   * @param estado_solicitud El nuevo estado ('en_revision', 'aceptada', 'rechazada').
+   * @param motivo_rechazo El motivo del rechazo (opcional, solo si se rechaza).
+   * @param token El token de autenticación del administrador.
+   * @returns Un Observable con la solicitud actualizada.
    */
   updateSolicitudStatus(
-    id: number,
+    id_solicitud: number,
     estado_solicitud: 'en_revision' | 'aceptada' | 'rechazada',
     motivo_rechazo: string | null,
     token: string
   ): Observable<Solicitud> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
     return this.http.put<Solicitud>(
-      `${this.apiUrl}/${id}/status`,
+      `${this.apiUrl}/${id_solicitud}/status`,
       { estado_solicitud, motivo_rechazo },
-      { headers: this.getAuthHeaders(token) }
+      { headers }
     );
   }
 
   /**
-   * Elimina una solicitud de adopción por su ID. Requiere token de administrador.
-   * @param id El ID de la solicitud a eliminar.
-   * @param token El token JWT del usuario administrador.
-   * @returns Un Observable de cualquier tipo (para 204 No Content).
+   * Elimina una solicitud de adopción (para administradores o el propio usuario si se permite).
+   * @param id_solicitud El ID de la solicitud a eliminar.
+   * @param token El token de autenticación del usuario.
+   * @returns Un Observable con la respuesta de la eliminación.
    */
-  deleteSolicitud(id: number, token: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders(token) });
+  deleteSolicitud(id_solicitud: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete<any>(`${this.apiUrl}/${id_solicitud}`, { headers });
   }
 }

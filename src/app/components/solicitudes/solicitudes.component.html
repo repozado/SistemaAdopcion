@@ -44,7 +44,7 @@
     <div class="solicitudes-grid">
       <div *ngFor="let solicitud of filteredSolicitudes" class="solicitud-card">
         <div class="card-header">
-          <span class="solicitud-id">#{{ solicitud.id_solicitud }}</span>
+          <span class="solicitud-id">Solicitud #{{ solicitud.id_solicitud }}</span>
           <span class="status-badge" [ngClass]="getStatusClass(solicitud.estado_solicitud)">
             {{ solicitud.estado_solicitud | uppercase }}
           </span>

@@ -1,3 +1,5 @@
+<!-- frontend/src/app/components/navbar/navbar.component.html -->
+
 <nav class="soulpet-navbar">
   <div class="navbar-container">
     <div class="navbar-brand" routerLink="/home">
@@ -26,6 +28,11 @@
         [routerLink]="['/perfilemocional']"
       >
         <i class="fas fa-user-circle"></i> Perfil
+      </a>
+
+      <!-- ¡NUEVO ENLACE: Mis Solicitudes! -->
+      <a *ngIf="auth.isLoggedIn() && hasMySolicitudes" class="nav-link" routerLinkActive="active" [routerLink]="['/mis-solicitudes']">
+        <i class="fas fa-file-alt"></i> Mis Solicitudes
       </a>
 
       <a *ngIf="auth.isLoggedIn() && hasMyAdopciones" class="nav-link" routerLinkActive="active" [routerLink]="['/mis-adopciones']">
@@ -121,6 +128,10 @@
     <a *ngIf="auth.isLoggedIn()" class="mobile-link" routerLinkActive="active" [routerLink]="['/perfilemocional']" (click)="toggleMenu()">
       <i class="fas fa-user-circle"></i> Perfil
     </a>
+    <!-- ¡NUEVO ENLACE MÓVIL: Mis Solicitudes! -->
+    <a *ngIf="auth.isLoggedIn() && hasMySolicitudes" class="mobile-link" routerLinkActive="active" [routerLink]="['/mis-solicitudes']" (click)="toggleMenu()">
+      <i class="fas fa-file-alt"></i> Mis Solicitudes
+    </a>
     <a *ngIf="auth.isLoggedIn() && hasMyAdopciones" class="mobile-link" routerLinkActive="active" [routerLink]="['/mis-adopciones']" (click)="toggleMenu()">
       <i class="fas fa-heartbeat"></i> Mis Adopciones
     </a>
@@ -157,6 +168,7 @@
     </button>
   </div>
 </nav>
+
 
 
 
