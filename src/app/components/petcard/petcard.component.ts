@@ -85,28 +85,34 @@ export class PetcardComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       const id = Number(params.get('id'));
-      if (id) {
-        this.loadMascotaDetails(id);
-        this.encuestaService.obtenerMiResultado().subscribe({
-          next: (resultado) => {
-            this.tipoEmocionalUsuario = resultado.descripcion;
-            this.compatibilidadUsuario = resultado.compatibilidad;
-            console.log(
-              'Compatibilidad emocional del usuario:',
-              this.compatibilidadUsuario
-            );
-          },
-          error: (err) => {
-            console.error(
-              'Error al obtener resultado emocional del usuario:',
-              err
-            );
-          },
-        });
-      } else {
+      if (!id) {
         this.error = 'ID de mascota no proporcionado.';
         this.isLoading = false;
+        return;
       }
+
+      this.loadMascotaDetails(id);
+
+      // Suscripción reactiva al estado de login
+      this.authSubscription = this.authService.isLoggedIn$.subscribe(
+        (loggedIn) => {
+          this.isLoggedIn = loggedIn;
+          if (loggedIn) {
+            // Sólo llamamos cuando tenemos sesión
+            this.encuestaService.obtenerMiResultado().subscribe({
+              next: (resultado) => {
+                this.tipoEmocionalUsuario = resultado.descripcion;
+                this.compatibilidadUsuario = resultado.compatibilidad;
+              },
+              error: (err) => console.error('Error emocional:', err),
+            });
+          } else {
+            // Limpiar datos previos cuando haya logout
+            this.tipoEmocionalUsuario = '';
+            this.compatibilidadUsuario = {};
+          }
+        }
+      );
     });
   }
 
@@ -184,13 +190,15 @@ export class PetcardComponent implements OnInit {
           }))
           .sort((a, b) => a.orden - b.orden);
 
-        if (
-          this.mascota?.imagen &&
-          !this.imagenes.some((img) => img.imagen === this.mascota?.imagen)
-        ) {
+        const mainUrl = this.mascota?.imagen
+          ? `data:image/jpeg;base64,${this.mascota.imagen}`
+          : null;
+
+        // Ahora sólo unshift si es distinta a la ya presente como orden 1
+        if (mainUrl && !this.imagenes.some((i) => i.orden === 1)) {
           this.imagenes.unshift({
             id_imagen: 0,
-            imagen: `data:image/jpeg;base64,${this.mascota.imagen}`,
+            imagen: mainUrl,
             orden: 0,
           });
         }
