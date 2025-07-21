@@ -242,14 +242,14 @@ h2 {
   transition: opacity 0.3s ease;
 }
 
-.mascota-image .adopted-text { /* Selector ajustado */
+.mascota-image .adopted-text {
   color: white;
   font-size: 1.8rem;
   font-weight: bold;
   text-transform: uppercase;
-  background-color: rgba(220, 53, 69, 0.8); /* Rojo de estado rechazado/peligro */
-  padding: 8px 15px;
-  border-radius: 8px;
+  padding: 0; /* sin caja */
+  background: none; /* sin fondo rosado */
+  border-radius: 0;
   letter-spacing: 1px;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
@@ -317,7 +317,7 @@ h2 {
   background-color: var(--accent); /* Verde */
 }
 .status-adoptado {
-  background-color: #dc3545; /* Rojo */
+  background-color: rgb(252, 175, 175); /* Rojo */
 }
 .status-en-cuarentena { /* Corregido de en_cuarentena a en-cuarentena para CSS */
   background-color: #ffc107; /* Amarillo */
@@ -331,7 +331,15 @@ h2 {
   color: var(--text);
   margin-bottom: 20px;
   line-height: 1.5;
-  flex-grow: 1; /* Permite que la descripción ocupe espacio */
+  flex-grow: 1;
+
+  /* TRUNCAR DESCRIPCIÓN A 3 LÍNEAS */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;     /* número de líneas */
+  line-clamp: 3;             /* estándar para compatibilidad */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mascota-match {
