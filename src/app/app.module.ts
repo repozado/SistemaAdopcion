@@ -51,7 +51,8 @@ import { AdopcionComponent } from './components/adopcion/adopcion.component';
     CuestionarioComponent,
     SesionexpiradaComponent,
     SolicitudesComponent,
-    AdopcionComponent
+    AdopcionComponent,
+
   ],
   imports: [
     BrowserModule,

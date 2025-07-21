@@ -1,0 +1,405 @@
+/* frontend/src/app/components/adopcion/adopcion.component.css */
+
+/* Variables CSS */
+:host {
+  --primary: #A78BFA;
+  --secondary: #FCAFAF;
+  --accent: #5DD5C0;
+  --light: #FFF7EC;
+  --dark: #292F36;
+  --text: #5E5E5E;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.adopciones-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif; /* Asegura una fuente base */
+}
+
+h2, h3 {
+  color: var(--dark);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.loading-message, .error-message, .no-data-message {
+  text-align: center;
+  padding: 20px;
+  border-radius: var(--radius);
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: var(--text);
+  background-color: var(--light);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.error-message {
+  background-color: #ffe0e0;
+  color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.error-message button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.error-message button:hover {
+  background-color: #8c6df9;
+}
+
+/* Estilos de tabla para administradores */
+.admin-table-container {
+  overflow-x: auto; /* Permite scroll horizontal en pantallas pequeñas */
+  margin-top: 20px;
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  background-color: white;
+  padding: 15px;
+}
+
+.adopciones-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.adopciones-table th, .adopciones-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  color: var(--text);
+}
+
+.adopciones-table th {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.adopciones-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.table-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin: 0 5px;
+  transition: color 0.2s ease;
+}
+
+.btn-edit {
+  color: var(--accent);
+}
+
+.btn-edit:hover {
+  color: #4CAF50; /* Un verde más oscuro */
+}
+
+.btn-delete {
+  color: #d32f2f; /* Rojo para eliminar */
+}
+
+.btn-delete:hover {
+  color: #b71c1c; /* Rojo más oscuro */
+}
+
+/* Estilos para las tarjetas de mascotas (reutilizados para usuarios normales) */
+.mascotas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.mascota-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex; /* Para organizar contenido dentro de la tarjeta */
+  flex-direction: column;
+}
+
+.mascota-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.mascota-header {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  color: white;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  background-color: var(--primary); /* Color de fondo para el header */
+}
+
+.mascota-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: var(--secondary);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.mascota-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  color: var(--primary); /* Color para el ícono de patita */
+}
+
+.mascota-image img {
+  object-fit: contain;
+  object-position: center;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+.mascota-image i {
+  font-size: 4rem;
+  opacity: 0.9;
+}
+
+.mascota-body {
+  padding: 20px;
+  flex-grow: 1; /* Permite que el cuerpo ocupe el espacio restante */
+}
+
+.mascota-body h3 {
+  color: var(--dark);
+  margin-bottom: 10px;
+  text-align: left; /* Sobrescribe el text-align center global para h3 */
+}
+
+.mascota-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.mascota-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mascota-meta i {
+  color: var(--primary);
+}
+
+.mascota-description {
+  color: var(--text);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* --- Nuevos estilos para el formulario de edición (modal) --- */
+.edit-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+.edit-form-card {
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.edit-form-card h3 {
+  text-align: center;
+  color: var(--dark);
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group textarea {
+  width: calc(100% - 20px); /* Ajusta el padding */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Incluye padding en el ancho */
+}
+
+.form-group textarea {
+  resize: vertical; /* Permite redimensionar verticalmente */
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.btn-save, .btn-cancel {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-save {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: #8c6df9;
+}
+
+.btn-cancel {
+  background-color: #ccc;
+  color: var(--dark);
+}
+
+.btn-cancel:hover {
+  background-color: #bbb;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Nuevos estilos para la barra de búsqueda --- */
+.search-bar-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-input {
+  flex-grow: 1;
+  max-width: 400px;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-button:hover {
+  background-color: #8c6df9;
+  transform: translateY(-2px);
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mascotas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  .adopciones-table th, .adopciones-table td {
+    padding: 8px 10px; /* Reducir padding en tablas */
+    font-size: 0.8rem;
+  }
+  .table-actions button {
+    font-size: 0.9rem;
+  }
+  .search-bar-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-input {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .adopciones-container {
+    padding: 1rem;
+  }
+
+  .mascotas-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-table-container {
+    padding: 5px;
+  }
+  .edit-form-card {
+    padding: 20px;
+  }
+}
