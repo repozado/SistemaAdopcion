@@ -24,7 +24,7 @@
             <div class="slides" [style.transform]="slideTransform">
               <img
                 *ngFor="let img of imagenes; let i = index"
-                [src]="'data:image/jpeg;base64,' + img.imagen"
+                [src]="img.imagen || 'https://placehold.co/600x400/A78BFA/ffffff?text=No+Image'"
                 [alt]="mascota.nombre + ' #' + (i+1)"
                 (click)="openLightbox(i)"
                 class="slide" />
@@ -57,7 +57,6 @@
             <span><i class="fas fa-ruler"></i> {{ mascota.tamano }}</span>
             <span><i class="fas fa-venus-mars"></i> {{ mascota.sexo }}</span>
             <span><i class="fas fa-map-marker-alt"></i> {{ mascota.lugar_actual }}</span>
-            <span><i class="fas fa-heart"></i> {{ mascota.perfil_emocional }}</span>
           </div>
         </div>
 
@@ -67,24 +66,17 @@
         </div>
 
         <div class="pet-section">
-          <h4>Requerimientos</h4>
+          <h4>Requerimientos Especiales</h4>
           <ul>
             <li *ngFor="let req of petReqList">{{ req }}</li>
           </ul>
         </div>
 
-<<<<<<< HEAD
-<div class="mascota-match" *ngIf="mascota?.perfil_emocional === tipoEmocionalUsuario">
-  <span>Compatibilidad:</span>
-  <div class="compat-stars">
-    <i
-      class="fas fa-paw"
-      *ngFor="let _ of [0, 1, 2]; let idx = index"
-      [class.filled]="idx < compatibilidadUsuario"
-    ></i>
-  </div>
-</div>
-=======
+        <div class="pet-section">
+          <h4>Perfil Emocional</h4>
+          <p>{{ mascota.perfil_emocional }}</p>
+        </div>
+
         <!-- Mensajes de estado de la solicitud -->
         <div *ngIf="requestSuccessMessage" class="request-message success-message">
           <i class="fas fa-check-circle"></i> {{ requestSuccessMessage }}
@@ -92,13 +84,12 @@
         <div *ngIf="requestErrorMessage" class="request-message error-message">
           <i class="fas fa-exclamation-circle"></i> {{ requestErrorMessage }}
         </div>
->>>>>>> ed55dc5d52dcbcad64c16d2ef172fc8c4feab802
 
         <!-- Botón de Solicitar Adopción -->
         <button
           class="btn btn-primary btn-adoptar"
           (click)="solicitarAdopcion()"
-          [disabled]="!_AuthService.isLoggedIn() || mascota.estado_adopcion !== 'disponible' || isRequesting || hasAlreadyRequested"
+          [disabled]="!authService.isLoggedIn() || mascota.estado_adopcion !== 'disponible' || isRequesting || hasAlreadyRequested"
         >
           <ng-container *ngIf="!isRequesting">
             <i class="fas fa-heart"></i> Solicitar Adopción
@@ -110,11 +101,15 @@
 
         <!-- Mensaje si la mascota no está disponible -->
         <div *ngIf="mascota.estado_adopcion !== 'disponible' && !hasAlreadyRequested" class="not-available-message">
-          <i class="fas fa-info-circle"></i> Esta mascota no está disponible para adopción en este momento.
+          <i class="fas fa-info-circle"></i> Esta mascota no está disponible para adopción en este momento. (Estado: {{ mascota.estado_adopcion | uppercase }})
         </div>
         <!-- Mensaje si el usuario no está logueado -->
-        <div *ngIf="!_AuthService.isLoggedIn()" class="not-logged-in-message">
+        <div *ngIf="!authService.isLoggedIn()" class="not-logged-in-message">
           <i class="fas fa-info-circle"></i> Inicia sesión para solicitar la adopción de esta mascota.
+        </div>
+        <!-- Mensaje si ya tiene una solicitud pendiente -->
+        <div *ngIf="authService.isLoggedIn() && hasAlreadyRequested" class="pending-request-message">
+          <i class="fas fa-info-circle"></i> Ya tienes una solicitud de adopción pendiente para esta mascota.
         </div>
       </div>
     </div>
@@ -122,23 +117,6 @@
 
   <!-- === LIGHTBOX === -->
   <div class="lightbox" *ngIf="lightboxOpen" (click)="closeLightbox()">
-    <img [src]="'data:image/jpeg;base64,' + imagenes[currentIndex].imagen" />
-  </div>
-
-  <!-- === MODAL DE CONFIRMACIÓN PERSONALIZADO === -->
-  <div class="custom-modal-overlay" *ngIf="showConfirmModal">
-    <div class="custom-modal-content">
-      <div class="modal-header">
-        <h3>Confirmar Solicitud de Adopción</h3>
-        <button class="close-button" (click)="closeConfirmModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>{{ confirmModalMessage }}</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" (click)="onCancelAction()">Cancelar</button>
-        <button class="btn-confirm" (click)="onConfirmAction()">Confirmar</button>
-      </div>
-    </div>
+    <img [src]="imagenes[currentIndex]?.imagen || ''" />
   </div>
 </div>
