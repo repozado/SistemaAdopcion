@@ -26,6 +26,8 @@ import { UsersComponent } from './components/users/users.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CuestionarioComponent } from './components/cuestionario/cuestionario.component';
 import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpirada.component';
+import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
+import { AdopcionComponent } from './components/adopcion/adopcion.component';
 
 
 @NgModule({
@@ -47,7 +49,9 @@ import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpir
     UsersComponent,
     RegisterComponent,
     CuestionarioComponent,
-    SesionexpiradaComponent
+    SesionexpiradaComponent,
+    SolicitudesComponent,
+    AdopcionComponent
   ],
   imports: [
     BrowserModule,
