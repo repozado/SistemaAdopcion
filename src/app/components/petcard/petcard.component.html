@@ -1,3 +1,5 @@
+<!-- frontend/src/app/components/petcard/petcard.component.html -->
+
 <div class="pet-detail-container" *ngIf="mascota">
   <div class="pet-detail-card">
     <div class="card-header">
@@ -20,11 +22,11 @@
           <!-- Si no hay imágenes, mostramos icono de pata -->
           <ng-container *ngIf="imagenes.length > 0; else noImage">
             <div class="slides" [style.transform]="slideTransform">
-              <img 
-                *ngFor="let img of imagenes; let i = index" 
+              <img
+                *ngFor="let img of imagenes; let i = index"
                 [src]="'data:image/jpeg;base64,' + img.imagen"
-                [alt]="mascota.nombre + ' #' + (i+1)" 
-                (click)="openLightbox(i)" 
+                [alt]="mascota.nombre + ' #' + (i+1)"
+                (click)="openLightbox(i)"
                 class="slide" />
             </div>
           </ng-container>
@@ -71,6 +73,7 @@
           </ul>
         </div>
 
+<<<<<<< HEAD
 <div class="mascota-match" *ngIf="mascota?.perfil_emocional === tipoEmocionalUsuario">
   <span>Compatibilidad:</span>
   <div class="compat-stars">
@@ -81,10 +84,38 @@
     ></i>
   </div>
 </div>
+=======
+        <!-- Mensajes de estado de la solicitud -->
+        <div *ngIf="requestSuccessMessage" class="request-message success-message">
+          <i class="fas fa-check-circle"></i> {{ requestSuccessMessage }}
+        </div>
+        <div *ngIf="requestErrorMessage" class="request-message error-message">
+          <i class="fas fa-exclamation-circle"></i> {{ requestErrorMessage }}
+        </div>
+>>>>>>> ed55dc5d52dcbcad64c16d2ef172fc8c4feab802
 
-        <button class="btn btn-primary" style="width:100%">
-          <i class="fas fa-heart"></i> Solicitar Adopción
+        <!-- Botón de Solicitar Adopción -->
+        <button
+          class="btn btn-primary btn-adoptar"
+          (click)="solicitarAdopcion()"
+          [disabled]="!_AuthService.isLoggedIn() || mascota.estado_adopcion !== 'disponible' || isRequesting || hasAlreadyRequested"
+        >
+          <ng-container *ngIf="!isRequesting">
+            <i class="fas fa-heart"></i> Solicitar Adopción
+          </ng-container>
+          <ng-container *ngIf="isRequesting">
+            <i class="fas fa-spinner fa-spin"></i> Enviando Solicitud...
+          </ng-container>
         </button>
+
+        <!-- Mensaje si la mascota no está disponible -->
+        <div *ngIf="mascota.estado_adopcion !== 'disponible' && !hasAlreadyRequested" class="not-available-message">
+          <i class="fas fa-info-circle"></i> Esta mascota no está disponible para adopción en este momento.
+        </div>
+        <!-- Mensaje si el usuario no está logueado -->
+        <div *ngIf="!_AuthService.isLoggedIn()" class="not-logged-in-message">
+          <i class="fas fa-info-circle"></i> Inicia sesión para solicitar la adopción de esta mascota.
+        </div>
       </div>
     </div>
   </div>
@@ -92,5 +123,22 @@
   <!-- === LIGHTBOX === -->
   <div class="lightbox" *ngIf="lightboxOpen" (click)="closeLightbox()">
     <img [src]="'data:image/jpeg;base64,' + imagenes[currentIndex].imagen" />
+  </div>
+
+  <!-- === MODAL DE CONFIRMACIÓN PERSONALIZADO === -->
+  <div class="custom-modal-overlay" *ngIf="showConfirmModal">
+    <div class="custom-modal-content">
+      <div class="modal-header">
+        <h3>Confirmar Solicitud de Adopción</h3>
+        <button class="close-button" (click)="closeConfirmModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>{{ confirmModalMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="onCancelAction()">Cancelar</button>
+        <button class="btn-confirm" (click)="onConfirmAction()">Confirmar</button>
+      </div>
+    </div>
   </div>
 </div>

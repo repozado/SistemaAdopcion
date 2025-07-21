@@ -28,12 +28,10 @@
         <i class="fas fa-user-circle"></i> Perfil
       </a>
 
-      <!-- Nuevo enlace para Mis Adopciones, visible solo si el usuario tiene adopciones y está logueado -->
       <a *ngIf="auth.isLoggedIn() && hasMyAdopciones" class="nav-link" routerLinkActive="active" [routerLink]="['/mis-adopciones']">
         <i class="fas fa-heartbeat"></i> Mis Adopciones
       </a>
 
-      <!-- Menú desplegable para admin -->
       <div *ngIf="auth.isAdmin()" class="admin-dropdown">
         <button class="admin-dropbtn">
           <i class="fas fa-user-cog"></i> Administrar <i class="fas fa-chevron-down dropdown-icon"></i>
@@ -123,7 +121,6 @@
     <a *ngIf="auth.isLoggedIn()" class="mobile-link" routerLinkActive="active" [routerLink]="['/perfilemocional']" (click)="toggleMenu()">
       <i class="fas fa-user-circle"></i> Perfil
     </a>
-    <!-- Nuevo enlace móvil para Mis Adopciones -->
     <a *ngIf="auth.isLoggedIn() && hasMyAdopciones" class="mobile-link" routerLinkActive="active" [routerLink]="['/mis-adopciones']" (click)="toggleMenu()">
       <i class="fas fa-heartbeat"></i> Mis Adopciones
     </a>
@@ -133,7 +130,7 @@
     </a>
     <a *ngIf="auth.isAdmin()" class="mobile-link admin-link" routerLinkActive="active"
       [routerLink]="['/administrar']" (click)="toggleMenu()">
-      <i class="fas fa-tools"></i> Panel Admin
+      <i class="fas fa-tools"></i> Panel Mascotas Admin
     </a>
     <a *ngIf="auth.isAdmin()" class="mobile-link admin-link" routerLinkActive="active"
       [routerLink]="['/adopciones']" (click)="toggleMenu()">
@@ -160,5 +157,6 @@
     </button>
   </div>
 </nav>
+
 
 

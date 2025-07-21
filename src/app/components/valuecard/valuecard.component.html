@@ -1,1 +1,48 @@
-<p>valuecard works!</p>
+<div class="image-picker-container">
+  <h3>Seleccionar imágenes</h3>
+  
+  <!-- Input oculto para selección de archivos -->
+  <input #fileInput type="file" multiple accept="image/*" 
+         (change)="onFileSelected($event)" style="display: none;">
+  
+  <!-- Botón para activar el input -->
+  <button class="select-btn" (click)="fileInput.click()">
+    <i class="fas fa-folder-open"></i> Seleccionar imágenes
+  </button>
+  
+  <!-- Lista de imágenes seleccionadas -->
+  <div class="image-list" *ngIf="base64Images.length > 0">
+    <h4>Imágenes seleccionadas:</h4>
+    
+    <!-- Vista previa de imágenes -->
+    <div class="image-previews">
+      <div class="image-preview" *ngFor="let img of base64Images">
+        <img [src]="img.data" [alt]="img.name">
+        <div class="image-info">
+          <i class="fas fa-image"></i> {{ img.name }}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Botón para mostrar datos Base64 en consola -->
+    <button class="show-data-btn" (click)="guardarImagenes()">
+      <i class="fas fa-code"></i> Mostrar datos Base64 en consola
+    </button>
+  </div>
+  
+  <!-- Mensaje cuando no hay imágenes -->
+  <div class="empty-message" *ngIf="base64Images.length === 0">
+    <i class="fas fa-images"></i>
+    <p>No se han seleccionado imágenes</p>
+  </div>
+  
+  <!-- Botones de acción -->
+  <div class="action-buttons" *ngIf="base64Images.length > 0">
+    <button class="save-btn" (click)="guardarImagenes()">
+      <i class="fas fa-save"></i> Guardar imágenes
+    </button>
+    <button class="clear-btn" (click)="limpiarSeleccion()">
+      <i class="fas fa-trash-alt"></i> Limpiar selección
+    </button>
+  </div>
+</div>
