@@ -15,8 +15,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { CuestionarioComponent } from './components/cuestionario/cuestionario.component';
 import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpirada.component';
 import { AdopcionComponent } from './components/adopcion/adopcion.component';
-import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
-import { MisadopcionesComponent } from './components/misadopciones/misadopciones.component'; // ¡Nueva línea: Importa el componente MisAdopciones!
+import { SolicitudesComponent } from './components/solicitudes/solicitudes.component'; // ¡Importa el componente Solicitudes!
+import { MisadopcionesComponent } from './components/misadopciones/misadopciones.component';
+
 
 const routes: Routes = [
   {path: 'sesionexpirada', component: SesionexpiradaComponent },
@@ -33,8 +34,8 @@ const routes: Routes = [
   {path: 'yo', component:EncuestaComponent},
   {path: 'adopciones', component: AdopcionComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: 'perfilemocional', component:EncuestaComponent},
+  // ¡Nueva línea: Ruta para Solicitudes, protegida para administradores!
   {path: 'solicitudes', component: SolicitudesComponent, canActivate: [AuthGuard, AdminGuard]},
-  // ¡Nueva línea: Ruta para Mis Adopciones, accesible para cualquier usuario autenticado!
   {path: 'mis-adopciones', component: MisadopcionesComponent, canActivate: [AuthGuard]},
   {path: '**', pathMatch: 'full', redirectTo: 'home'}
 ];
