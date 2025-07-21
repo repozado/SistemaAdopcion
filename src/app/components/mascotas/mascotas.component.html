@@ -18,7 +18,7 @@
     <option value="Tranquilo">Tranquilo</option>
     <option value="Cariñoso">Cariñoso</option>
     <option value="Independiente">Independiente</option>
-    <option value="Recomendados">Recomendados</option>
+    <option  *ngIf="isLoggedIn" value="Recomendados">Recomendados</option>
   </select>
 </div>
 

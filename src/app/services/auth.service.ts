@@ -23,9 +23,9 @@ export class AuthService {
 
   // --- NUEVO: BehaviorSubject para el estado de autenticación ---
   // Inicializa con el estado actual del token al cargar el servicio
-  private _isLoggedIn = new BehaviorSubject<boolean>(this.hasValidToken());
+  private _isLoggedIn$$ = new BehaviorSubject<boolean>(this.hasValidToken());
   // Observable público al que otros componentes pueden suscribirse para reaccionar a los cambios
-  public isLoggedIn$: Observable<boolean> = this._isLoggedIn.asObservable();
+  public isLoggedIn$: Observable<boolean> = this._isLoggedIn$$.asObservable();
   // -------------------------------------------------------------
 
   constructor(private http: HttpClient) {}
@@ -54,7 +54,7 @@ export class AuthService {
         const decoded = jwtDecode<DecodedToken>(res.token);
         localStorage.setItem(this.roleKey, decoded.role);
         // --- NUEVO: Actualiza el BehaviorSubject a 'true' al iniciar sesión con éxito ---
-        this._isLoggedIn.next(true);
+        this._isLoggedIn$$.next(true);
         // -----------------------------------------------------------------------------
       }));
   }
@@ -67,7 +67,7 @@ export class AuthService {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.roleKey);
     // --- NUEVO: Actualiza el BehaviorSubject a 'false' al cerrar sesión ---
-    this._isLoggedIn.next(false);
+    this._isLoggedIn$$.next(false);
     // -------------------------------------------------------------------
   }
 
@@ -81,7 +81,7 @@ export class AuthService {
 
   // Ahora, isLoggedIn() devuelve el valor actual del BehaviorSubject
   isLoggedIn(): boolean {
-    return this._isLoggedIn.value;
+    return this._isLoggedIn$$.value;
   }
 
   isAdmin(): boolean {
@@ -114,6 +114,18 @@ export class AuthService {
       }
     }
     return null;
+  }
+
+    // Llamar a este método tras hacer login:
+  setToken(token: string) {
+    localStorage.setItem('token', token);
+    this._isLoggedIn$$.next(true);
+  }
+
+  // Llamar tras logout:
+  clearToken() {
+    localStorage.removeItem('token');
+    this._isLoggedIn$$.next(false);
   }
 }
 

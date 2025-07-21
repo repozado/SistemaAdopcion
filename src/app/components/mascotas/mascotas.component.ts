@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Mascota, MascotasService } from '../../services/mascotas.service';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { EncuestaService } from '../../services/encuesta.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-mascotas',
@@ -20,12 +21,21 @@ export class MascotasComponent implements OnInit {
   private encuestaService = inject(EncuestaService);
   tipoEmocionalUsuario: string = '';
   public compatibilidadUsuario: any = {};
+  public isLoggedIn = false;
+  private authService = inject(AuthService);
 
   ngOnInit() {
+    this.authService.isLoggedIn$.subscribe(val => {
+      this.isLoggedIn = val;
+    });
     this.mascotaService.getAll().subscribe({
       next: (data) => {
         this.mascotas = data;
         this.applyFilters(); // <--- importante
+
+        // Sólo si hay token llamamos al endpoint protegido
+        const token = this.authService.getToken();
+        if (token) {
         this.encuestaService.obtenerMiResultado().subscribe({
           next: (resultado) => {
             this.tipoEmocionalUsuario = resultado.descripcion;
@@ -38,6 +48,7 @@ export class MascotasComponent implements OnInit {
             this.applyFilters(); // aun así aplica filtro sin tipo
           },
         });
+      }
       },
       error: (err) => console.error(err),
     });
