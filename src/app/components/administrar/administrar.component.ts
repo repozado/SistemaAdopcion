@@ -1,12 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Mascota, MascotasService } from '../../services/mascotas.service';
-import { TipoEmocional, TipoemocionalService} from '../../services/tipoemocional.service';
+import {
+  TipoEmocional,
+  TipoemocionalService,
+} from '../../services/tipoemocional.service';
 
 @Component({
   selector: 'app-administrar',
   standalone: false,
   templateUrl: './administrar.component.html',
-  styleUrls: ['./administrar.component.css']
+  styleUrls: ['./administrar.component.css'],
 })
 export class AdministrarComponent implements OnInit {
   mascotas: Mascota[] = [];
@@ -36,7 +39,7 @@ export class AdministrarComponent implements OnInit {
   filters = [
     { value: 'Disponible', label: 'Disponibles' },
     { value: 'En proceso', label: 'En proceso' },
-    { value: 'Adoptado', label: 'Adoptados' }
+    { value: 'Adoptado', label: 'Adoptados' },
   ];
 
   ngOnInit(): void {
@@ -46,31 +49,40 @@ export class AdministrarComponent implements OnInit {
 
   loadMascotas(): void {
     this.mascotaService.getAll().subscribe({
-      next: data => { this.mascotas = data; this.filterMascotas(); },
-      error: err => console.error('Error al cargar mascotas', err)
+      next: (data) => {
+        this.mascotas = data;
+        this.filterMascotas();
+      },
+      error: (err) => console.error('Error al cargar mascotas', err),
     });
   }
 
   loadTiposEmocionales(): void {
     this.tipoService.getAll().subscribe({
-      next: tipos => this.tiposEmocionales = tipos,
-      error: err => console.error('Error cargando tipos emocionales', err)
+      next: (tipos) => (this.tiposEmocionales = tipos),
+      error: (err) => console.error('Error cargando tipos emocionales', err),
     });
   }
 
+  // En el archivo TS
   filterMascotas(): void {
     let result = this.mascotas;
+
+    // Aplicar filtro de búsqueda
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      result = result.filter(m =>
-        m.nombre.toLowerCase().includes(term) ||
-        m.perfil_emocional.toLowerCase().includes(term) ||
-        m.tamano.toLowerCase().includes(term)
+      result = result.filter(
+        (m) =>
+          (m.nombre?.toLowerCase() || '').includes(term) ||
+          (m.perfil_emocional?.toLowerCase() || '').includes(term) ||
+          (m.tamano?.toLowerCase() || '').includes(term)
       );
     }
+
     if (this.selectedFilter) {
-      result = result.filter(m => m.estado_adopcion === this.selectedFilter);
+      result = result.filter((m) => m.estado_adopcion === this.selectedFilter);
     }
+
     this.filteredMascotas = result;
     this.currentPage = 1;
   }
@@ -84,8 +96,12 @@ export class AdministrarComponent implements OnInit {
     return this.filteredMascotas.slice(start, start + this.itemsPerPage);
   }
 
-  prevPage(): void { if (this.currentPage > 1) this.currentPage--; }
-  nextPage(): void { if (this.currentPage < this.totalPages) this.currentPage++; }
+  prevPage(): void {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
 
   openAddModal(): void {
     this.isEditing = false;
@@ -102,13 +118,19 @@ export class AdministrarComponent implements OnInit {
     this.newFiles = [];
     this.newPreviews = [];
     this.mascotaService.getImages(mascota.id_mascota).subscribe({
-      next: imgs => this.existingImages = imgs.map(x => ({ id_imagen: x.id_imagen, data: `data:image/*;base64,${x.imagen}` })),
-      error: err => console.error('Error cargando imágenes existentes', err)
+      next: (imgs) =>
+        (this.existingImages = imgs.map((x) => ({
+          id_imagen: x.id_imagen,
+          data: `data:image/*;base64,${x.imagen}`,
+        }))),
+      error: (err) => console.error('Error cargando imágenes existentes', err),
     });
     this.showModal = true;
   }
 
-  closeModal(): void { this.showModal = false; }
+  closeModal(): void {
+    this.showModal = false;
+  }
 
   handleSubmit(): void {
     this.isEditing ? this.update() : this.create();
@@ -117,30 +139,46 @@ export class AdministrarComponent implements OnInit {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
-    Array.from(input.files).forEach(file => {
+    Array.from(input.files).forEach((file) => {
       this.newFiles.push(file);
       const reader = new FileReader();
-      reader.onload = () => this.newPreviews.push({ name: file.name, data: reader.result as string });
+      reader.onload = () =>
+        this.newPreviews.push({
+          name: file.name,
+          data: reader.result as string,
+        });
       reader.readAsDataURL(file);
     });
   }
 
   removeExistingImage(index: number): void {
     const img = this.existingImages[index];
-    this.mascotaService.deleteImage(this.currentMascota.id_mascota, img.id_imagen)
-      .subscribe({ next: () => this.existingImages.splice(index, 1), error: err => console.error('Error al eliminar imagen existente', err) });
+    this.mascotaService
+      .deleteImage(this.currentMascota.id_mascota!, img.id_imagen)
+      .subscribe({
+        next: () => {
+          this.existingImages.splice(index, 1);
+          // ¡Redefine la imagen de presentación al siguiente elemento!
+          this.currentMascota.imagen =
+            this.existingImages[0]?.data || this.newPreviews[0]?.data || null;
+        },
+        error: (err) =>
+          console.error('Error al eliminar imagen existente', err),
+      });
   }
 
   removeNewImage(index: number): void {
     this.newFiles.splice(index, 1);
     this.newPreviews.splice(index, 1);
+    this.currentMascota.imagen =
+      this.existingImages[0]?.data || this.newPreviews[0]?.data || null;
   }
 
   create(): void {
     const payload = this.buildPayload();
     this.mascotaService.create(payload as any).subscribe({
-      next: m => this.afterSave(m.id_mascota, false),
-      error: err => console.error('Error al crear mascota', err)
+      next: (m) => this.afterSave(m.id_mascota, false),
+      error: (err) => console.error('Error al crear mascota', err),
     });
   }
 
@@ -149,7 +187,7 @@ export class AdministrarComponent implements OnInit {
     const payload = this.buildPayload();
     this.mascotaService.update(id, payload as any).subscribe({
       next: () => this.afterSave(id, true),
-      error: err => console.error('Error al actualizar mascota', err)
+      error: (err) => console.error('Error al actualizar mascota', err),
     });
   }
 
@@ -164,41 +202,69 @@ export class AdministrarComponent implements OnInit {
       estado_adopcion: this.currentMascota.estado_adopcion,
       lugar_actual: this.currentMascota.lugar_actual,
       requerimientos: this.currentMascota.requerimientos,
-      id_emocional: this.currentMascota.id_emocional
+      id_emocional: this.currentMascota.id_emocional,
     };
   }
 
   private afterSave(id: number, isUpdate: boolean): void {
+    const finish = () => {
+      this.setMessage(isUpdate ? 'Mascota actualizada.' : 'Mascota creada.');
+      this.closeModal();
+      this.loadMascotas();
+    };
+
     if (this.newFiles.length) {
       const form = new FormData();
-      this.newFiles.forEach(f => form.append('imagenes', f));
+      this.newFiles.forEach((f) => form.append('imagenes', f));
       this.mascotaService.uploadImages(id, form).subscribe({
-        next: () => console.log('Nuevas imágenes subidas'),
-        error: err => console.error('Error subiendo imágenes', err)
+        next: () => {
+          console.log('Nuevas imágenes subidas');
+          finish(); // sólo recargo cuando termine
+        },
+        error: (err) => console.error('Error subiendo imágenes', err),
       });
+    } else {
+      finish(); // si no hay imágenes nuevas, recargo de una
     }
-    this.setMessage(isUpdate ? 'Mascota actualizada.' : 'Mascota creada.');
-    this.closeModal();
-    this.loadMascotas();
   }
 
   delete(): void {
     if (!this.mascotaToDelete) return;
+
     const id = this.mascotaToDelete.id_mascota;
+
     this.mascotaService.delete(id).subscribe({
-      next: () => { this.setMessage('Mascota eliminada'); this.loadMascotas(); this.showConfirmModal = false; },
-      error: err => console.error('Error eliminando mascota', err)
+      next: () => {
+        // Actualiza la lista local sin recargar del servidor
+        this.mascotas = this.mascotas.filter((m) => m.id_mascota !== id);
+        this.filteredMascotas = this.filteredMascotas.filter(
+          (m) => m.id_mascota !== id
+        );
+
+        this.setMessage('Mascota eliminada');
+        this.showConfirmModal = false;
+        this.mascotaToDelete = null;
+
+        if (this.paginatedMascotas.length === 0 && this.currentPage > 1) {
+          this.currentPage--;
+        }
+      },
+      error: (err) => {
+        console.error('Error eliminando mascota', err);
+        this.showConfirmModal = false;
+      },
     });
   }
 
   confirmDelete(id: number): void {
-    this.mascotaToDelete = this.mascotas.find(m => m.id_mascota === id) || null;
+    this.mascotaToDelete =
+      this.mascotas.find((m) => m.id_mascota === id) || null;
     this.showConfirmModal = true;
   }
 
   setMessage(msg: string): void {
     this.message = msg;
-    setTimeout(() => this.message = '', 3000);
+    setTimeout(() => (this.message = ''), 3000);
   }
 
   private createEmptyMascota(): Mascota {
@@ -215,7 +281,7 @@ export class AdministrarComponent implements OnInit {
       lugar_actual: '',
       perfil_emocional: '',
       imagen: null,
-      id_emocional: 0
+      id_emocional: 0,
     };
   }
 }

@@ -7,16 +7,28 @@
   <!-- Filtros y búsqueda -->
   <div class="admin-toolbar">
     <div class="search-group">
-      <input type="text" class="form-control" placeholder="Buscar mascotas..." [(ngModel)]="searchTerm">
-      <button class="btn btn-primary">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar mascotas..."
+        [(ngModel)]="searchTerm"
+        (input)="filterMascotas()"
+      />
+      <button class="btn btn-primary" (click)="filterMascotas()">
         <i class="fas fa-search"></i>
       </button>
     </div>
 
     <div class="filter-group">
-      <select class="form-control" [(ngModel)]="selectedFilter">
+      <select
+        class="form-control"
+        [(ngModel)]="selectedFilter"
+        (change)="filterMascotas()"
+      >
         <option value="">Todas las mascotas</option>
-        <option *ngFor="let filter of filters" [value]="filter.value">{{filter.label}}</option>
+        <option *ngFor="let filter of filters" [value]="filter.value">
+          {{ filter.label }}
+        </option>
       </select>
     </div>
 
@@ -27,9 +39,8 @@
 
   <!-- Mensaje de confirmación -->
   <div *ngIf="message" class="alert success-alert">
-    {{message}}
+    {{ message }}
   </div>
-
 
   <!-- Tabla de mascotas -->
   <div class="admin-table-container">
@@ -48,34 +59,54 @@
         <tr *ngFor="let mascota of paginatedMascotas">
           <td>
             <div class="pet-info-cell">
-              <div class="pet-avatar"
-                [ngClass]="{'dog': mascota.especie === 'Perro', 'cat': mascota.especie === 'Gato'}">
-                <i [class]="mascota.imagen"></i>
+              <div class="pet-avatar">
+                <ng-container *ngIf="mascota.imagen; else fallbackIcon">
+                  <img
+                    [src]="'data:image/jpeg;base64,' + mascota.imagen"
+                    [alt]="mascota.nombre"
+                    class="pet-image"
+                  />
+                </ng-container>
+                <ng-template #fallbackIcon>
+                  <i
+                    [class]="
+                      mascota.especie === 'Perro' ? 'fas fa-dog' : 'fas fa-cat'
+                    "
+                  ></i>
+                </ng-template>
               </div>
               <div>
-                <strong>{{mascota.nombre}}</strong>
-                <small>{{mascota.sexo}}</small>
+                <strong>{{ mascota.nombre }}</strong>
+                <small>{{ mascota.sexo }}</small>
               </div>
             </div>
           </td>
-          <td>{{mascota.perfil_emocional}}</td>
-          <td>{{mascota.especie}}</td>
-          <td>{{mascota.edad}} años</td>
+          <td>{{ mascota.perfil_emocional }}</td>
+          <td>{{ mascota.especie }}</td>
+          <td>{{ mascota.edad }} años</td>
           <td>
-            <span [ngClass]="{
-              'status-available': mascota.estado_adopcion === 'Disponible',
-              'status-pending': mascota.estado_adopcion === 'En proceso',
-              'status-adopted': mascota.estado_adopcion === 'Adoptado'
-            }">
-              {{mascota.estado_adopcion}}
+            <span
+              [ngClass]="{
+                'status-available': mascota.estado_adopcion === 'Disponible',
+                'status-pending': mascota.estado_adopcion === 'En proceso',
+                'status-adopted': mascota.estado_adopcion === 'Adoptado'
+              }"
+            >
+              {{ mascota.estado_adopcion }}
             </span>
           </td>
           <td>
             <div class="action-buttons">
-              <button class="action-btn edit-btn" (click)="openEditModal(mascota)">
+              <button
+                class="action-btn edit-btn"
+                (click)="openEditModal(mascota)"
+              >
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="action-btn delete-btn" (click)="confirmDelete(mascota.id_mascota)">
+              <button
+                class="action-btn delete-btn"
+                (click)="confirmDelete(mascota.id_mascota)"
+              >
                 <i class="fas fa-trash"></i>
               </button>
             </div>
@@ -87,11 +118,19 @@
 
   <!-- Paginación -->
   <div class="pagination" *ngIf="filteredMascotas.length > itemsPerPage">
-    <button class="btn btn-outline" [disabled]="currentPage === 1" (click)="prevPage()">
+    <button
+      class="btn btn-outline"
+      [disabled]="currentPage === 1"
+      (click)="prevPage()"
+    >
       <i class="fas fa-chevron-left"></i>
     </button>
-    <span>Página {{currentPage}} de {{totalPages}}</span>
-    <button class="btn btn-outline" [disabled]="currentPage === totalPages" (click)="nextPage()">
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+    <button
+      class="btn btn-outline"
+      [disabled]="currentPage === totalPages"
+      (click)="nextPage()"
+    >
       <i class="fas fa-chevron-right"></i>
     </button>
   </div>
@@ -100,7 +139,7 @@
   <div class="modal" *ngIf="showModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>{{isEditing ? 'Editar Mascota' : 'Añadir Nueva Mascota'}}</h3>
+        <h3>{{ isEditing ? "Editar Mascota" : "Añadir Nueva Mascota" }}</h3>
         <button class="close-btn" (click)="closeModal()">&times;</button>
       </div>
       <div class="modal-body">
@@ -108,11 +147,22 @@
           <div class="form-row">
             <div class="form-group">
               <label>Nombre</label>
-              <input type="text" class="form-control" [(ngModel)]="currentMascota.nombre" name="nombre" required>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="currentMascota.nombre"
+                name="nombre"
+                required
+              />
             </div>
             <div class="form-group">
               <label>Tipo</label>
-              <select class="form-control" [(ngModel)]="currentMascota.especie" name="especie" required>
+              <select
+                class="form-control"
+                [(ngModel)]="currentMascota.especie"
+                name="especie"
+                required
+              >
                 <option value="Perro">Perro</option>
                 <option value="Gato">Gato</option>
                 <option value="Otro">Otro</option>
@@ -123,11 +173,22 @@
           <div class="form-row">
             <div class="form-group">
               <label>Edad</label>
-              <input type="number" class="form-control" [(ngModel)]="currentMascota.edad" name="edad" required>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="currentMascota.edad"
+                name="edad"
+                required
+              />
             </div>
             <div class="form-group">
               <label>Tamaño</label>
-              <select class="form-control" [(ngModel)]="currentMascota.tamano" name="tamano" required>
+              <select
+                class="form-control"
+                [(ngModel)]="currentMascota.tamano"
+                name="tamano"
+                required
+              >
                 <option value="Pequeño">Pequeño</option>
                 <option value="Mediano">Mediano</option>
                 <option value="Grande">Grande</option>
@@ -138,14 +199,24 @@
           <div class="form-row">
             <div class="form-group">
               <label>Sexo</label>
-              <select class="form-control" [(ngModel)]="currentMascota.sexo" name="sexo" required>
+              <select
+                class="form-control"
+                [(ngModel)]="currentMascota.sexo"
+                name="sexo"
+                required
+              >
                 <option value="Macho">Macho</option>
                 <option value="Hembra">Hembra</option>
               </select>
             </div>
             <div class="form-group">
               <label>Estado</label>
-              <select class="form-control" [(ngModel)]="currentMascota.estado_adopcion" name="estado_adopcion" required>
+              <select
+                class="form-control"
+                [(ngModel)]="currentMascota.estado_adopcion"
+                name="estado_adopcion"
+                required
+              >
                 <option value="Disponible">Disponible</option>
                 <option value="En proceso">En proceso</option>
                 <option value="Adoptado">Adoptado</option>
@@ -155,9 +226,17 @@
 
           <div class="form-group">
             <label>Perfil Emocional</label>
-            <select class="form-control" [(ngModel)]="currentMascota.id_emocional" name="id_emocional" required>
+            <select
+              class="form-control"
+              [(ngModel)]="currentMascota.id_emocional"
+              name="id_emocional"
+              required
+            >
               <option value="" disabled>-- Selecciona perfil --</option>
-              <option *ngFor="let tipo of tiposEmocionales" [value]="tipo.id_emocional">
+              <option
+                *ngFor="let tipo of tiposEmocionales"
+                [value]="tipo.id_emocional"
+              >
                 {{ tipo.descripcion }}
               </option>
             </select>
@@ -165,14 +244,23 @@
 
           <div class="form-group">
             <label>Descripción</label>
-            <textarea class="form-control" rows="3" [(ngModel)]="currentMascota.descripcion" name="descripcion"
-              required></textarea>
+            <textarea
+              class="form-control"
+              rows="3"
+              [(ngModel)]="currentMascota.descripcion"
+              name="descripcion"
+              required
+            ></textarea>
           </div>
 
           <div class="form-group">
             <label>Requerimientos</label>
-            <textarea class="form-control" rows="2" [(ngModel)]="currentMascota.requerimientos"
-              name="requerimientos"></textarea>
+            <textarea
+              class="form-control"
+              rows="2"
+              [(ngModel)]="currentMascota.requerimientos"
+              name="requerimientos"
+            ></textarea>
           </div>
 
           <!--
@@ -184,41 +272,77 @@
 
           <div class="form-group">
             <label>Lugar actual</label>
-            <input type="text" class="form-control" [(ngModel)]="currentMascota.lugar_actual" name="lugar_actual">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="currentMascota.lugar_actual"
+              name="lugar_actual"
+            />
           </div>
-
 
           <div class="form-group image-picker-container">
             <h3>Seleccionar imágenes</h3>
-            <input #fileInput type="file" multiple accept="image/*" (change)="onFileSelected($event)" hidden>
-            <button type="button" class="select-btn" (click)="fileInput.click()">
+            <input
+              #fileInput
+              type="file"
+              multiple
+              accept="image/*"
+              (change)="onFileSelected($event)"
+              hidden
+            />
+            <button
+              type="button"
+              class="select-btn"
+              (click)="fileInput.click()"
+            >
               <i class="fas fa-folder-open"></i> Seleccionar imágenes
             </button>
 
             <div class="image-previews">
               <!-- existentes -->
-              <div class="image-preview" *ngFor="let img of existingImages; let i = index">
-                <button class="remove-btn" (click)="removeExistingImage(i)">✕</button>
-                <img [src]="img.data">
+              <div
+                class="image-preview"
+                *ngFor="let img of existingImages; let i = index"
+              >
+                <button 
+                  type="button" 
+                  class="remove-btn" 
+                  (click)="removeExistingImage(i); $event.stopPropagation()"
+                >
+                  ✕
+                </button>
+                <img [src]="img.data" />
               </div>
               <!-- nuevas -->
-              <div class="image-preview" *ngFor="let img of newPreviews; let j = index">
-                <button class="remove-btn" (click)="removeNewImage(j)">✕</button>
-                <img [src]="img.data">
+              <div
+                class="image-preview"
+                *ngFor="let img of newPreviews; let j = index"
+              >
+                <button type="button" class="remove-btn" (click)="removeNewImage(j); $event.stopPropagation()">
+                  ✕
+                </button>
+                <img [src]="img.data" />
               </div>
             </div>
-            <div class="empty-message" *ngIf="!existingImages.length && !newPreviews.length">
+            <div
+              class="empty-message"
+              *ngIf="!existingImages.length && !newPreviews.length"
+            >
               <i class="fas fa-images"></i>
               <p>No se han seleccionado imágenes</p>
             </div>
           </div>
 
-
-
           <div class="form-actions">
-            <button type="button" class="btn btn-outline" (click)="closeModal()">Cancelar</button>
+            <button
+              type="button"
+              class="btn btn-outline"
+              (click)="closeModal()"
+            >
+              Cancelar
+            </button>
             <button type="submit" class="btn btn-primary">
-              {{isEditing ? 'Actualizar' : 'Guardar'}}
+              {{ isEditing ? "Actualizar" : "Guardar" }}
             </button>
           </div>
         </form>
@@ -233,11 +357,15 @@
         <h3>Confirmar Eliminación</h3>
       </div>
       <div class="modal-body">
-        <p>¿Estás seguro que deseas eliminar a {{mascotaToDelete?.nombre}}?</p>
+        <p>
+          ¿Estás seguro que deseas eliminar a {{ mascotaToDelete?.nombre }}?
+        </p>
         <p>Esta acción no se puede deshacer.</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline" (click)="showConfirmModal = false">Cancelar</button>
+        <button class="btn btn-outline" (click)="showConfirmModal = false">
+          Cancelar
+        </button>
         <button class="btn btn-danger" (click)="delete()">Eliminar</button>
       </div>
     </div>
