@@ -25,7 +25,6 @@ export class PetcardComponent implements OnInit {
   public solicitudesService = inject(SolicitudesService);
 
   mascota: Mascota | undefined;
-  // mainImage: string | null = null; // Ya no es necesario si 'imagen' está en Mascota
   imagenes: MascotaImagen[] = []; // Usaremos este array para la galería
   isLoading: boolean = true;
   error: string | null = null;
@@ -43,16 +42,28 @@ export class PetcardComponent implements OnInit {
   // Lista de requerimientos de la mascota para mostrar en el HTML
   petReqList: string[] = [];
 
+  // --- PROPIEDADES PARA EL MODAL DE CONFIRMACIÓN ---
+  showConfirmModal: boolean = false; // Controla la visibilidad del modal
+  confirmModalMessage: string = ''; // Mensaje a mostrar en el modal
+  // -------------------------------------------------------
+
+  // --- CORRECCIÓN: Declaración de isLoggedIn ---
+  public isLoggedIn: boolean = false;
+  // ---------------------------------------------
+
   private authSubscription: Subscription | undefined;
+  private autoPlayInterval: any; // Para almacenar el ID del intervalo
 
   constructor() {
     // Suscribirse a los cambios en el estado de autenticación
     this.authSubscription = this.authService.isLoggedIn$.subscribe(loggedIn => {
+      this.isLoggedIn = loggedIn; // Actualiza el estado de isLoggedIn
       // Si el estado de login cambia y la mascota ya está cargada, verificar solicitudes
       if (this.mascota && loggedIn) {
         this.checkPendingRequest();
       } else if (!loggedIn) {
         this.hasAlreadyRequested = false; // Si no está logueado, no hay solicitudes pendientes
+        this.requestErrorMessage = 'Inicia sesión para solicitar la adopción de esta mascota.';
       }
     });
   }
@@ -73,6 +84,10 @@ export class PetcardComponent implements OnInit {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
+    // Limpiar el intervalo de autoplay si existe
+    if (this.autoPlayInterval) {
+      clearInterval(this.autoPlayInterval);
+    }
   }
 
   /**
@@ -85,20 +100,25 @@ export class PetcardComponent implements OnInit {
     this.requestSuccessMessage = null;
     this.requestErrorMessage = null;
 
-    // Usar getById() en lugar de getMascotaById()
     this.mascotasService.getById(id).subscribe({
       next: (data) => {
         this.mascota = data;
+        // Normalizar el estado de adopción a minúsculas y quitar espacios
+        if (this.mascota && this.mascota.estado_adopcion) {
+          this.mascota.estado_adopcion = this.mascota.estado_adopcion.trim().toLowerCase();
+        }
+
         // Parsear los requerimientos especiales si existen
-        // ¡CORRECCIÓN AQUÍ! Usar 'requerimientos' en lugar de 'requisitos_especiales'
-        if (this.mascota.requerimientos) {
+        if (this.mascota?.requerimientos) { // Usar optional chaining para seguridad
           this.petReqList = this.mascota.requerimientos.split(',').map(req => req.trim());
         } else {
           this.petReqList = ['No hay requerimientos especiales especificados.'];
         }
         this.loadMascotaImages(id); // Cargar imágenes después de obtener los detalles de la mascota
-        if (this.authService.isLoggedIn()) {
+        if (this.authService.isLoggedIn()) { // Usar this.authService.isLoggedIn() directamente
           this.checkPendingRequest(); // Verificar si ya tiene una solicitud pendiente
+        } else { // Si no está logueado
+          this.requestErrorMessage = 'Inicia sesión para solicitar la adopción de esta mascota.';
         }
         this.isLoading = false;
       },
@@ -115,27 +135,26 @@ export class PetcardComponent implements OnInit {
    * @param mascotaId El ID de la mascota.
    */
   loadMascotaImages(mascotaId: number): void {
-    // Usar getImages() con el nuevo endpoint
     this.mascotasService.getImages(mascotaId).subscribe({
       next: (images) => {
         this.imagenes = images.map(img => ({
-          imagen: img.imagen ? `data:image/jpeg;base64,${img.imagen}` : null, // Asegura el prefijo Base64
+          imagen: img.imagen ? `data:image/jpeg;base64,${img.imagen}` : null,
           orden: img.orden
-        })).sort((a, b) => a.orden - b.orden); // Ordenar por la propiedad 'orden'
+        })).sort((a, b) => a.orden - b.orden);
 
-        // Si la mascota tiene una imagen principal directamente en el objeto Mascota, úsala como primera opción
         if (this.mascota?.imagen && !this.imagenes.some(img => img.imagen === this.mascota?.imagen)) {
           this.imagenes.unshift({ imagen: `data:image/jpeg;base64,${this.mascota.imagen}`, orden: 0 });
         }
 
         if (this.imagenes.length > 0) {
-          this.currentIndex = 0; // Reiniciar el índice del carrusel
+          this.currentIndex = 0;
           this.updateSlideTransform();
         }
+        this.startAutoPlay(); // Iniciar autoplay después de cargar imágenes
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error al cargar imágenes de la mascota:', err);
-        this.imagenes = []; // En caso de error, no mostrar imágenes
+        this.imagenes = [];
       }
     });
   }
@@ -167,6 +186,14 @@ export class PetcardComponent implements OnInit {
     this.slideTransform = `translateX(-${this.currentIndex * 100}%)`;
   }
 
+  private startAutoPlay() {
+    // Limpiar cualquier intervalo existente para evitar duplicados
+    if (this.autoPlayInterval) {
+      clearInterval(this.autoPlayInterval);
+    }
+    this.autoPlayInterval = setInterval(() => this.nextImage(), 4000);
+  }
+
   /**
    * Abre el lightbox con la imagen seleccionada.
    * @param index El índice de la imagen en la galería.
@@ -195,7 +222,7 @@ export class PetcardComponent implements OnInit {
   }
 
   /**
-   * Verifica si el usuario autenticado ya tiene una solicitud 'en_revision' para esta mascota.
+   * Verifica si el usuario autenticado ya tiene una solicitud 'en_revision' o 'aceptada' para esta mascota.
    */
   checkPendingRequest(): void {
     const token = this.authService.getToken();
@@ -207,8 +234,12 @@ export class PetcardComponent implements OnInit {
     this.solicitudesService.getMySolicitudes(token).subscribe({
       next: (solicitudes: Solicitud[]) => {
         this.hasAlreadyRequested = solicitudes.some(
-          s => s.id_mascota === this.mascota!.id_mascota && s.estado_solicitud === 'en_revision'
+          s => s.id_mascota === this.mascota!.id_mascota &&
+               (s.estado_solicitud === 'en_revision' || s.estado_solicitud === 'aceptada')
         );
+        if (this.hasAlreadyRequested) {
+          this.requestSuccessMessage = 'Ya tienes una solicitud pendiente o aceptada para esta mascota.';
+        }
       },
       error: (err: HttpErrorResponse) => {
         console.error('Error al verificar solicitudes pendientes:', err);
@@ -217,39 +248,106 @@ export class PetcardComponent implements OnInit {
     });
   }
 
+  // --- MÉTODOS PARA EL MODAL DE CONFIRMACIÓN ---
+  /**
+   * Abre el modal de confirmación con un mensaje específico.
+   */
+  openConfirmModal(message: string): void {
+    this.confirmModalMessage = message;
+    this.showConfirmModal = true;
+    console.log('DEBUG: Modal de confirmación abierto con mensaje:', message); // DEBUG
+  }
+
+  /**
+   * Cierra el modal de confirmación.
+   */
+  closeConfirmModal(): void {
+    this.showConfirmModal = false;
+    this.confirmModalMessage = '';
+    console.log('DEBUG: Modal de confirmación cerrado.'); // DEBUG
+  }
+
+  /**
+   * Maneja la acción de confirmar desde el modal.
+   * Procede con el envío de la solicitud.
+   */
+  onConfirmAction(): void {
+    this.closeConfirmModal(); // Cierra el modal
+    this.proceedWithAdoptionRequest(); // Llama a la lógica para enviar la solicitud
+  }
+
+  /**
+   * Maneja la acción de cancelar desde el modal.
+   * No hace nada y solo cierra el modal.
+   */
+  onCancelAction(): void {
+    this.closeConfirmModal(); // Cierra el modal
+  }
+  // ---------------------------------------------------
+
   /**
    * Envía una solicitud de adopción para la mascota actual.
    */
   solicitarAdopcion(): void {
+    this.requestSuccessMessage = null;
+    this.requestErrorMessage = null;
+
+    if (!this.authService.isLoggedIn()) { // Usar this.authService.isLoggedIn() directamente
+      this.requestErrorMessage = 'Debes iniciar sesión para solicitar una adopción.';
+      this.router.navigate(['/login']); // Redirigir al login si no está logueado
+      return;
+    }
+
     if (!this.mascota || !this.mascota.id_mascota) {
       this.requestErrorMessage = 'No se pudo obtener la información de la mascota para la solicitud.';
       return;
     }
 
-    const token = this.authService.getToken();
-    if (!token) {
-      this.requestErrorMessage = 'Debes iniciar sesión para enviar una solicitud de adopción.';
-      this.router.navigate(['/login']);
+    // Asegurarse de que el estado de adopción esté normalizado antes de la verificación final
+    const estadoAdopcionNormalizado = this.mascota.estado_adopcion ? this.mascota.estado_adopcion.trim().toLowerCase() : '';
+
+    if (estadoAdopcionNormalizado !== 'disponible') {
+      this.requestErrorMessage = `Esta mascota no está disponible para adopción (Estado: ${this.mascota.estado_adopcion}).`;
       return;
     }
 
-    this.isRequesting = true; // Deshabilitar el botón
-    this.requestSuccessMessage = null;
-    this.requestErrorMessage = null;
+    if (this.hasAlreadyRequested) {
+      this.requestErrorMessage = 'Ya tienes una solicitud pendiente o aceptada para esta mascota.';
+      return;
+    }
 
-    this.solicitudesService.createSolicitud(this.mascota.id_mascota, token).subscribe({
-      next: (response: Solicitud) => {
-        console.log('Solicitud de adopción enviada con éxito:', response);
-        this.hasAlreadyRequested = true; // Actualizar el estado para deshabilitar el botón
-        this.requestSuccessMessage = '¡Solicitud de adopción enviada con éxito! Será revisada pronto.';
-        this.isRequesting = false;
-      },
-      error: (err: HttpErrorResponse) => {
-        console.error('Error al enviar solicitud de adopción:', err);
-        this.requestErrorMessage = err.error?.error || 'Error al enviar la solicitud de adopción. Intenta de nuevo.';
-        this.isRequesting = false;
-      }
-    });
+    // Abrimos el modal personalizado en lugar de alert() o confirm()
+    const confirmationMessage = `¿Estás seguro de solicitar la adopción de ${this.mascota.nombre}?
+    Se enviará una solicitud y nuestro equipo la evaluará. Recibirás una notificación sobre el estado de tu solicitud.`;
+    this.openConfirmModal(confirmationMessage);
+  }
+
+  /**
+   * Contiene la lógica real para enviar la solicitud de adopción.
+   * Se llama después de que el usuario confirma en el modal.
+   */
+  private proceedWithAdoptionRequest(): void {
+    this.isRequesting = true;
+    const token = this.authService.getToken(); // Usar this.authService.getToken()
+
+    if (token) {
+      this.solicitudesService.createSolicitud(this.mascota!.id_mascota, token).subscribe({
+        next: (response: Solicitud) => { // Tipado explícito
+          console.log('Solicitud creada con éxito:', response);
+          this.requestSuccessMessage = '¡Solicitud de adopción enviada con éxito! Será revisada pronto.';
+          this.isRequesting = false;
+          this.hasAlreadyRequested = true; // Actualizar el estado para deshabilitar el botón
+        },
+        error: (err: HttpErrorResponse) => { // Tipado explícito
+          console.error('Error al crear solicitud:', err);
+          this.requestErrorMessage = err.error?.error || 'Error al enviar la solicitud de adopción. Intenta de nuevo.';
+          this.isRequesting = false;
+        },
+      });
+    } else {
+      this.requestErrorMessage = 'No se pudo obtener el token de autenticación.';
+      this.isRequesting = false;
+    }
   }
 
   /**
@@ -258,5 +356,16 @@ export class PetcardComponent implements OnInit {
   volver(): void {
     this.router.navigate(['/mascotas']);
   }
-}
 
+
+
+  getProfileColor(profile: string): string {
+    const colors: { [key: string]: string } = {
+      Aventurero: '#A78BFA',
+      Tranquilo: '#5DD5C0',
+      Juguetón: '#FCAFAF',
+      Cariñoso: '#FF9E7D',
+    };
+    return colors[profile] || '#A78BFA';
+  }
+}

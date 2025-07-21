@@ -117,6 +117,23 @@
 
   <!-- === LIGHTBOX === -->
   <div class="lightbox" *ngIf="lightboxOpen" (click)="closeLightbox()">
-    <img [src]="imagenes[currentIndex]?.imagen || ''" />
+    <img [src]="imagenes[currentIndex].imagen || 'https://placehold.co/600x400/A78BFA/ffffff?text=No+Image'" />
+  </div>
+
+  <!-- === MODAL DE CONFIRMACIÓN PERSONALIZADO === -->
+  <div class="custom-modal-overlay" *ngIf="showConfirmModal">
+    <div class="custom-modal-content">
+      <div class="modal-header">
+        <h3>Confirmar Solicitud de Adopción</h3>
+        <button class="close-button" (click)="closeConfirmModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>{{ confirmModalMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="onCancelAction()">Cancelar</button>
+        <button class="btn-confirm" (click)="onConfirmAction()">Confirmar</button>
+      </div>
+    </div>
   </div>
 </div>
