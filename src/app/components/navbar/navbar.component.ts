@@ -1,11 +1,12 @@
 // frontend/src/app/components/navbar/navbar.component.ts
 
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router'; // Se mantiene NavigationEnd por si se usa en el futuro
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { AdopcionesService } from '../../services/adopciones.service';
-import { SolicitudesService } from '../../services/solicitudes.service';
+import { AdopcionesService } from '../../services/adopciones.service'; // Importa el servicio de adopciones
+import { SolicitudesService } from '../../services/solicitudes.service'; // Importa el servicio de solicitudes
 import { Subscription } from 'rxjs'; // Para manejar la suscripción
+import { filter } from 'rxjs/operators'; // Se mantiene filter por si se usa en el futuro
 
 @Component({
   selector: 'app-navbar',
@@ -17,18 +18,29 @@ export class NavbarComponent implements OnInit, OnDestroy {
   menuOpen = false;
   hasMyAdopciones: boolean = false;
   hasMySolicitudes: boolean = false;
-  private authSubscription: Subscription | undefined; // Para la suscripción al AuthService
+  // Propiedades para el rol de administrador y la ruta actual (reincorporadas si se necesitan en el HTML)
+  isAdmin: boolean = false;
+  currentRoute: string = '';
+
+  private authSubscription: Subscription | undefined;
+  private routerSubscription: Subscription | undefined; // Se mantiene por si se usa currentRoute
 
   // Inyección de servicios
-  public auth: AuthService = inject(AuthService);
+  public auth: AuthService = inject(AuthService); // Se inyecta como 'auth' para el template
   private router: Router = inject(Router);
   private adopcionesService: AdopcionesService = inject(AdopcionesService);
   private solicitudesService: SolicitudesService = inject(SolicitudesService);
 
-  ngOnInit(): void {
-    // Suscribirse al observable isLoggedIn$ del AuthService
-    this.authSubscription = this.auth.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
+  constructor() {
+    // Suscribirse a los cambios en el estado de autenticación
+    this.authSubscription = this.auth.isLoggedIn$.subscribe(loggedIn => {
+      // Actualizar el estado de isAdmin aquí también, ya que depende del estado de login
+      this.isAdmin = this.auth.isAdmin();
+      // --- DEBUG: Agregado para verificar el estado de isAdmin ---
+      console.log('NavbarComponent: isLoggedIn cambiado a', loggedIn, 'isAdmin es', this.isAdmin);
+      // ---------------------------------------------------------
+
+      if (loggedIn) {
         // Si el usuario acaba de iniciar sesión o ya estaba logueado
         this.checkMyAdopciones();
         this.checkMySolicitudes();
@@ -39,8 +51,22 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }
     });
 
-    // También verificar al inicio por si el observable ya emitió el valor inicial antes de la suscripción
-    // Esto es útil para el estado inicial de la página si el token ya existe.
+    // Suscribirse a los eventos de navegación para actualizar la ruta actual
+    // Esto es útil si el navbar necesita saber la ruta activa para estilos, etc.
+    this.routerSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.currentRoute = event.urlAfterRedirects;
+    });
+  }
+
+  ngOnInit(): void {
+    // Inicializar el estado de login y el rol al cargar el componente
+    // Esto es importante para el estado inicial de la página si el token ya existe.
+    this.isAdmin = this.auth.isAdmin(); // Asegura que isAdmin se inicialice
+    // --- DEBUG: Agregado para verificar el estado inicial de isAdmin ---
+    console.log('NavbarComponent: ngOnInit - isAdmin inicial es', this.isAdmin);
+    // -----------------------------------------------------------------
     if (this.auth.isLoggedIn()) {
       this.checkMyAdopciones();
       this.checkMySolicitudes();
@@ -51,6 +77,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     // Asegurarse de desuscribirse para evitar fugas de memoria
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
+    }
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 
@@ -104,7 +133,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.auth.logout();
-    // La suscripción a isLoggedIn$ en ngOnInit manejará la actualización de hasMyAdopciones y hasMySolicitudes
+    // La suscripción a isLoggedIn$ en el constructor manejará la actualización
+    // de hasMyAdopciones, hasMySolicitudes e isAdmin automáticamente.
     this.router.navigate(['/home']);
   }
 }
+
+

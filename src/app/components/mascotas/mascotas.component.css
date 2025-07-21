@@ -1,27 +1,58 @@
+/* frontend/src/app/components/mascotas/mascotas.component.css */
+
+/* Variables CSS */
 :host {
-  --primary: #a78bfa;
-  --secondary: #fcafaf;
-  --accent: #5dd5c0;
-  --light: #fff7ec;
-  --dark: #292f36;
-  --text: #5e5e5e;
+  --primary: #A78BFA;
+  --secondary: #FCAFAF;
+  --accent: #5DD5C0;
+  --light: #FFF7EC;
+  --dark: #292F36;
+  --text: #5E5E5E;
+  --border: #E0E0E0; /* Nueva variable para bordes */
   --radius: 12px;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --transition: all 0.3s ease; /* Nueva variable para transiciones */
 }
 
+.mascotas-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif; /* Asegura una fuente base */
+}
+
+h2 {
+  color: var(--dark);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* --- Barra de Búsqueda y Filtros --- */
 .filtro-container {
   display: flex;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
   align-items: center;
   gap: 1rem;
+  margin-top: 2rem; /* Aquí se crea la separación con el navbar */
   margin-bottom: 1rem;
+  justify-content: center; /* Opcional: centra todo el grupo horizontalmente */
 }
 
 .buscador-input {
   flex: 1;
+  min-width: 200px; /* Asegura un ancho mínimo para el input */
   padding: 0.6rem 1rem;
   border: 1px solid #ccc;
   border-radius: 10px;
   font-size: 16px;
+  box-shadow: var(--shadow); /* Añadido para consistencia */
+  transition: var(--transition);
+}
+
+.buscador-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
 }
 
 .combo-emocional.estilizado {
@@ -38,36 +69,93 @@
   background-position-x: 95%;
   background-position-y: center;
   background-size: 20px;
+  box-shadow: var(--shadow); /* Añadido para consistencia */
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-.filtro-container {
+.combo-emocional.estilizado:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+}
+
+/* Estilos para el botón de limpiar filtros */
+.clear-filters-button {
+  padding: 0.6rem 1rem;
+  background-color: #6c757d; /* Un color diferente para distinguirlo */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-top: 2rem; /*Aquí se crea la separación con el navbar */
-  margin-bottom: 1rem;
-  justify-content: center; /* Opcional: centra todo el grupo horizontalmente */
+  gap: 8px;
+  box-shadow: var(--shadow); /* Añadido para consistencia */
 }
 
-.fas.fa-paw {
-  color: #ccc; /* Patitas vacías */
-  margin-right: 2px;
+.clear-filters-button:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
 }
 
-.fas.fa-paw.filled {
-  color: #ff9800; /* Patitas llenas */
+/* Mensajes de estado (carga, error, sin resultados) */
+.loading-message, .error-message, .no-results-message {
+  text-align: center;
+  padding: 20px;
+  border-radius: var(--radius);
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: var(--text);
+  background-color: var(--light);
+  border: 1px solid rgba(0,0,0,0.05);
+  display: flex; /* Para centrar contenido */
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow);
 }
 
-.mascotas-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+.loading-message i {
+  font-size: 2rem;
+  color: var(--primary);
+  animation: spin 1s infinite linear; /* Agregado spinner */
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  background-color: #ffe0e0;
+  color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.error-message button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.error-message button:hover {
+  background-color: #8c6df9;
+}
+
+/* --- Cuadrícula de Mascotas --- */
 .mascotas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 25px;
+  margin-top: 20px;
 }
 
 .mascota-card {
@@ -76,11 +164,14 @@
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer; /* Indica que la tarjeta es clickeable */
+  display: flex;
+  flex-direction: column; /* Permite que el contenido se apile verticalmente */
 }
 
 .mascota-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
 .mascota-header {
@@ -90,6 +181,7 @@
   color: white;
   border-top-left-radius: var(--radius);
   border-top-right-radius: var(--radius);
+  /* El background-color se establecerá dinámicamente en el HTML */
 }
 
 .mascota-badge {
@@ -102,40 +194,88 @@
   border-radius: 20px;
   font-weight: 600;
   font-size: 0.9rem;
+  z-index: 3; /* Asegura que esté por encima del overlay */
 }
 
+/* El div .mascota-image ahora es el contenedor principal de la imagen y el overlay */
 .mascota-image {
   width: 100%;
-  height: 180px; /* mismo alto que .mascota-header */
+  height: 100%; /* Ocupa todo el espacio del header */
+  position: relative; /* Necesario para posicionar el overlay */
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f5f5; /* opcional, para un fondo neutro */
+  background: #f5f5f5; /* Fondo si no hay imagen */
 }
 
-.mascota-image img {
-  /* Contain en lugar de cover para que toda la imagen quepa */
-  object-fit: contain;
+/* La imagen real dentro del contenedor */
+.mascota-actual-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Para que toda la imagen quepa */
   object-position: center;
-  /* Asegura que no supere el contenedor */
-  max-width: 100%;
-  max-height: 100%;
   display: block;
+  transition: filter 0.3s ease; /* Transición para el filtro de opacidad/oscurecimiento */
 }
 
-.mascota-image i {
+/* El icono de fallback */
+.mascota-fallback-icon {
   font-size: 4rem;
+  color: #ccc; /* Color para el icono de patita */
   opacity: 0.9;
 }
 
+/* --- ESTILOS PARA MASCOTAS ADOPTADAS --- */
+.mascota-image .adopted-overlay { /* Selector ajustado */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semi-transparente */
+  display: flex;
+  flex-direction: column; /* Para centrar el texto verticalmente */
+  justify-content: center;
+  align-items: center;
+  z-index: 2; /* Asegura que esté por encima de la imagen */
+  transition: opacity 0.3s ease;
+}
+
+.mascota-image .adopted-text { /* Selector ajustado */
+  color: white;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: rgba(220, 53, 69, 0.8); /* Rojo de estado rechazado/peligro */
+  padding: 8px 15px;
+  border-radius: 8px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Oscurecer la imagen subyacente si el overlay está presente */
+/* Nota: El selector :has() puede no ser compatible con todos los navegadores antiguos */
+.mascota-image:has(.adopted-overlay) .mascota-actual-image {
+  filter: brightness(0.5) grayscale(0.5); /* Oscurece y desatura la imagen */
+}
+/* --- FIN ESTILOS PARA MASCOTAS ADOPTADAS --- */
+
+
 .mascota-body {
   padding: 20px;
+  flex-grow: 1; /* Permite que el cuerpo ocupe el espacio restante */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espacia el contenido verticalmente */
 }
 
 .mascota-body h3 {
   color: var(--dark);
+  margin-top: 0;
   margin-bottom: 10px;
+  font-size: 1.3rem;
+  text-align: left; /* Asegura que el título no se centre si hay un estilo global */
 }
 
 .mascota-meta {
@@ -145,6 +285,7 @@
   margin-bottom: 15px;
   font-size: 0.9rem;
   color: var(--text);
+  justify-content: flex-start; /* Alinea a la izquierda */
 }
 
 .mascota-meta span {
@@ -157,10 +298,40 @@
   color: var(--primary);
 }
 
+/* Estilos para el badge de estado de adopción */
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  text-transform: capitalize;
+  margin-top: 10px; /* Espacio superior */
+  margin-bottom: 10px; /* Espacio inferior */
+  align-self: flex-start; /* Alinea a la izquierda dentro del flex column */
+}
+
+/* Clases de estado dinámicas (para el status-badge) */
+.status-disponible {
+  background-color: var(--accent); /* Verde */
+}
+.status-adoptado {
+  background-color: #dc3545; /* Rojo */
+}
+.status-en-cuarentena { /* Corregido de en_cuarentena a en-cuarentena para CSS */
+  background-color: #ffc107; /* Amarillo */
+}
+.status-inactivo {
+  background-color: #6c757d; /* Gris */
+}
+
+
 .mascota-description {
   color: var(--text);
   margin-bottom: 20px;
   line-height: 1.5;
+  flex-grow: 1; /* Permite que la descripción ocupe espacio */
 }
 
 .mascota-match {
@@ -169,6 +340,7 @@
   gap: 10px;
   margin: 20px 0;
   font-size: 0.9rem;
+  justify-content: flex-start; /* Alinea a la izquierda */
 }
 
 .match-bar {
@@ -207,28 +379,12 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  margin-top: auto; /* Empuja el botón hacia abajo en el flex column */
 }
 
 .btn-adoptar:hover {
   background-color: #8c6df9;
   transform: translateY(-2px);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .mascotas-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .mascotas-container {
-    padding: 1rem;
-  }
-
-  .mascotas-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* Estilos para las patitas (stars) */
@@ -244,4 +400,40 @@
 }
 .compat-stars i.filled {
   color: var(--secondary); /* patita llena */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filtro-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .buscador-input, .combo-emocional.estilizado, .clear-filters-button {
+    width: 100%;
+    min-width: unset;
+  }
+  .mascotas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Ajuste para móviles */
+  }
+}
+
+@media (max-width: 480px) {
+  .mascotas-container {
+    padding: 1rem;
+  }
+  .mascotas-grid {
+    grid-template-columns: 1fr;
+  }
+  .mascota-body h3 {
+    font-size: 1.2rem;
+  }
+  .mascota-description {
+    font-size: 0.9rem;
+  }
+  .status-badge {
+    font-size: 0.75rem;
+  }
+  .mascota-image .adopted-text {
+    font-size: 1.5rem; /* Ajuste para pantallas muy pequeñas */
+  }
 }
