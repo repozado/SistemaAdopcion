@@ -445,3 +445,21 @@ h2 {
     font-size: 1.5rem; /* Ajuste para pantallas muy pequeñas */
   }
 }
+:host {
+  /* …tus variables existentes… */
+  --color-Activo: #A78BFA;
+  --color-Tranquilo: #5DD5C0;
+  --color-Cariñoso: #FF9E7D;
+  --color-Independiente: #FCAFAF;
+  --color-Paciente: #FFC107;
+  --color-Recomendados: #5A6268; /* opcional */
+}
+
+.profile-bar {
+  height: 10px;
+  width: 100%;
+  border-radius: 0 0 var(--radius) var(--radius);
+  /* opcional: un pequeño box-shadow o transición */
+  transition: var(--transition);
+}
+

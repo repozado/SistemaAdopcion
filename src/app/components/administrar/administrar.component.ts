@@ -38,7 +38,6 @@ export class AdministrarComponent implements OnInit {
   itemsPerPage = 10;
   filters = [
     { value: 'Disponible', label: 'Disponibles' },
-    { value: 'En proceso', label: 'En proceso' },
     { value: 'Adoptado', label: 'Adoptados' },
   ];
 

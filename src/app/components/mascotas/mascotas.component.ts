@@ -14,7 +14,7 @@ import { EncuestaService } from '../../services/encuesta.service'; // Usando Enc
   selector: 'app-mascotas',
   standalone: false, // Asegúrate de que esto sea 'false' si se declara en un NgModule
   templateUrl: './mascotas.component.html',
-  styleUrls: ['./mascotas.component.css']
+  styleUrls: ['./mascotas.component.css'],
 })
 export class MascotasComponent implements OnInit, OnDestroy {
   // Inyección de servicios
@@ -41,16 +41,18 @@ export class MascotasComponent implements OnInit, OnDestroy {
 
   constructor() {
     // Suscribirse al estado de autenticación para actualizar isLoggedIn
-    this.authSubscription = this.authService.isLoggedIn$.subscribe(loggedIn => {
-      this.isLoggedIn = loggedIn;
-      if (loggedIn) {
-        this.loadUserEmotionalProfile(); // Cargar perfil si el usuario inicia sesión
-      } else {
-        this.tipoEmocionalUsuario = null; // Limpiar perfil si el usuario cierra sesión
-        this.compatibilidadUsuario = 0;
-        this.applyFilters(); // Re-aplicar filtros para reflejar el cambio de estado
+    this.authSubscription = this.authService.isLoggedIn$.subscribe(
+      (loggedIn) => {
+        this.isLoggedIn = loggedIn;
+        if (loggedIn) {
+          this.loadUserEmotionalProfile(); // Cargar perfil si el usuario inicia sesión
+        } else {
+          this.tipoEmocionalUsuario = null; // Limpiar perfil si el usuario cierra sesión
+          this.compatibilidadUsuario = 0;
+          this.applyFilters(); // Re-aplicar filtros para reflejar el cambio de estado
+        }
       }
-    });
+    );
   }
 
   ngOnInit(): void {
@@ -78,21 +80,26 @@ export class MascotasComponent implements OnInit, OnDestroy {
   loadMascotas(): void {
     this.isLoading = true;
     this.error = null;
-    this.mascotaService.getAll().subscribe({ // Usando mascotaService
+    this.mascotaService.getAll().subscribe({
+      // Usando mascotaService
       next: (data) => {
         // Normalizar el estado de adopción al cargar las mascotas
-        this.mascotas = data.map(mascota => ({
+        this.mascotas = data.map((mascota) => ({
           ...mascota,
-          estado_adopcion: mascota.estado_adopcion ? mascota.estado_adopcion.trim().toLowerCase() : 'disponible' // Asegura un valor por defecto
+          estado_adopcion: mascota.estado_adopcion
+            ? mascota.estado_adopcion.trim().toLowerCase()
+            : 'disponible', // Asegura un valor por defecto
         }));
         this.applyFilters(); // Aplica los filtros iniciales al cargar
         this.isLoading = false;
       },
-      error: (err: HttpErrorResponse) => { // Usando HttpErrorResponse para tipado
+      error: (err: HttpErrorResponse) => {
+        // Usando HttpErrorResponse para tipado
         console.error('Error al cargar mascotas:', err);
-        this.error = 'Error al cargar las mascotas. Intenta de nuevo más tarde.';
+        this.error =
+          'Error al cargar las mascotas. Intenta de nuevo más tarde.';
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -103,20 +110,26 @@ export class MascotasComponent implements OnInit, OnDestroy {
     const token = this.authService.getToken();
     if (token) {
       // Usando obtenerMiResultado() de EncuestaService como en tu código
-      this.userProfileSubscription = this.encuestaService.obtenerMiResultado().subscribe({
-        next: (resultado) => { // Cambiado 'result' a 'resultado' para coincidir con tu código
-          this.tipoEmocionalUsuario = resultado.descripcion; // Asumiendo que 'descripcion' es el nombre del tipo emocional
-          this.compatibilidadUsuario = resultado.compatibilidad; // Asumiendo que 'compatibilidad' es el número
-          console.log('TNUMERO:', this.compatibilidadUsuario); // Tu console.log
-          this.applyFilters(); // Re-aplicar filtros después de cargar el perfil
-        },
-        error: (err) => {
-          console.error('Error al cargar el perfil emocional del usuario:', err);
-          this.tipoEmocionalUsuario = null;
-          this.compatibilidadUsuario = 0;
-          this.applyFilters(); // Re-aplicar filtros si hay error (ej. usuario sin encuesta)
-        }
-      });
+      this.userProfileSubscription = this.encuestaService
+        .obtenerMiResultado()
+        .subscribe({
+          next: (resultado) => {
+            // Cambiado 'result' a 'resultado' para coincidir con tu código
+            this.tipoEmocionalUsuario = resultado.descripcion; // Asumiendo que 'descripcion' es el nombre del tipo emocional
+            this.compatibilidadUsuario = resultado.compatibilidad; // Asumiendo que 'compatibilidad' es el número
+            console.log('TNUMERO:', this.compatibilidadUsuario); // Tu console.log
+            this.applyFilters(); // Re-aplicar filtros después de cargar el perfil
+          },
+          error: (err) => {
+            console.error(
+              'Error al cargar el perfil emocional del usuario:',
+              err
+            );
+            this.tipoEmocionalUsuario = null;
+            this.compatibilidadUsuario = 0;
+            this.applyFilters(); // Re-aplicar filtros si hay error (ej. usuario sin encuesta)
+          },
+        });
     } else {
       this.tipoEmocionalUsuario = null;
       this.compatibilidadUsuario = 0;
@@ -143,7 +156,8 @@ export class MascotasComponent implements OnInit, OnDestroy {
       if (this.selectedEmotionalProfile === 'Recomendados') {
         matchesProfile = mascota.perfil_emocional === this.tipoEmocionalUsuario;
       } else if (this.selectedEmotionalProfile !== '') {
-        matchesProfile = mascota.perfil_emocional === this.selectedEmotionalProfile;
+        matchesProfile =
+          mascota.perfil_emocional === this.selectedEmotionalProfile;
       }
 
       // Asegúrate de que las mascotas adoptadas siempre se muestren, pero con su overlay
@@ -156,34 +170,37 @@ export class MascotasComponent implements OnInit, OnDestroy {
   /**
    * Limpia todos los filtros.
    */
-  clearFilters(): void { // Método añadido para el botón de limpiar filtros
+  clearFilters(): void {
+    // Método añadido para el botón de limpiar filtros
     this.searchText = '';
     this.selectedEmotionalProfile = '';
     this.applyFilters(); // Re-aplica los filtros para mostrar todas las mascotas
   }
 
   /**
-   * Obtiene el color de fondo para la tarjeta según el perfil emocional.
    * @param profile El perfil emocional de la mascota.
-   * @returns El color en formato hexadecimal.
+   * @returns Un color CSS (hex o variable) asociado al perfil.
    */
-  getProfileColor(profile: string): string {
-    const colors: { [key: string]: string } = {
-      'Activo': '#A78BFA',
-      'Tranquilo': '#5DD5C0',
-      'Cariño': '#FCAFAF', // Cambiado de 'Cariñoso' a 'Cariño' para coincidir con tu HTML
-      'Independiente': '#FF9E7D',
-      'Aventurero': '#A78BFA', // Asegurando que 'Aventurero' también tenga un color si lo usas
-      'Juguetón': '#FCAFAF' // Asegurando que 'Juguetón' también tenga un color si lo usas
-    };
-    return colors[profile] || '#A78BFA'; // Color por defecto
-  }
+getProfileColor(profile: string): string {
+  const colors: Record<string,string> = {
+    'Activo':       '#A78BFA',  // morado suave
+    'Tranquilo':    '#5DD5C0',  // verde azulado
+    'Cariñoso':     '#FF9E7D',  // coral
+    'Independiente':'#FC9FAD',  // rosa suave
+    'Paciente':     '#FFC107',  // ámbar
+    'Recomendados': '#6C757D',  // gris oscuro
+  };
+  // fallback al primary si no coincide
+  return colors[profile] ?? '#A78BFA';
+}
+
 
   /**
    * Navega a la página de detalles de la mascota.
    * @param mascota El objeto mascota.
    */
-  verDetalle(mascota: Mascota) { // Usando 'verDetalle' como en tu HTML
+  verDetalle(mascota: Mascota) {
+    // Usando 'verDetalle' como en tu HTML
     console.log('Mascota:', mascota);
     this.router.navigate(['/mascota', mascota.id_mascota]);
   }
@@ -208,7 +225,8 @@ export class MascotasComponent implements OnInit, OnDestroy {
    * @param estado El estado de adopción de la mascota.
    * @returns La clase CSS correspondiente.
    */
-  getStatusClass(estado: string): string { // Método añadido para el status-badge
+  getStatusClass(estado: string): string {
+    // Método añadido para el status-badge
     const normalizedEstado = estado ? estado.toLowerCase() : '';
     switch (normalizedEstado) {
       case 'disponible':
