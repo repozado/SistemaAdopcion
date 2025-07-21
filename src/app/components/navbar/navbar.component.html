@@ -16,15 +16,24 @@
         <i class="fas fa-question-circle"></i> FAQ
       </a>
       <a *ngIf="auth.isLoggedIn()" class="nav-link" routerLinkActive="active" [routerLink]="['/yo']">
-        <i class="fas fa-envelope"></i> yo
+        <i class="fas fa-user-circle"></i> Perfil
       </a>
-      <a *ngIf="auth.isAdmin()" class="nav-link admin-link" routerLinkActive="active" [routerLink]="['/usuarios']">
-        <i class="fas fa-user-cog"></i> Panel Usuarios
-      </a>
-      <a *ngIf="auth.isAdmin()" class="nav-link admin-link" routerLinkActive="active"
-        [routerLink]="['/administrar']">
-        <i class="fas fa-user-cog"></i> Panel Admin
-      </a>
+      
+      <!-- Menú desplegable para admin -->
+      <div *ngIf="auth.isAdmin()" class="admin-dropdown">
+        <button class="admin-dropbtn">
+          <i class="fas fa-user-cog"></i> Admin <i class="fas fa-chevron-down dropdown-icon"></i>
+        </button>
+        <div class="admin-dropdown-content">
+          <a class="admin-link" routerLinkActive="active" [routerLink]="['/usuarios']">
+            <i class="fas fa-users"></i> Panel Usuarios
+          </a>
+          <a class="admin-link" routerLinkActive="active" [routerLink]="['/administrar']">
+            <i class="fas fa-tools"></i> Panel Admin
+          </a>
+        </div>
+      </div>
+      
       <button *ngIf="!auth.isLoggedIn()" class="login-btn" (click)="openLoginModal()">
         <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
       </button>

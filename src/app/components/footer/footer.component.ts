@@ -32,7 +32,7 @@ export class FooterComponent {
       { text: 'Términos de servicio', url: '/terms' }
     ],
     contact: [
-      { text: 'contacto@soulpet.org', url: 'mailto:contacto@soulpet.org' },
+      { text: 'soulpetadopcion@gmail.com', url: 'mailto:soulpetadopcion@gmail.com' },
       { text: '+593 98 765 4321', url: 'tel:+593987654321' },
       { text: 'Machala, Ecuador', url: 'https://maps.app.goo.gl/' }
     ]
