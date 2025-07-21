@@ -328,7 +328,7 @@ html, body {
   line-height: 1.6;
 }
 
-/* === MASCOTAS DESTACADAS === */
+/* === MASCOTAS DESTACADAS - ACTUALIZADO === */
 .featured-pets {
   background: var(--light);
   padding: 80px 0;
@@ -353,6 +353,9 @@ html, body {
   box-shadow: var(--shadow);
   transition: var(--transition);
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .pet-card:hover {
@@ -362,18 +365,41 @@ html, body {
 
 .pet-image {
   height: 220px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
-  position: relative;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: #f5f5f5; /* Fondo neutral para imágenes */
 }
 
+/* Estilos para la imagen de la mascota */
+.mascota-image {
+  width: 100%;
+  height: 180px;     /* mismo alto que .mascota-header */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5; /* opcional, para un fondo neutro */
+}
+
+.pet-image img {
+  /* Contain en lugar de cover para que toda la imagen quepa */
+  object-fit: contain;
+  object-position: center;
+  /* Asegura que no supere el contenedor */
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+.pet-image i {
+  font-size: 4rem;
+  opacity: 0.9;
+}
+
+
+/* Cuando hay imagen, ocultamos el icono */
 .pet-image.has-image i {
   display: none;
 }
@@ -382,16 +408,20 @@ html, body {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: white;
-  color: var(--primary);
+  background: var(--secondary);
+  color: white;
   padding: 6px 12px;
   border-radius: 20px;
   font-weight: bold;
   font-size: 0.85rem;
+  z-index: 2;
 }
 
 .pet-info {
   padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .pet-info h3 {
@@ -409,11 +439,22 @@ html, body {
   flex-wrap: wrap;
 }
 
+.pet-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pet-meta i {
+  font-size: 0.8rem;
+}
+
 .pet-description {
   font-size: 0.95rem;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   color: var(--text);
   line-height: 1.4;
+  flex-grow: 1;
 }
 
 .pet-actions {
@@ -432,6 +473,8 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  border: none;
+  cursor: pointer;
 }
 
 .btn-info {
@@ -439,19 +482,49 @@ html, body {
   color: var(--text);
 }
 
+.btn-info:hover {
+  background: #d1d1d1;
+}
+
 .btn-adopt {
   background: var(--primary);
   color: white;
 }
 
-.text-center {
-  text-align: center;
+.btn-adopt:hover {
+  background: #8c6df9;
 }
 
-.mt-5 {
-  margin-top: 3rem;
+/* Efecto hover para la imagen */
+.pet-card:hover .pet-image img {
+  transform: scale(1.05);
 }
 
+/* Responsive para mascotas */
+@media (max-width: 768px) {
+  .pets-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  
+  .pet-image {
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pets-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .pet-actions {
+    flex-direction: column;
+  }
+  
+  .btn-info, .btn-adopt {
+    width: 100%;
+    justify-content: center;
+  }
+}
 /* === ESTADÍSTICAS === */
 .stats-section {
   background: var(--dark);

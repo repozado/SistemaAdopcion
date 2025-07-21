@@ -209,7 +209,7 @@ export class CuestionarioComponent implements OnInit {
 
     this.CuestionarioService.enviarRespuestas(respuestasFormateadas).subscribe({
       next: (data) => {
-        this.router.navigate(['/yo']);
+        this.router.navigate(['/perfilemocional']);
       },
       error: (err) => {
         console.error(err);
