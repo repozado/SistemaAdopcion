@@ -11,6 +11,21 @@
   --transition: all 0.3s ease;
 }
 
+.compat-stars {
+  display: flex;
+  gap: 4px;
+}
+.fas.fa-paw {
+  color: lightgray;
+}
+.fas.fa-paw.filled {
+  color: #a78bfa; /* o el color que desees */
+}
+
+.mascota-match {
+  margin-bottom: 1rem; /* ajusta el espacio según necesidad */
+}
+
 .pet-detail-container {
   padding: 20px 0;
 }

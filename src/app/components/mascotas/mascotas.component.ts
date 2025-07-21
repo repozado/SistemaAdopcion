@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Mascota, MascotasService } from '../../services/mascotas.service';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
+import { EncuestaService } from '../../services/encuesta.service';
 
 @Component({
   selector: 'app-mascotas',
@@ -11,19 +12,59 @@ import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 })
 export class MascotasComponent implements OnInit {
   mascotas: Mascota[] = [];
+  filteredMascotas: Mascota[] = [];
+  searchText: string = '';
+  selectedEmotionalProfile: string = '';
   private mascotaService = inject(MascotasService);
   private router = inject(Router);
+  private encuestaService = inject(EncuestaService);
+  tipoEmocionalUsuario: string = '';
+  public compatibilidadUsuario: any = {};
 
   ngOnInit() {
     this.mascotaService.getAll().subscribe({
       next: (data) => {
         this.mascotas = data;
-        console.log('Mascotas cargadas:', this.mascotas);
+        this.applyFilters(); // <--- importante
+        this.encuestaService.obtenerMiResultado().subscribe({
+          next: (resultado) => {
+            this.tipoEmocionalUsuario = resultado.descripcion;
+            this.compatibilidadUsuario = resultado.compatibilidad;
+            console.log('TNUMERO:', this.compatibilidadUsuario);
+            this.applyFilters(); // ✅ aplicar filtro con tipo emocional ya disponible
+          },
+          error: (err) => {
+            console.error('Error al obtener tipo emocional del usuario:', err);
+            this.applyFilters(); // aun así aplica filtro sin tipo
+          },
+        });
       },
       error: (err) => console.error(err),
     });
   }
 
+  applyFilters(): void {
+    const search = this.searchText.toLowerCase().trim();
+
+    this.filteredMascotas = this.mascotas.filter((mascota) => {
+      const matchesSearch =
+      (mascota.nombre?.toLowerCase() ?? '').includes(search) ||
+      (mascota.especie?.toLowerCase() ?? '').includes(search) ||
+      (mascota.lugar_actual?.toLowerCase() ?? '').includes(search) ||
+      (mascota.descripcion?.toLowerCase() ?? '').includes(search) ||
+      (mascota.perfil_emocional?.toLowerCase() ?? '').includes(search);
+
+      let matchesProfile = true;
+      if (this.selectedEmotionalProfile === 'Recomendados') {
+        matchesProfile = mascota.perfil_emocional === this.tipoEmocionalUsuario;
+      } else if (this.selectedEmotionalProfile !== '') {
+        matchesProfile =
+          mascota.perfil_emocional === this.selectedEmotionalProfile;
+      }
+
+      return matchesSearch && matchesProfile;
+    });
+  }
   getProfileColor(profile: string): string {
     const colors: { [key: string]: string } = {
       Aventurero: '#A78BFA',

@@ -1,16 +1,48 @@
+<!-- 🔍 BARRA DE BÚSQUEDA -->
+<div class="filtro-container">
+  <input
+    type="text"
+    class="form-control buscador-input"
+    placeholder="Buscar mascotas por nombre, especie, lugar..."
+    [(ngModel)]="searchText"
+    (input)="applyFilters()"
+  />
+
+  <select
+    [(ngModel)]="selectedEmotionalProfile"
+    (change)="applyFilters()"
+    class="combo-emocional estilizado"
+  >
+    <option value="">Todos los perfiles</option>
+    <option value="Activo">Activo</option>
+    <option value="Tranquilo">Tranquilo</option>
+    <option value="Cariñoso">Cariñoso</option>
+    <option value="Independiente">Independiente</option>
+    <option value="Recomendados">Recomendados</option>
+  </select>
+</div>
+
 <div class="mascotas-container">
   <div class="mascotas-grid">
-    <div class="mascota-card" *ngFor="let mascota of mascotas; let i = index">
-      <div class="mascota-header" [style.background-color]="getProfileColor(mascota.perfil_emocional)">
+    <div
+      class="mascota-card"
+      *ngFor="let mascota of filteredMascotas; let i = index"
+    >
+      <div
+        class="mascota-header"
+        [style.background-color]="getProfileColor(mascota.perfil_emocional)"
+      >
         <div class="mascota-badge">
           {{ mascota.perfil_emocional }}
         </div>
 
         <div class="mascota-image">
           <ng-container *ngIf="mascota.imagen; else fallbackIcon">
-            <img *ngIf="mascota.imagen; else fallbackIcon" [src]="'data:image/jpeg;base64,' + mascota.imagen"
-              [alt]="mascota.nombre" />
-
+            <img
+              *ngIf="mascota.imagen; else fallbackIcon"
+              [src]="'data:image/jpeg;base64,' + mascota.imagen"
+              [alt]="mascota.nombre"
+            />
           </ng-container>
           <ng-template #fallbackIcon>
             <i class="fas fa-paw"></i>
@@ -22,27 +54,35 @@
         <h3>{{ mascota.nombre }}</h3>
 
         <div class="mascota-meta">
-          <span><i class="fas fa-dog" *ngIf="mascota.especie === 'Perro'"></i>
+          <span
+            ><i class="fas fa-dog" *ngIf="mascota.especie === 'Perro'"></i>
             <i class="fas fa-cat" *ngIf="mascota.especie === 'Gato'"></i>
-            {{ mascota.especie }}</span>
-          <span><i class="fas fa-birthday-cake"></i>  {{ formatAge(mascota.edad) }} </span>
-          <span><i class="fas fa-ruler-combined"></i> {{ mascota.tamano }}</span>
+            {{ mascota.especie }}</span
+          >
+          <span
+            ><i class="fas fa-birthday-cake"></i>
+            {{ formatAge(mascota.edad) }}
+          </span>
+          <span
+            ><i class="fas fa-ruler-combined"></i> {{ mascota.tamano }}</span
+          >
         </div>
 
         <p class="mascota-description">{{ mascota.descripcion }}</p>
 
-        <!--
-        <div class="mascota-match">
+        <div
+          class="mascota-match"
+          *ngIf="mascota.perfil_emocional === tipoEmocionalUsuario"
+        >
           <span>Compatibilidad:</span>
-          <div class="compat-stars"> -->
-           <!-- Dibujamos 3 patitas; si index<compatibilidad, llevan la clase 'filled' -->
-           <!---
-           <i class="fas fa-paw" *ngFor="let _ of [0,1,2]; let idx = index"
-              [class.filled]="idx < mascota.compatibilidad"></i>
+          <div class="compat-stars">
+            <i
+              class="fas fa-paw"
+              *ngFor="let _ of [0, 1, 2]; let idx = index"
+              [class.filled]="idx < compatibilidadUsuario"
+            ></i>
           </div>
-        </div> -->
-
-
+        </div>
 
         <button class="btn-adoptar" (click)="verDetalle(mascota)">
           <i class="fas fa-heart"></i> Conocer más

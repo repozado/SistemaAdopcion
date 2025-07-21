@@ -55,6 +55,7 @@
             <span><i class="fas fa-ruler"></i> {{ mascota.tamano }}</span>
             <span><i class="fas fa-venus-mars"></i> {{ mascota.sexo }}</span>
             <span><i class="fas fa-map-marker-alt"></i> {{ mascota.lugar_actual }}</span>
+            <span><i class="fas fa-heart"></i> {{ mascota.perfil_emocional }}</span>
           </div>
         </div>
 
@@ -70,15 +71,16 @@
           </ul>
         </div>
 
-        <!--
-        <div class="pet-section">
-          <h4>Compatibilidad</h4>
-          <div class="compat-stars">
-            <i class="fas fa-paw" *ngFor="let _ of [0,1,2]; let idx = index"
-              [class.filled]="idx < mascota.compatibilidad"></i>
-          </div>
-        </div>
-        -->
+<div class="mascota-match" *ngIf="mascota?.perfil_emocional === tipoEmocionalUsuario">
+  <span>Compatibilidad:</span>
+  <div class="compat-stars">
+    <i
+      class="fas fa-paw"
+      *ngFor="let _ of [0, 1, 2]; let idx = index"
+      [class.filled]="idx < compatibilidadUsuario"
+    ></i>
+  </div>
+</div>
 
         <button class="btn btn-primary" style="width:100%">
           <i class="fas fa-heart"></i> Solicitar Adopción

@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EncuestaService } from '../../services/encuesta.service';
 import {
   Mascota,
   MascotaImagen,
@@ -22,9 +23,11 @@ export class PetcardComponent {
   lightboxOpen = false;
 
   private _MascotaService = inject(MascotasService);
+  private encuestaService = inject(EncuestaService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-
+  public compatibilidadUsuario: any = {};
+public tipoEmocionalUsuario: string = '';
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
     console.log('ID de la mascota:', id);
@@ -42,6 +45,16 @@ export class PetcardComponent {
       .subscribe((img) => {
         this.imagenes = img;
         this.startAutoPlay();
+        this.encuestaService.obtenerMiResultado().subscribe({
+  next: (resultado) => {
+    this.tipoEmocionalUsuario = resultado.descripcion;
+    this.compatibilidadUsuario = resultado.compatibilidad;
+    console.log('DETALLE: Compatibilidad =', this.compatibilidadUsuario);
+  },
+  error: (err) => {
+    console.error('Error al obtener resultado del usuario:', err);
+  },
+});
       });
   }
 
