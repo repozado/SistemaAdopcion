@@ -32,7 +32,6 @@ const routes: Routes = [
   {path: 'yo', component:EncuestaComponent},
   // ¡Nueva línea: Ruta para Adopciones, protegida para administradores!
   {path: 'adopciones', component: AdopcionComponent, canActivate: [AuthGuard, AdminGuard]},
-  {path: '**', pathMatch: 'full', redirectTo: 'home'}
   {path: 'perfilemocional', component:EncuestaComponent},
   {path: 'solicitudes', component: SolicitudesComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: '**', pathMatch: 'full', redirectTo: 'home'}
