@@ -176,9 +176,9 @@ export class PetcardComponent implements OnInit {
   loadMascotaImages(mascotaId: number): void {
     this.mascotasService.getImages(mascotaId).subscribe({
       next: (images) => {
-<<<<<<< HEAD
         this.imagenes = images
           .map((img) => ({
+            id_imagen: img.id_imagen,
             imagen: img.imagen ? `data:image/jpeg;base64,${img.imagen}` : null,
             orden: img.orden,
           }))
@@ -189,19 +189,10 @@ export class PetcardComponent implements OnInit {
           !this.imagenes.some((img) => img.imagen === this.mascota?.imagen)
         ) {
           this.imagenes.unshift({
+            id_imagen: 0,
             imagen: `data:image/jpeg;base64,${this.mascota.imagen}`,
             orden: 0,
           });
-=======
-        this.imagenes = images.map(img => ({
-          id_imagen: img.id_imagen, 
-          imagen: img.imagen ? `data:image/jpeg;base64,${img.imagen}` : null,
-          orden: img.orden
-        })).sort((a, b) => a.orden - b.orden);
-
-        if (this.mascota?.imagen && !this.imagenes.some(img => img.imagen === this.mascota?.imagen)) {
-          this.imagenes.unshift({id_imagen: 0, imagen: `data:image/jpeg;base64,${this.mascota.imagen}`, orden: 0 });
->>>>>>> c3a06af (Crud de Mascotas casi terminado)
         }
 
         if (this.imagenes.length > 0) {
