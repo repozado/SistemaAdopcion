@@ -13,6 +13,7 @@ export class EncuestaComponent implements OnInit {
   resultado: any = null;
   cargando: boolean = true;
   error: string = '';
+  userEmail: string | null = null;
 
   constructor(
     private encuestaService: EncuestaService,
@@ -21,6 +22,7 @@ export class EncuestaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+            this.userEmail = this.auth.getUserEmail();
     this.encuestaService.obtenerMiResultado().subscribe({
       next: (data) => {
         this.resultado = data;
