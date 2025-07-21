@@ -1,1 +1,38 @@
-<p>valuecard works!</p>
+<div class="image-picker-container">
+  <h3>Seleccionar imágenes</h3>
+  
+  <!-- Input oculto para selección de archivos -->
+  <input #fileInput type="file" multiple accept="image/*" 
+         (change)="onFileSelected($event)" style="display: none;">
+  
+  <!-- Botón para activar el input -->
+  <button class="select-btn" (click)="fileInput.click()">
+    <i class="fas fa-folder-open"></i> Seleccionar imágenes
+  </button>
+  
+  <!-- Lista de imágenes seleccionadas -->
+  <div class="image-list" *ngIf="imagePaths.length > 0">
+    <h4>Imágenes seleccionadas:</h4>
+    <ul>
+      <li *ngFor="let path of imagePaths">
+        <i class="fas fa-image"></i> {{ path }}
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Mensaje cuando no hay imágenes -->
+  <div class="empty-message" *ngIf="imagePaths.length === 0">
+    <i class="fas fa-images"></i>
+    <p>No se han seleccionado imágenes</p>
+  </div>
+  
+  <!-- Botones de acción -->
+  <div class="action-buttons" *ngIf="imagePaths.length > 0">
+    <button class="save-btn" (click)="guardarImagenes()">
+      <i class="fas fa-save"></i> Guardar rutas
+    </button>
+    <button class="clear-btn" (click)="limpiarSeleccion()">
+      <i class="fas fa-trash-alt"></i> Limpiar
+    </button>
+  </div>
+</div>

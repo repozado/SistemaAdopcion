@@ -18,6 +18,7 @@ import { AdopcionComponent } from './components/adopcion/adopcion.component';
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component'; // ¡Importa el componente Solicitudes!
 import { MisadopcionesComponent } from './components/misadopciones/misadopciones.component';
 
+import { ValuecardComponent } from './components/valuecard/valuecard.component';
 
 const routes: Routes = [
   {path: 'sesionexpirada', component: SesionexpiradaComponent },
@@ -37,6 +38,7 @@ const routes: Routes = [
   // ¡Nueva línea: Ruta para Solicitudes, protegida para administradores!
   {path: 'solicitudes', component: SolicitudesComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: 'mis-adopciones', component: MisadopcionesComponent, canActivate: [AuthGuard]},
+  {path: 'valuecard', component: ValuecardComponent},
   {path: '**', pathMatch: 'full', redirectTo: 'home'}
 ];
 
