@@ -14,6 +14,7 @@ import { UsersComponent } from './components/users/users.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CuestionarioComponent } from './components/cuestionario/cuestionario.component';
 import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpirada.component';
+import { AdopcionComponent } from './components/adopcion/adopcion.component'; // ¡Nueva línea: Importa el componente de Adopcion!
 
 const routes: Routes = [
   { path: 'sesionexpirada', component: SesionexpiradaComponent },
@@ -28,7 +29,9 @@ const routes: Routes = [
   {path: 'mascota/:id', component:PetcardComponent},
   {path: 'cuestionario', component:CuestionarioComponent, canActivate: [AuthGuard]},
   {path: 'yo', component:EncuestaComponent},
-  {path: '**', pathMatch: 'full', redirectTo: 'home'} 
+  // ¡Nueva línea: Ruta para Adopciones, protegida para administradores!
+  {path: 'adopciones', component: AdopcionComponent, canActivate: [AuthGuard, AdminGuard]},
+  {path: '**', pathMatch: 'full', redirectTo: 'home'}
 ];
 
 @NgModule({
