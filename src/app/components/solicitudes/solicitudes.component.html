@@ -1,84 +1,152 @@
+<!-- frontend/src/app/components/solicitudes/solicitudes.component.html -->
+
 <div class="solicitudes-container">
-  <div class="solicitudes-header">
-    <h2><i class="fas fa-clipboard-list"></i> Panel de Solicitudes</h2>
-    <div class="filtros">
-      <button 
-        *ngFor="let filtro of ['todas', 'pendiente', 'aprobada', 'rechazada']"
-        [class.active]="filtroEstado === filtro"
-        (click)="filtroEstado = filtro">
-        {{ filtro | titlecase }}
-      </button>
+  <h2>Administración de Solicitudes de Adopción</h2>
+
+  <!-- Mensaje de error/carga/sin permisos -->
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+    <button (click)="loadSolicitudes()">Reintentar</button>
+  </div>
+
+  <div *ngIf="isLoading && !error" class="loading-message">
+    <p>Cargando solicitudes...</p>
+  </div>
+
+  <ng-container *ngIf="!isLoading && !error && authService.isAdmin()">
+    <!-- Barra de búsqueda y filtros -->
+    <div class="filter-controls">
+      <div class="search-bar-container">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearchChange()"
+          placeholder="Buscar por usuario, mascota, ID..."
+          class="search-input"
+        />
+        <button (click)="onSearchChange()" class="search-button">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+      </div>
+
+      <div class="status-filter-container">
+        <label for="statusFilter">Filtrar por Estado:</label>
+        <select id="statusFilter" [(ngModel)]="selectedStatusFilter" (change)="onStatusFilterChange()" class="status-select">
+          <option value="todas">Todas</option>
+          <option value="en_revision">En Revisión</option>
+          <option value="aceptada">Aceptada</option>
+          <option value="rechazada">Rechazada</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Cuadrícula de solicitudes -->
+    <div class="solicitudes-grid">
+      <div *ngFor="let solicitud of filteredSolicitudes" class="solicitud-card">
+        <div class="card-header">
+          <span class="solicitud-id">#{{ solicitud.id_solicitud }}</span>
+          <span class="status-badge" [ngClass]="getStatusClass(solicitud.estado_solicitud)">
+            {{ solicitud.estado_solicitud | uppercase }}
+          </span>
+        </div>
+        <div class="card-body">
+          <p><strong>Usuario:</strong> {{ solicitud.nombre_usuario }} (ID: {{ solicitud.id_usuario }})</p>
+          <p><strong>Mascota:</strong> {{ solicitud.nombre_mascota }} (ID: {{ solicitud.id_mascota }})</p>
+          <p><strong>Fecha Solicitud:</strong> {{ solicitud.fecha_solicitud | date:'shortDate' }}</p>
+          <p *ngIf="solicitud.fecha_revision"><strong>Fecha Revisión:</strong> {{ solicitud.fecha_revision | date:'shortDate' }}</p>
+          <p *ngIf="solicitud.motivo_rechazo"><strong>Motivo Rechazo:</strong> {{ solicitud.motivo_rechazo }}</p>
+        </div>
+        <div class="card-actions">
+          <button
+            *ngIf="solicitud.estado_solicitud === 'en_revision'"
+            class="btn-action btn-accept"
+            (click)="acceptSolicitud(solicitud)"
+          >
+            <i class="fas fa-check-circle"></i> Aceptar
+          </button>
+          <button
+            *ngIf="solicitud.estado_solicitud === 'en_revision'"
+            class="btn-action btn-reject"
+            (click)="openRejectModal(solicitud)"
+          >
+            <i class="fas fa-times-circle"></i> Rechazar
+          </button>
+          <!-- NUEVO BOTÓN: Ver Adoptante -->
+          <button class="btn-action btn-view-applicant" (click)="viewApplicantInfo(solicitud)">
+            <i class="fas fa-user"></i> Ver Adoptante
+          </button>
+          <button class="btn-action btn-delete" (click)="deleteSolicitud(solicitud.id_solicitud)">
+            <i class="fas fa-trash-alt"></i> Eliminar
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="filteredSolicitudes.length === 0" class="no-data-message">
+        <p>No hay solicitudes que coincidan con los filtros aplicados.</p>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Modal de Rechazo -->
+  <div class="custom-modal-overlay" *ngIf="showRejectModal">
+    <div class="custom-modal-content">
+      <div class="modal-header">
+        <h3>Rechazar Solicitud #{{ currentSolicitudToReject?.id_solicitud }}</h3>
+        <button class="close-button" (click)="closeRejectModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Por favor, especifica el motivo del rechazo para la solicitud de {{ currentSolicitudToReject?.nombre_usuario }} para {{ currentSolicitudToReject?.nombre_mascota }}:</p>
+        <textarea
+          [(ngModel)]="motivoRechazo"
+          placeholder="Escribe el motivo del rechazo aquí..."
+          rows="4"
+        ></textarea>
+        <div *ngIf="error && showRejectModal" class="modal-error-message">{{ error }}</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeRejectModal()">Cancelar</button>
+        <button class="btn-confirm" (click)="confirmReject()">Confirmar Rechazo</button>
+      </div>
     </div>
   </div>
 
-  <div class="solicitudes-list">
-    <div *ngFor="let solicitud of solicitudesFiltradas" class="solicitud-card" 
-         [class.pendiente]="solicitud.estado_solicitud === 'pendiente'"
-         [class.aprobada]="solicitud.estado_solicitud === 'aprobada'" 
-         [class.rechazada]="solicitud.estado_solicitud === 'rechazada'">
-      
-      <div class="solicitud-header">
-        <div class="mascota-info">
-          <div class="mascota-imagen" *ngIf="solicitud.mascota_imagen; else defaultIcon">
-            <img [src]="solicitud.mascota_imagen" [alt]="solicitud.mascota_nombre">
-          </div>
-          <ng-template #defaultIcon>
-            <div class="mascota-imagen default">
-              <i class="fas fa-paw"></i>
-            </div>
-          </ng-template>
-          <div>
-            <h3>Solicitud #{{ solicitud.id_solicitud }}</h3>
-            <p>Mascota: {{ solicitud.mascota_nombre }}</p>
-          </div>
-        </div>
-        <div class="solicitud-meta">
-          <span><i class="fas fa-calendar-alt"></i> {{ formatearFecha(solicitud.fecha_solicitud) }}</span>
-          <span class="estado-badge" [class.pendiente]="solicitud.estado_solicitud === 'pendiente'"
-            [class.aprobada]="solicitud.estado_solicitud === 'aprobada'" 
-            [class.rechazada]="solicitud.estado_solicitud === 'rechazada'">
-            {{ solicitud.estado_solicitud | titlecase }}
-          </span>
-        </div>
+  <!-- NUEVO MODAL: Información del Adoptante -->
+  <div class="custom-modal-overlay" *ngIf="showApplicantInfoModal">
+    <div class="custom-modal-content">
+      <div class="modal-header">
+        <h3>Información del Adoptante</h3>
+        <button class="close-button" (click)="closeApplicantInfoModal()">&times;</button>
       </div>
-
-      <div class="solicitud-body">
-        <div class="solicitante-info">
-          <h4><i class="fas fa-user"></i> Solicitante (ID: {{ solicitud.id_usuario }})</h4>
-          <p><strong>Nombre:</strong> {{ solicitud.usuario_nombre }}</p>
-          <p><strong>Email:</strong> {{ solicitud.usuario_email }}</p>
-          <p><strong>Teléfono:</strong> {{ solicitud.usuario_telefono }}</p>
+      <div class="modal-body">
+        <div *ngIf="isFetchingApplicantDetails" class="loading-message-small">
+          <p><i class="fas fa-spinner fa-spin"></i> Cargando detalles del usuario...</p>
+        </div>
+        <div *ngIf="applicantDetailsError" class="error-message-small">
+          <p><i class="fas fa-exclamation-triangle"></i> {{ applicantDetailsError }}</p>
         </div>
 
-        <div class="solicitud-mensaje" *ngIf="solicitud.mensaje">
-          <h4><i class="fas fa-comment"></i> Mensaje del solicitante</h4>
-          <p>{{ solicitud.mensaje }}</p>
-        </div>
-
-        <div class="solicitud-detalle" *ngIf="solicitud.estado_solicitud !== 'pendiente'">
-          <h4><i class="fas fa-info-circle"></i> Detalle de revisión</h4>
-          <p><strong>Fecha revisión:</strong> {{ formatearFecha(solicitud.fecha_revision!) }}</p>
-          <p *ngIf="solicitud.estado_solicitud === 'rechazada' && solicitud.motivo_rechazo">
-            <strong>Motivo rechazo:</strong> {{ solicitud.motivo_rechazo }}
-          </p>
-        </div>
+        <ng-container *ngIf="currentApplicantInfo && !isFetchingApplicantDetails && !applicantDetailsError">
+          <p><strong>Nombre:</strong> {{ currentApplicantInfo.nombre_usuario }}</p>
+          <p><strong>ID de Usuario:</strong> {{ currentApplicantInfo.id_usuario }}</p>
+          <ng-container *ngIf="fullApplicantDetails">
+            <p><strong>Email:</strong> {{ fullApplicantDetails.email }}</p>
+            <p *ngIf="fullApplicantDetails.telefono"><strong>Teléfono:</strong> {{ fullApplicantDetails.telefono }}</p>
+            <p *ngIf="fullApplicantDetails.direccion"><strong>Dirección:</strong> {{ fullApplicantDetails.direccion }}</p>
+            <p><strong>Rol:</strong> {{ fullApplicantDetails.role | uppercase }}</p>
+            <p *ngIf="fullApplicantDetails.created_at"><strong>Miembro desde:</strong> {{ fullApplicantDetails.created_at | date:'shortDate' }}</p>
+          </ng-container>
+          <ng-container *ngIf="!fullApplicantDetails">
+            <p>No se pudieron cargar los detalles completos del adoptante.</p>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!currentApplicantInfo && !isFetchingApplicantDetails && !applicantDetailsError">
+          <p>No se pudo cargar la información del adoptante.</p>
+        </ng-container>
       </div>
-
-      <div class="solicitud-actions">
-        <button *ngIf="solicitud.estado_solicitud === 'pendiente'" class="btn-aprobar" 
-                (click)="aprobarSolicitud(solicitud)">
-          <i class="fas fa-check"></i> Aprobar
-        </button>
-        <button *ngIf="solicitud.estado_solicitud === 'pendiente'" class="btn-rechazar" 
-                (click)="mostrarDialogoRechazo(solicitud)">
-          <i class="fas fa-times"></i> Rechazar
-        </button>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeApplicantInfoModal()">Cerrar</button>
       </div>
-    </div>
-
-    <div *ngIf="solicitudesFiltradas.length === 0" class="no-solicitudes">
-      <i class="fas fa-inbox"></i>
-      <p>No hay solicitudes {{filtroEstado !== 'todas' ? 'en estado ' + filtroEstado : ''}}</p>
     </div>
   </div>
 </div>
+
