@@ -20,6 +20,7 @@ export interface Mascota {
 }
 
 export interface MascotaImagen {
+  id_imagen: number;
   imagen: string | null;
   orden: number;
 }

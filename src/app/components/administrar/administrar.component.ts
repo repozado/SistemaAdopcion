@@ -102,7 +102,7 @@ export class AdministrarComponent implements OnInit {
     this.newFiles = [];
     this.newPreviews = [];
     this.mascotaService.getImages(mascota.id_mascota).subscribe({
-      next: imgs => this.existingImages = imgs.map(x => ({ id_imagen: x.orden, data: `data:image/*;base64,${x.imagen}` })),
+      next: imgs => this.existingImages = imgs.map(x => ({ id_imagen: x.id_imagen, data: `data:image/*;base64,${x.imagen}` })),
       error: err => console.error('Error cargando imágenes existentes', err)
     });
     this.showModal = true;
