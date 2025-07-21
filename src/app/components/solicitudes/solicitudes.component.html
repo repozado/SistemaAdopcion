@@ -1,1 +1,84 @@
-<p>solicitudes works!</p>
+<div class="solicitudes-container">
+  <div class="solicitudes-header">
+    <h2><i class="fas fa-clipboard-list"></i> Panel de Solicitudes</h2>
+    <div class="filtros">
+      <button 
+        *ngFor="let filtro of ['todas', 'pendiente', 'aprobada', 'rechazada']"
+        [class.active]="filtroEstado === filtro"
+        (click)="filtroEstado = filtro">
+        {{ filtro | titlecase }}
+      </button>
+    </div>
+  </div>
+
+  <div class="solicitudes-list">
+    <div *ngFor="let solicitud of solicitudesFiltradas" class="solicitud-card" 
+         [class.pendiente]="solicitud.estado_solicitud === 'pendiente'"
+         [class.aprobada]="solicitud.estado_solicitud === 'aprobada'" 
+         [class.rechazada]="solicitud.estado_solicitud === 'rechazada'">
+      
+      <div class="solicitud-header">
+        <div class="mascota-info">
+          <div class="mascota-imagen" *ngIf="solicitud.mascota_imagen; else defaultIcon">
+            <img [src]="solicitud.mascota_imagen" [alt]="solicitud.mascota_nombre">
+          </div>
+          <ng-template #defaultIcon>
+            <div class="mascota-imagen default">
+              <i class="fas fa-paw"></i>
+            </div>
+          </ng-template>
+          <div>
+            <h3>Solicitud #{{ solicitud.id_solicitud }}</h3>
+            <p>Mascota: {{ solicitud.mascota_nombre }}</p>
+          </div>
+        </div>
+        <div class="solicitud-meta">
+          <span><i class="fas fa-calendar-alt"></i> {{ formatearFecha(solicitud.fecha_solicitud) }}</span>
+          <span class="estado-badge" [class.pendiente]="solicitud.estado_solicitud === 'pendiente'"
+            [class.aprobada]="solicitud.estado_solicitud === 'aprobada'" 
+            [class.rechazada]="solicitud.estado_solicitud === 'rechazada'">
+            {{ solicitud.estado_solicitud | titlecase }}
+          </span>
+        </div>
+      </div>
+
+      <div class="solicitud-body">
+        <div class="solicitante-info">
+          <h4><i class="fas fa-user"></i> Solicitante (ID: {{ solicitud.id_usuario }})</h4>
+          <p><strong>Nombre:</strong> {{ solicitud.usuario_nombre }}</p>
+          <p><strong>Email:</strong> {{ solicitud.usuario_email }}</p>
+          <p><strong>Teléfono:</strong> {{ solicitud.usuario_telefono }}</p>
+        </div>
+
+        <div class="solicitud-mensaje" *ngIf="solicitud.mensaje">
+          <h4><i class="fas fa-comment"></i> Mensaje del solicitante</h4>
+          <p>{{ solicitud.mensaje }}</p>
+        </div>
+
+        <div class="solicitud-detalle" *ngIf="solicitud.estado_solicitud !== 'pendiente'">
+          <h4><i class="fas fa-info-circle"></i> Detalle de revisión</h4>
+          <p><strong>Fecha revisión:</strong> {{ formatearFecha(solicitud.fecha_revision!) }}</p>
+          <p *ngIf="solicitud.estado_solicitud === 'rechazada' && solicitud.motivo_rechazo">
+            <strong>Motivo rechazo:</strong> {{ solicitud.motivo_rechazo }}
+          </p>
+        </div>
+      </div>
+
+      <div class="solicitud-actions">
+        <button *ngIf="solicitud.estado_solicitud === 'pendiente'" class="btn-aprobar" 
+                (click)="aprobarSolicitud(solicitud)">
+          <i class="fas fa-check"></i> Aprobar
+        </button>
+        <button *ngIf="solicitud.estado_solicitud === 'pendiente'" class="btn-rechazar" 
+                (click)="mostrarDialogoRechazo(solicitud)">
+          <i class="fas fa-times"></i> Rechazar
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="solicitudesFiltradas.length === 0" class="no-solicitudes">
+      <i class="fas fa-inbox"></i>
+      <p>No hay solicitudes {{filtroEstado !== 'todas' ? 'en estado ' + filtroEstado : ''}}</p>
+    </div>
+  </div>
+</div>

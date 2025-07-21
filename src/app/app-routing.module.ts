@@ -14,9 +14,10 @@ import { UsersComponent } from './components/users/users.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CuestionarioComponent } from './components/cuestionario/cuestionario.component';
 import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpirada.component';
+import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 
 const routes: Routes = [
-  { path: 'sesionexpirada', component: SesionexpiradaComponent },
+  {path: 'sesionexpirada', component: SesionexpiradaComponent },
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'home', component:HomeComponent},
@@ -27,7 +28,8 @@ const routes: Routes = [
   {path: "usuarios", component:UsersComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: 'mascota/:id', component:PetcardComponent},
   {path: 'cuestionario', component:CuestionarioComponent, canActivate: [AuthGuard]},
-  {path: 'yo', component:EncuestaComponent},
+  {path: 'perfilemocional', component:EncuestaComponent},
+  {path: 'solicitudes', component: SolicitudesComponent, canActivate: [AuthGuard, AdminGuard]},
   {path: '**', pathMatch: 'full', redirectTo: 'home'} 
 ];
 
