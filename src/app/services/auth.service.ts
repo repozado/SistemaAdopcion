@@ -16,7 +16,6 @@ interface DecodedToken {
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
- // private apiUrl = 'http://localhost:3000/api/auth';
   private tokenKey = 'auth_token';
   private roleKey  = 'auth_role';
 
