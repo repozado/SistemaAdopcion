@@ -14,18 +14,6 @@ export class MascotasComponent implements OnInit {
   private mascotaService = inject(MascotasService);
   private router = inject(Router);
 
-  /*ngOnInit() {
-    this.mascotaService.getAll().subscribe({
-      next: (data) => {
-        this.mascotas = data;
-        console.log('Mascotas cargadas:', this.mascotas);
-      },
-      error: (error) => {
-        console.error('Error al cargar las mascotas:', error);
-      },
-    });
-  }*/
-
   ngOnInit() {
     this.mascotaService.getAll().subscribe({
       next: (data) => {
