@@ -195,22 +195,24 @@
               <i class="fas fa-folder-open"></i> Seleccionar imágenes
             </button>
 
-            <div class="image-list" *ngIf="base64Images.length">
-              <h4>Imágenes seleccionadas:</h4>
-              <div class="image-previews">
-                <div class="image-preview" *ngFor="let img of base64Images; let i = index">
-                  <!-- Botón para eliminar individual -->
-                  <button type="button" class="remove-btn" (click)="removeImage(i)">✕</button>
-                  <img [src]="img.data" [alt]="img.name">
-                </div>
+            <div class="image-previews">
+              <!-- existentes -->
+              <div class="image-preview" *ngFor="let img of existingImages; let i = index">
+                <button class="remove-btn" (click)="removeExistingImage(i)">✕</button>
+                <img [src]="img.data">
+              </div>
+              <!-- nuevas -->
+              <div class="image-preview" *ngFor="let img of newPreviews; let j = index">
+                <button class="remove-btn" (click)="removeNewImage(j)">✕</button>
+                <img [src]="img.data">
               </div>
             </div>
-
-            <div class="empty-message" *ngIf="!base64Images.length">
+            <div class="empty-message" *ngIf="!existingImages.length && !newPreviews.length">
               <i class="fas fa-images"></i>
               <p>No se han seleccionado imágenes</p>
             </div>
           </div>
+
 
 
           <div class="form-actions">
