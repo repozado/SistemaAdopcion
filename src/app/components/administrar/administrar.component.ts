@@ -154,9 +154,14 @@ export class AdministrarComponent implements OnInit {
   removeExistingImage(index: number): void {
     const img = this.existingImages[index];
     this.mascotaService
-      .deleteImage(this.currentMascota.id_mascota, img.id_imagen)
+      .deleteImage(this.currentMascota.id_mascota!, img.id_imagen)
       .subscribe({
-        next: () => this.existingImages.splice(index, 1),
+        next: () => {
+          this.existingImages.splice(index, 1);
+          // ¡Redefine la imagen de presentación al siguiente elemento!
+          this.currentMascota.imagen =
+            this.existingImages[0]?.data || this.newPreviews[0]?.data || null;
+        },
         error: (err) =>
           console.error('Error al eliminar imagen existente', err),
       });
@@ -165,6 +170,8 @@ export class AdministrarComponent implements OnInit {
   removeNewImage(index: number): void {
     this.newFiles.splice(index, 1);
     this.newPreviews.splice(index, 1);
+    this.currentMascota.imagen =
+      this.existingImages[0]?.data || this.newPreviews[0]?.data || null;
   }
 
   create(): void {
@@ -200,17 +207,25 @@ export class AdministrarComponent implements OnInit {
   }
 
   private afterSave(id: number, isUpdate: boolean): void {
+    const finish = () => {
+      this.setMessage(isUpdate ? 'Mascota actualizada.' : 'Mascota creada.');
+      this.closeModal();
+      this.loadMascotas();
+    };
+
     if (this.newFiles.length) {
       const form = new FormData();
       this.newFiles.forEach((f) => form.append('imagenes', f));
       this.mascotaService.uploadImages(id, form).subscribe({
-        next: () => console.log('Nuevas imágenes subidas'),
+        next: () => {
+          console.log('Nuevas imágenes subidas');
+          finish(); // sólo recargo cuando termine
+        },
         error: (err) => console.error('Error subiendo imágenes', err),
       });
+    } else {
+      finish(); // si no hay imágenes nuevas, recargo de una
     }
-    this.setMessage(isUpdate ? 'Mascota actualizada.' : 'Mascota creada.');
-    this.closeModal();
-    this.loadMascotas();
   }
 
   delete(): void {
