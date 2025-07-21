@@ -19,10 +19,15 @@
         <i class="fas fa-user-circle"></i> Perfil
       </a>
 
+      <!-- Nuevo enlace para Mis Adopciones, visible solo si el usuario tiene adopciones y está logueado -->
+      <a *ngIf="auth.isLoggedIn() && hasMyAdopciones" class="nav-link" routerLinkActive="active" [routerLink]="['/mis-adopciones']">
+        <i class="fas fa-heartbeat"></i> Mis Adopciones
+      </a>
+
       <!-- Menú desplegable para admin -->
       <div *ngIf="auth.isAdmin()" class="admin-dropdown">
         <button class="admin-dropbtn">
-          <i class="fas fa-user-cog"></i> Administar <i class="fas fa-chevron-down dropdown-icon"></i>
+          <i class="fas fa-user-cog"></i> Administrar <i class="fas fa-chevron-down dropdown-icon"></i>
         </button>
         <div class="admin-dropdown-content">
           <a class="admin-link" routerLinkActive="active" [routerLink]="['/usuarios']">
@@ -33,6 +38,9 @@
           </a>
           <a class="admin-link" routerLinkActive="active" [routerLink]="['/adopciones']">
             <i class="fas fa-heart"></i> Adopciones
+          </a>
+          <a class="admin-link" routerLinkActive="active" [routerLink]="['/solicitudes']">
+            <i class="fas fa-file-alt"></i> Solicitudes
           </a>
         </div>
       </div>
@@ -63,14 +71,30 @@
     <a class="mobile-link" routerLinkActive="active" [routerLink]="['/contacto']" (click)="toggleMenu()">
       <i class="fas fa-envelope"></i> Contacto
     </a>
+    <a *ngIf="auth.isLoggedIn()" class="mobile-link" routerLinkActive="active" [routerLink]="['/perfilemocional']" (click)="toggleMenu()">
+      <i class="fas fa-user-circle"></i> Perfil
+    </a>
+    <!-- Nuevo enlace móvil para Mis Adopciones -->
+    <a *ngIf="auth.isLoggedIn() && hasMyAdopciones" class="mobile-link" routerLinkActive="active" [routerLink]="['/mis-adopciones']" (click)="toggleMenu()">
+      <i class="fas fa-heartbeat"></i> Mis Adopciones
+    </a>
 
     <a *ngIf="auth.isAdmin()" class="mobile-link admin-link" routerLinkActive="active" [routerLink]="['/usuarios']" (click)="toggleMenu()">
-      <i class="fas fa-user-cog"></i> Panel Usuarios
+      <i class="fas fa-users"></i> Panel Usuarios
     </a>
     <a *ngIf="auth.isAdmin()" class="mobile-link admin-link" routerLinkActive="active"
       [routerLink]="['/administrar']" (click)="toggleMenu()">
-      <i class="fas fa-user-cog"></i> Panel Admin
+      <i class="fas fa-tools"></i> Panel Admin
     </a>
+    <a *ngIf="auth.isAdmin()" class="mobile-link admin-link" routerLinkActive="active"
+      [routerLink]="['/adopciones']" (click)="toggleMenu()">
+      <i class="fas fa-heart"></i> Adopciones Admin
+    </a>
+    <a *ngIf="auth.isAdmin()" class="mobile-link admin-link" routerLinkActive="active"
+      [routerLink]="['/solicitudes']" (click)="toggleMenu()">
+      <i class="fas fa-file-alt"></i> Solicitudes Admin
+    </a>
+
     <button *ngIf="!auth.isLoggedIn()" class="mobile-login-btn" (click)="openLoginModal(); toggleMenu()">
       <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
     </button>
@@ -79,3 +103,4 @@
     </button>
   </div>
 </nav>
+

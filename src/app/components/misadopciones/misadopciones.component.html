@@ -1,0 +1,74 @@
+<!-- frontend/src/app/components/misadopciones/misadopciones.component.html -->
+
+<div class="mis-adopciones-container">
+  <h2>Mis Adopciones</h2>
+
+  <!-- Sección de búsqueda -->
+  <div class="search-bar-container">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (keyup.enter)="onSearch()"
+      placeholder="Buscar por mascota, observaciones, ID..."
+      class="search-input"
+    />
+    <button (click)="onSearch()" class="search-button">
+      <i class="fas fa-search"></i> Buscar
+    </button>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="isLoading" class="loading-message">
+    <p>Cargando tus adopciones...</p>
+    <!-- Puedes añadir un spinner o animación aquí -->
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+    <button (click)="loadMyAdopciones()">Reintentar</button>
+  </div>
+
+  <!-- Contenido principal si no hay carga ni error -->
+  <ng-container *ngIf="!isLoading && !error">
+    <div class="mascotas-grid">
+      <div *ngFor="let adopcion of filteredAdopciones" class="mascota-card"> <!-- ¡Aquí se usa filteredAdopciones! -->
+        <div class="mascota-header">
+          <div class="mascota-image">
+            <!-- Condición para mostrar la imagen o el fallback icon -->
+            <ng-container *ngIf="adopcion.imagen_mascota; else fallbackIcon">
+              <img [src]="'data:image/jpeg;base64,' + adopcion.imagen_mascota"
+                   [alt]="adopcion.nombre_mascota_adoptada" />
+            </ng-container>
+            <ng-template #fallbackIcon>
+              <i class="fas fa-paw"></i>
+            </ng-template>
+          </div>
+          <span class="mascota-badge">Adoptado</span>
+        </div>
+
+        <div class="mascota-body">
+          <h3>{{ adopcion.nombre_mascota_adoptada }}</h3>
+
+          <div class="mascota-meta">
+            <span><i class="fas fa-calendar-alt"></i> Fecha de Adopción: {{ adopcion.fecha_adopcion | date:'shortDate' }}</span>
+            <span *ngIf="adopcion.fecha_entrega_prevista"><i class="fas fa-calendar-check"></i> Entrega Prevista: {{ adopcion.fecha_entrega_prevista | date:'shortDate' }}</span>
+            <span *ngIf="adopcion.nombre_entregado_por"><i class="fas fa-user-tie"></i> Entregado Por: {{ adopcion.nombre_entregado_por }}</span>
+          </div>
+
+          <p class="mascota-description">
+            Observaciones: {{ adopcion.observaciones || 'No hay observaciones adicionales.' }}
+          </p>
+          <p class="mascota-description">
+            ID Solicitud: {{ adopcion.id_solicitud }}
+          </p>
+        </div>
+      </div>
+
+      <div *ngIf="filteredAdopciones.length === 0" class="no-data-message">
+        <p>Aún no tienes adopciones registradas que coincidan con la búsqueda.</p>
+      </div>
+    </div>
+  </ng-container>
+</div>
+

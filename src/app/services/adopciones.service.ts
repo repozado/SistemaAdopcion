@@ -17,6 +17,7 @@ export interface Adopcion {
   nombre_adoptante: string;
   id_mascota_adoptada: number;
   nombre_mascota_adoptada: string;
+  imagen_mascota: string | null; // ¡NUEVO! Campo para la imagen de la mascota
   fecha_adopcion: string; // ISO string (YYYY-MM-DDTHH:MM:SS.sssZ)
   observaciones: string | null;
   entregado_por: number | null;

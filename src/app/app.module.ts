@@ -28,6 +28,7 @@ import { CuestionarioComponent } from './components/cuestionario/cuestionario.co
 import { SesionexpiradaComponent } from './components/sesionexpirada/sesionexpirada.component';
 import { SolicitudesComponent } from './components/solicitudes/solicitudes.component';
 import { AdopcionComponent } from './components/adopcion/adopcion.component';
+import { MisadopcionesComponent } from './components/misadopciones/misadopciones.component';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { AdopcionComponent } from './components/adopcion/adopcion.component';
     SesionexpiradaComponent,
     SolicitudesComponent,
     AdopcionComponent,
+    MisadopcionesComponent,
 
   ],
   imports: [

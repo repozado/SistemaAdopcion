@@ -1,0 +1,226 @@
+/* frontend/src/app/components/misadopciones/misadopciones.component.css */
+
+/* Variables CSS - Reutilizadas de tu estilo general */
+:host {
+  --primary: #A78BFA;
+  --secondary: #FCAFAF;
+  --accent: #5DD5C0;
+  --light: #FFF7EC;
+  --dark: #292F36;
+  --text: #5E5E5E;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.mis-adopciones-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif; /* Asegura una fuente base */
+}
+
+h2 {
+  color: var(--dark);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Mensajes de estado (carga, error, sin datos) */
+.loading-message, .error-message, .no-data-message {
+  text-align: center;
+  padding: 20px;
+  border-radius: var(--radius);
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: var(--text);
+  background-color: var(--light);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.error-message {
+  background-color: #ffe0e0;
+  color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.error-message button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.error-message button:hover {
+  background-color: #8c6df9;
+}
+
+/* Estilos de la cuadrícula de tarjetas (reutilizados) */
+.mascotas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.mascota-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex; /* Para organizar contenido dentro de la tarjeta */
+  flex-direction: column;
+}
+
+.mascota-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.mascota-header {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  color: white;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  background-color: var(--primary); /* Color de fondo para el header de la tarjeta de adopción */
+}
+
+.mascota-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: var(--secondary);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.mascota-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  color: var(--primary); /* Color para el ícono de patita */
+}
+
+.mascota-image i {
+  font-size: 4rem;
+  opacity: 0.9;
+}
+
+.mascota-body {
+  padding: 20px;
+  flex-grow: 1; /* Permite que el cuerpo ocupe el espacio restante */
+}
+
+.mascota-body h3 {
+  color: var(--dark);
+  margin-bottom: 10px;
+  text-align: left; /* Sobrescribe el text-align center global para h3 */
+}
+
+.mascota-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.mascota-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mascota-meta i {
+  color: var(--primary);
+}
+
+.mascota-description {
+  color: var(--text);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* --- Nuevos estilos para la barra de búsqueda --- */
+.search-bar-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-input {
+  flex-grow: 1;
+  max-width: 400px;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-button:hover {
+  background-color: #8c6df9;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mascotas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  .search-bar-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-input {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .mis-adopciones-container {
+    padding: 1rem;
+  }
+
+  .mascotas-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
