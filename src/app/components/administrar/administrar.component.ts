@@ -13,7 +13,7 @@ export class AdministrarComponent implements OnInit {
   filteredMascotas: Mascota[] = [];
   searchTerm = '';
   selectedFilter = '';
-  showModal = false;
+  showModal = false;  
   showConfirmModal = false;
   isEditing = false;
   mascotaToDelete: Mascota | null = null;
@@ -58,22 +58,27 @@ export class AdministrarComponent implements OnInit {
     });
   }
 
-  filterMascotas(): void {
-    let result = this.mascotas;
-    if (this.searchTerm) {
-      const term = this.searchTerm.toLowerCase();
-      result = result.filter(m =>
-        m.nombre.toLowerCase().includes(term) ||
-        m.perfil_emocional.toLowerCase().includes(term) ||
-        m.tamano.toLowerCase().includes(term)
-      );
-    }
-    if (this.selectedFilter) {
-      result = result.filter(m => m.estado_adopcion === this.selectedFilter);
-    }
-    this.filteredMascotas = result;
-    this.currentPage = 1;
+  // En el archivo TS
+filterMascotas(): void {
+  let result = this.mascotas;
+  
+  // Aplicar filtro de búsqueda
+  if (this.searchTerm) {
+    const term = this.searchTerm.toLowerCase();
+    result = result.filter(m => 
+      (m.nombre?.toLowerCase() || '').includes(term) ||
+      (m.perfil_emocional?.toLowerCase() || '').includes(term) ||
+      (m.tamano?.toLowerCase() || '').includes(term)
+    );
   }
+  
+  if (this.selectedFilter) {
+    result = result.filter(m => m.estado_adopcion === this.selectedFilter);
+  }
+  
+  this.filteredMascotas = result;
+  this.currentPage = 1;
+}
 
   get totalPages(): number {
     return Math.ceil(this.filteredMascotas.length / this.itemsPerPage);
