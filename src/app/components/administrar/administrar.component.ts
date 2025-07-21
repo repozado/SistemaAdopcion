@@ -12,6 +12,10 @@ import {
   styleUrl: './administrar.component.css',
 })
 export class AdministrarComponent implements OnInit {
+  existingImages: { id_imagen: number; data: string }[] = [];
+  newFiles: File[] = [];
+  newPreviews: { name: string; data: string }[] = [];
+  
   mascotas: Mascota[] = [];
   filteredMascotas: Mascota[] = [];
   searchTerm: string = '';
@@ -28,6 +32,8 @@ export class AdministrarComponent implements OnInit {
   // PARA EL IMAGE PICKER
   base64Images: Array<{ name: string; data: string }> = [];
   private selectedFiles: File[] = [];
+
+  
 
   private tipoService = inject(TipoemocionalService);
   private mascotaService = inject(MascotasService);
@@ -120,6 +126,16 @@ export class AdministrarComponent implements OnInit {
     this.isEditing = true;
     this.currentMascota = { ...mascota };
     this.showModal = true;
+    // Carga las imágenes existentes:
+    this.mascotaService.getImages(mascota.id_mascota).subscribe({
+      next: imgs => {
+        this.existingImages = imgs.map(x => ({ id_imagen: x.orden, data: `data:image/*;base64,${x.imagen}` }));
+      },
+      error: err => console.error('No se pudieron cargar imágenes', err)
+    });
+    // limpia las nuevas
+    this.newFiles = [];
+    this.newPreviews = [];
   }
 
   closeModal(): void {

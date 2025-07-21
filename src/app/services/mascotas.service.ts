@@ -50,7 +50,7 @@ export class MascotasService {
           perfil_emocional: item.perfil_emocional,
           // aquí garantizamos que siempre exista "imagen" (puede ser null)
           imagen: item.imagen ?? null,
-          id_emocional:    item.id_emocional
+          id_emocional: item.id_emocional,
         }))
       )
     );
@@ -82,5 +82,10 @@ export class MascotasService {
   /** Envío de imágenes a la API */
   uploadImages(id: number, form: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/${id}/imagenes`, form);
+  }
+
+  /** Borrar una imagen por su ID */
+  deleteImage(mascotaId: number, imagenId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${mascotaId}/imagenes/${imagenId}`);
   }
 }
