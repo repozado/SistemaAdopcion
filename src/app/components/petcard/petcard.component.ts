@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs'; // Importar Subscription para gestionar la suscripción
+import { EncuestaService } from '../../services/encuesta.service';
 
 @Component({
   selector: 'app-petcard',
@@ -23,6 +24,9 @@ export class PetcardComponent implements OnInit {
   private mascotasService = inject(MascotasService);
   public authService = inject(AuthService);
   public solicitudesService = inject(SolicitudesService);
+  public compatibilidadUsuario: any = {};
+public tipoEmocionalUsuario: string = '';
+private encuestaService = inject(EncuestaService);
 
   mascota: Mascota | undefined;
   imagenes: MascotaImagen[] = []; // Usaremos este array para la galería
@@ -73,6 +77,16 @@ export class PetcardComponent implements OnInit {
       const id = Number(params.get('id'));
       if (id) {
         this.loadMascotaDetails(id);
+        this.encuestaService.obtenerMiResultado().subscribe({
+  next: (resultado) => {
+    this.tipoEmocionalUsuario = resultado.descripcion;
+    this.compatibilidadUsuario = resultado.compatibilidad;
+    console.log('Compatibilidad emocional del usuario:', this.compatibilidadUsuario);
+  },
+  error: (err) => {
+    console.error('Error al obtener resultado emocional del usuario:', err);
+  }
+});
       } else {
         this.error = 'ID de mascota no proporcionado.';
         this.isLoading = false;
