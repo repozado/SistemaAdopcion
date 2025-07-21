@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
   selector: 'app-sesionexpirada',
   standalone: false,
   templateUrl: './sesionexpirada.component.html',
-  styleUrl: './sesionexpirada.component.css'
+  styleUrl: './sesionexpirada.component.css',
 })
 export class SesionexpiradaComponent {
   constructor(private router: Router) {}

@@ -1,7 +1,7 @@
 :host {
-  --primary: #A78BFA;
-  --secondary: #FCAFAF;
-  --dark: #292F36;
+  --primary: #a78bfa;
+  --secondary: #fcafaf;
+  --dark: #292f36;
   --text-light: #ffffff;
   --text-muted: #cccccc;
 }
@@ -10,7 +10,7 @@
   background-color: var(--dark);
   color: var(--text-light);
   padding: 60px 0 30px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .footer-container {
@@ -43,7 +43,7 @@
 }
 
 .footer-logo span {
-  font-family: 'Baloo 2', cursive;
+  font-family: "Baloo 2", cursive;
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary);
@@ -89,7 +89,7 @@
 }
 
 .footer-column h3::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: 0;
@@ -144,7 +144,7 @@
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .footer-bottom {
     flex-direction: column;
     gap: 15px;
@@ -156,7 +156,7 @@
   .footer-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .social-links {
     justify-content: center; /* Centra íconos en móviles */
   }

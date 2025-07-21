@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   rememberMe: boolean = false;
@@ -37,9 +37,9 @@ export class LoginComponent implements OnInit{
       },
       error: (err) => {
         console.error('Login error:', err); // Log the full error for debugging
-        this.error = 'Email o contraseña inválidos. Por favor, inténtalo de nuevo.';
-      }
+        this.error =
+          'Email o contraseña inválidos. Por favor, inténtalo de nuevo.';
+      },
     });
   }
-
 }

@@ -2,15 +2,15 @@
 
 /* Variables CSS */
 :host {
-  --primary: #A78BFA;
-  --secondary: #FCAFAF;
-  --accent: #5DD5C0;
-  --light: #FFF7EC;
-  --dark: #292F36;
-  --text: #5E5E5E;
-  --border: #E0E0E0; /* Nueva variable para bordes */
+  --primary: #a78bfa;
+  --secondary: #fcafaf;
+  --accent: #5dd5c0;
+  --light: #fff7ec;
+  --dark: #292f36;
+  --text: #5e5e5e;
+  --border: #e0e0e0; /* Nueva variable para bordes */
   --radius: 12px;
-  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   --transition: all 0.3s ease; /* Nueva variable para transiciones */
 }
 
@@ -18,7 +18,7 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Arial', sans-serif; /* Asegura una fuente base */
+  font-family: "Arial", sans-serif; /* Asegura una fuente base */
 }
 
 h2 {
@@ -102,7 +102,9 @@ h2 {
 }
 
 /* Mensajes de estado (carga, error, sin resultados) */
-.loading-message, .error-message, .no-results-message {
+.loading-message,
+.error-message,
+.no-results-message {
   text-align: center;
   padding: 20px;
   border-radius: var(--radius);
@@ -110,7 +112,7 @@ h2 {
   font-size: 1.1rem;
   color: var(--text);
   background-color: var(--light);
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   display: flex; /* Para centrar contenido */
   flex-direction: column;
   align-items: center;
@@ -125,8 +127,12 @@ h2 {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .error-message {
@@ -171,7 +177,7 @@ h2 {
 
 .mascota-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .mascota-header {
@@ -227,7 +233,8 @@ h2 {
 }
 
 /* --- ESTILOS PARA MASCOTAS ADOPTADAS --- */
-.mascota-image .adopted-overlay { /* Selector ajustado */
+.mascota-image .adopted-overlay {
+  /* Selector ajustado */
   position: absolute;
   top: 0;
   left: 0;
@@ -251,7 +258,7 @@ h2 {
   background: none; /* sin fondo rosado */
   border-radius: 0;
   letter-spacing: 1px;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* Oscurecer la imagen subyacente si el overlay está presente */
@@ -260,7 +267,6 @@ h2 {
   filter: brightness(0.5) grayscale(0.5); /* Oscurece y desatura la imagen */
 }
 /* --- FIN ESTILOS PARA MASCOTAS ADOPTADAS --- */
-
 
 .mascota-body {
   padding: 20px;
@@ -319,13 +325,13 @@ h2 {
 .status-adoptado {
   background-color: rgb(252, 175, 175); /* Rojo */
 }
-.status-en-cuarentena { /* Corregido de en_cuarentena a en-cuarentena para CSS */
+.status-en-cuarentena {
+  /* Corregido de en_cuarentena a en-cuarentena para CSS */
   background-color: #ffc107; /* Amarillo */
 }
 .status-inactivo {
   background-color: #6c757d; /* Gris */
 }
-
 
 .mascota-description {
   color: var(--text);
@@ -335,8 +341,8 @@ h2 {
 
   /* TRUNCAR DESCRIPCIÓN A 3 LÍNEAS */
   display: -webkit-box;
-  -webkit-line-clamp: 3;     /* número de líneas */
-  line-clamp: 3;             /* estándar para compatibilidad */
+  -webkit-line-clamp: 3; /* número de líneas */
+  line-clamp: 3; /* estándar para compatibilidad */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -416,12 +422,17 @@ h2 {
     flex-direction: column;
     align-items: stretch;
   }
-  .buscador-input, .combo-emocional.estilizado, .clear-filters-button {
+  .buscador-input,
+  .combo-emocional.estilizado,
+  .clear-filters-button {
     width: 100%;
     min-width: unset;
   }
   .mascotas-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Ajuste para móviles */
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(280px, 1fr)
+    ); /* Ajuste para móviles */
   }
 }
 
@@ -447,12 +458,12 @@ h2 {
 }
 :host {
   /* …tus variables existentes… */
-  --color-Activo: #A78BFA;
-  --color-Tranquilo: #5DD5C0;
-  --color-Cariñoso: #FF9E7D;
-  --color-Independiente: #FCAFAF;
-  --color-Paciente: #FFC107;
-  --color-Recomendados: #5A6268; /* opcional */
+  --color-Activo: #a78bfa;
+  --color-Tranquilo: #5dd5c0;
+  --color-Cariñoso: #ff9e7d;
+  --color-Independiente: #fcafaf;
+  --color-Paciente: #ffc107;
+  --color-Recomendados: #5a6268; /* opcional */
 }
 
 .profile-bar {
@@ -462,4 +473,3 @@ h2 {
   /* opcional: un pequeño box-shadow o transición */
   transition: var(--transition);
 }
-

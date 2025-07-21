@@ -14,7 +14,7 @@ interface DecodedToken {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
@@ -49,17 +49,25 @@ export class AuthService {
   login(email: string, password: string): Observable<{ token: string }> {
     return this.http
       .post<{ token: string }>(`${this.apiUrl}/login`, { email, password })
-      .pipe(tap(res => {
-        localStorage.setItem(this.tokenKey, res.token);
-        const decoded = jwtDecode<DecodedToken>(res.token);
-        localStorage.setItem(this.roleKey, decoded.role);
-        // --- NUEVO: Actualiza el BehaviorSubject a 'true' al iniciar sesión con éxito ---
-        this._isLoggedIn$$.next(true);
-        // -----------------------------------------------------------------------------
-      }));
+      .pipe(
+        tap((res) => {
+          localStorage.setItem(this.tokenKey, res.token);
+          const decoded = jwtDecode<DecodedToken>(res.token);
+          localStorage.setItem(this.roleKey, decoded.role);
+          // --- NUEVO: Actualiza el BehaviorSubject a 'true' al iniciar sesión con éxito ---
+          this._isLoggedIn$$.next(true);
+          // -----------------------------------------------------------------------------
+        })
+      );
   }
 
-  register(user: { nombre: string; email: string; telefono: string; direccion: string; password: string; }): Observable<any> {
+  register(user: {
+    nombre: string;
+    email: string;
+    telefono: string;
+    direccion: string;
+    password: string;
+  }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, user);
   }
 
@@ -116,7 +124,7 @@ export class AuthService {
     return null;
   }
 
-    // Llamar a este método tras hacer login:
+  // Llamar a este método tras hacer login:
   setToken(token: string) {
     localStorage.setItem('token', token);
     this._isLoggedIn$$.next(true);
@@ -128,4 +136,3 @@ export class AuthService {
     this._isLoggedIn$$.next(false);
   }
 }
-

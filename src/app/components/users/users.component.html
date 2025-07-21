@@ -19,7 +19,11 @@
     </div>
 
     <div class="filter-group">
-      <select class="form-control" [(ngModel)]="selectedRoleFilter" (change)="applyFilters()">
+      <select
+        class="form-control"
+        [(ngModel)]="selectedRoleFilter"
+        (change)="applyFilters()"
+      >
         <option value="">Todos los Roles</option>
         <option value="user">User</option>
         <option value="admin">Admin</option>

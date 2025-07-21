@@ -111,30 +111,33 @@ export class UsersComponent implements OnInit {
       updated_at: this.currentUser.updated_at,
     };
 
-    this.userService.update(this.currentUser.id_usuario, userToUpdate).subscribe(
-      (response) => {
-        const index = this.users.findIndex(
-          (u) => u.id_usuario === this.currentUser.id_usuario
-        );
-        if (index !== -1) {
-          this.users[index] = response;
+    this.userService
+      .update(this.currentUser.id_usuario, userToUpdate)
+      .subscribe(
+        (response) => {
+          const index = this.users.findIndex(
+            (u) => u.id_usuario === this.currentUser.id_usuario
+          );
+          if (index !== -1) {
+            this.users[index] = response;
+          }
+          this.message = `Usuario "${this.currentUser.email}" actualizado con éxito.`;
+          this.isLoading = false;
+          this.closeEditModal();
+          this.applyFilters(); // Re-apply filters to update the displayed list
+        },
+        (error) => {
+          console.error('Error al actualizar el usuario:', error);
+          this.error =
+            'Error al actualizar el usuario. Por favor, inténtelo de nuevo.';
+          if (error.error && error.error.message) {
+            this.error = `Error: ${error.error.message}`;
+          } else if (error.message) {
+            this.error = `Error: ${error.message}`;
+          }
+          this.isLoading = false;
         }
-        this.message = `Usuario "${this.currentUser.email}" actualizado con éxito.`;
-        this.isLoading = false;
-        this.closeEditModal();
-        this.applyFilters(); // Re-apply filters to update the displayed list
-      },
-      (error) => {
-        console.error('Error al actualizar el usuario:', error);
-        this.error = 'Error al actualizar el usuario. Por favor, inténtelo de nuevo.';
-        if (error.error && error.error.message) {
-          this.error = `Error: ${error.error.message}`;
-        } else if (error.message) {
-          this.error = `Error: ${error.message}`;
-        }
-        this.isLoading = false;
-      }
-    );
+      );
   }
 
   confirmDelete(user: Usuario): void {
@@ -189,7 +192,8 @@ export class UsersComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al eliminar el usuario:', error);
-        this.error = 'Error al eliminar el usuario. Por favor, inténtelo de nuevo.';
+        this.error =
+          'Error al eliminar el usuario. Por favor, inténtelo de nuevo.';
         if (error.error && error.error.message) {
           this.error = `Error: ${error.error.message}`;
         } else if (error.message) {

@@ -1,7 +1,10 @@
 // frontend/src/app/components/mis-solicitudes/mis-solicitudes.component.ts
 
 import { Component, OnInit, inject } from '@angular/core';
-import { SolicitudesService, Solicitud } from '../../services/solicitudes.service';
+import {
+  SolicitudesService,
+  Solicitud,
+} from '../../services/solicitudes.service';
 import { AuthService } from '../../services/auth.service';
 import { MascotasService } from '../../services/mascotas.service'; // Para cargar imágenes de mascotas
 import { Router } from '@angular/router'; // Para posible navegación a la ficha de mascota
@@ -10,7 +13,7 @@ import { Router } from '@angular/router'; // Para posible navegación a la ficha
   selector: 'app-mis-solicitudes',
   standalone: false, // Este componente NO es standalone
   templateUrl: './missolicitudes.component.html',
-  styleUrls: ['./missolicitudes.component.css']
+  styleUrls: ['./missolicitudes.component.css'],
 })
 export class MissolicitudesComponent implements OnInit {
   private solicitudesService = inject(SolicitudesService);
@@ -42,7 +45,8 @@ export class MissolicitudesComponent implements OnInit {
     const token = this.authService.getToken();
 
     if (!token) {
-      this.error = 'No autenticado. Por favor, inicia sesión para ver tus solicitudes.';
+      this.error =
+        'No autenticado. Por favor, inicia sesión para ver tus solicitudes.';
       this.isLoading = false;
       return;
     }
@@ -56,9 +60,10 @@ export class MissolicitudesComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar mis solicitudes:', err);
-        this.error = 'Error al cargar tus solicitudes de adopción. Intenta de nuevo más tarde.';
+        this.error =
+          'Error al cargar tus solicitudes de adopción. Intenta de nuevo más tarde.';
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -67,7 +72,7 @@ export class MissolicitudesComponent implements OnInit {
    * Similar a la lógica en MisAdopcionesComponent.
    */
   private loadMascotaImages(): void {
-    this.mySolicitudes.forEach(solicitud => {
+    this.mySolicitudes.forEach((solicitud) => {
       if (solicitud.id_mascota) {
         this.mascotasService.getImages(solicitud.id_mascota).subscribe({
           next: (images) => {
@@ -75,15 +80,20 @@ export class MissolicitudesComponent implements OnInit {
             if (images && images.length > 0 && images[0].imagen) {
               // ¡CAMBIO AQUÍ! Añadir el prefijo data:image/jpeg;base64,
               // Asume que las imágenes son JPEG. Si son PNG, usa 'image/png'.
-              (solicitud as any).imagen_mascota = `data:image/jpeg;base64,${images[0].imagen}`;
+              (
+                solicitud as any
+              ).imagen_mascota = `data:image/jpeg;base64,${images[0].imagen}`;
             } else {
               (solicitud as any).imagen_mascota = null;
             }
           },
           error: (err) => {
-            console.warn(`No se pudo cargar la imagen para la mascota ID ${solicitud.id_mascota}:`, err);
+            console.warn(
+              `No se pudo cargar la imagen para la mascota ID ${solicitud.id_mascota}:`,
+              err
+            );
             (solicitud as any).imagen_mascota = null; // Asegurarse de que sea null en caso de error
-          }
+          },
         });
       } else {
         (solicitud as any).imagen_mascota = null; // Si no hay id_mascota, no hay imagen
@@ -101,12 +111,15 @@ export class MissolicitudesComponent implements OnInit {
     }
 
     const lowerCaseSearchTerm = this.searchTerm.toLowerCase();
-    this.filteredSolicitudes = this.mySolicitudes.filter(solicitud => {
+    this.filteredSolicitudes = this.mySolicitudes.filter((solicitud) => {
       return (
         solicitud.nombre_mascota.toLowerCase().includes(lowerCaseSearchTerm) ||
-        solicitud.estado_solicitud.toLowerCase().includes(lowerCaseSearchTerm) ||
+        solicitud.estado_solicitud
+          .toLowerCase()
+          .includes(lowerCaseSearchTerm) ||
         solicitud.id_solicitud.toString().includes(lowerCaseSearchTerm) ||
-        (solicitud.motivo_rechazo && solicitud.motivo_rechazo.toLowerCase().includes(lowerCaseSearchTerm))
+        (solicitud.motivo_rechazo &&
+          solicitud.motivo_rechazo.toLowerCase().includes(lowerCaseSearchTerm))
       );
     });
   }
@@ -152,17 +165,19 @@ export class MissolicitudesComponent implements OnInit {
       return;
     }
 
-    this.solicitudesService.deleteSolicitud(this.solicitudToDelete.id_solicitud, token).subscribe({
-      next: () => {
-        this.closeDeleteConfirmModal();
-        this.loadMySolicitudes(); // Recargar para ver los cambios
-      },
-      error: (err) => {
-        console.error('Error al eliminar solicitud:', err);
-        this.error = 'Error al eliminar la solicitud. Intenta de nuevo.';
-        this.closeDeleteConfirmModal();
-      }
-    });
+    this.solicitudesService
+      .deleteSolicitud(this.solicitudToDelete.id_solicitud, token)
+      .subscribe({
+        next: () => {
+          this.closeDeleteConfirmModal();
+          this.loadMySolicitudes(); // Recargar para ver los cambios
+        },
+        error: (err) => {
+          console.error('Error al eliminar solicitud:', err);
+          this.error = 'Error al eliminar la solicitud. Intenta de nuevo.';
+          this.closeDeleteConfirmModal();
+        },
+      });
   }
 
   /**

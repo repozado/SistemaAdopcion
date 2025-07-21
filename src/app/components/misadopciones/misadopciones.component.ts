@@ -9,8 +9,9 @@ import { MascotasService } from '../../services/mascotas.service'; // ¡NUEVO! I
   selector: 'app-misadopciones',
   standalone: false,
   templateUrl: './misadopciones.component.html',
-  styleUrls: ['./misadopciones.component.css']
+  styleUrls: ['./misadopciones.component.css'],
 })
+
 export class MisadopcionesComponent implements OnInit {
   private adopcionesService = inject(AdopcionesService);
   private authService = inject(AuthService);
@@ -36,7 +37,8 @@ export class MisadopcionesComponent implements OnInit {
     const token = this.authService.getToken();
 
     if (!token) {
-      this.error = 'No autenticado. Por favor, inicia sesión para ver tus adopciones.';
+      this.error =
+        'No autenticado. Por favor, inicia sesión para ver tus adopciones.';
       this.isLoading = false;
       return;
     }
@@ -53,7 +55,7 @@ export class MisadopcionesComponent implements OnInit {
         console.error('Error al cargar mis adopciones:', err);
         this.error = 'Error al cargar tus registros de adopción.';
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -61,7 +63,7 @@ export class MisadopcionesComponent implements OnInit {
    * ¡NUEVO MÉTODO! Carga la imagen principal para cada mascota adoptada.
    */
   private loadMascotaImages(): void {
-    this.myAdopciones.forEach(adopcion => {
+    this.myAdopciones.forEach((adopcion) => {
       // Solo si la mascota tiene un ID válido
       if (adopcion.id_mascota_adoptada) {
         this.mascotasService.getImages(adopcion.id_mascota_adoptada).subscribe({
@@ -74,9 +76,12 @@ export class MisadopcionesComponent implements OnInit {
             }
           },
           error: (err) => {
-            console.warn(`No se pudo cargar la imagen para la mascota ID ${adopcion.id_mascota_adoptada}:`, err);
+            console.warn(
+              `No se pudo cargar la imagen para la mascota ID ${adopcion.id_mascota_adoptada}:`,
+              err
+            );
             adopcion.imagen_mascota = null; // En caso de error, asegura que no haya imagen
-          }
+          },
         });
       } else {
         adopcion.imagen_mascota = null; // Si no hay ID de mascota, no hay imagen
@@ -94,10 +99,13 @@ export class MisadopcionesComponent implements OnInit {
     }
 
     const lowerCaseSearchTerm = this.searchTerm.toLowerCase();
-    this.filteredAdopciones = this.myAdopciones.filter(adopcion => {
+    this.filteredAdopciones = this.myAdopciones.filter((adopcion) => {
       return (
-        adopcion.nombre_mascota_adoptada.toLowerCase().includes(lowerCaseSearchTerm) ||
-        (adopcion.observaciones && adopcion.observaciones.toLowerCase().includes(lowerCaseSearchTerm)) ||
+        adopcion.nombre_mascota_adoptada
+          .toLowerCase()
+          .includes(lowerCaseSearchTerm) ||
+        (adopcion.observaciones &&
+          adopcion.observaciones.toLowerCase().includes(lowerCaseSearchTerm)) ||
         adopcion.id_adopcion.toString().includes(lowerCaseSearchTerm) ||
         adopcion.id_solicitud.toString().includes(lowerCaseSearchTerm)
       );

@@ -12,7 +12,7 @@ import { filter } from 'rxjs/operators'; // Se mantiene filter por si se usa en 
   selector: 'app-navbar',
   standalone: false,
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   menuOpen = false;
@@ -33,11 +33,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor() {
     // Suscribirse a los cambios en el estado de autenticación
-    this.authSubscription = this.auth.isLoggedIn$.subscribe(loggedIn => {
+    this.authSubscription = this.auth.isLoggedIn$.subscribe((loggedIn) => {
       // Actualizar el estado de isAdmin aquí también, ya que depende del estado de login
       this.isAdmin = this.auth.isAdmin();
       // --- DEBUG: Agregado para verificar el estado de isAdmin ---
-      console.log('NavbarComponent: isLoggedIn cambiado a', loggedIn, 'isAdmin es', this.isAdmin);
+      console.log(
+        'NavbarComponent: isLoggedIn cambiado a',
+        loggedIn,
+        'isAdmin es',
+        this.isAdmin
+      );
       // ---------------------------------------------------------
 
       if (loggedIn) {
@@ -53,11 +58,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     // Suscribirse a los eventos de navegación para actualizar la ruta actual
     // Esto es útil si el navbar necesita saber la ruta activa para estilos, etc.
-    this.routerSubscription = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      this.currentRoute = event.urlAfterRedirects;
-    });
+    this.routerSubscription = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.currentRoute = event.urlAfterRedirects;
+      });
   }
 
   ngOnInit(): void {
@@ -94,9 +99,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
           this.hasMyAdopciones = adopciones && adopciones.length > 0;
         },
         error: (err) => {
-          console.error('Error al verificar mis adopciones para el navbar:', err);
+          console.error(
+            'Error al verificar mis adopciones para el navbar:',
+            err
+          );
           this.hasMyAdopciones = false;
-        }
+        },
       });
     } else {
       this.hasMyAdopciones = false;
@@ -114,9 +122,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
           this.hasMySolicitudes = solicitudes && solicitudes.length > 0;
         },
         error: (err) => {
-          console.error('Error al verificar mis solicitudes para el navbar:', err);
+          console.error(
+            'Error al verificar mis solicitudes para el navbar:',
+            err
+          );
           this.hasMySolicitudes = false;
-        }
+        },
       });
     } else {
       this.hasMySolicitudes = false;
@@ -138,5 +149,3 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/home']);
   }
 }
-
-

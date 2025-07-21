@@ -1,11 +1,11 @@
 /* navbar.component.css */
 :host {
-  --primary: #A78BFA;       /* Color lavanda principal */
-  --secondary: #FCAFAF;     /* Color coral secundario */
-  --light: #FFF7EC;         /* Fondo crema claro */
-  --dark: #292F36;          /* Texto oscuro */
-  --text: #5E5E5E;          /* Texto gris */
-  --radius: 12px;           /* Bordes redondeados */
+  --primary: #a78bfa; /* Color lavanda principal */
+  --secondary: #fcafaf; /* Color coral secundario */
+  --light: #fff7ec; /* Fondo crema claro */
+  --dark: #292f36; /* Texto oscuro */
+  --text: #5e5e5e; /* Texto gris */
+  --radius: 12px; /* Bordes redondeados */
   --transition: all 0.3s ease; /* Transición suave */
 }
 
@@ -16,7 +16,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  font-family: 'Poppins', 'Baloo 2', sans-serif;
+  font-family: "Poppins", "Baloo 2", sans-serif;
 }
 
 .navbar-container {
@@ -97,7 +97,7 @@
   border: none;
   border-radius: 30px;
   padding: 8px 20px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -239,7 +239,7 @@
   border: none;
   border-radius: 20px;
   padding: 8px 15px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -269,7 +269,7 @@
   right: 0;
   background-color: white;
   min-width: 200px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   border-radius: var(--radius);
   z-index: 1;
   overflow: hidden;

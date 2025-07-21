@@ -181,19 +181,18 @@ export class MascotasComponent implements OnInit, OnDestroy {
    * @param profile El perfil emocional de la mascota.
    * @returns Un color CSS (hex o variable) asociado al perfil.
    */
-getProfileColor(profile: string): string {
-  const colors: Record<string,string> = {
-    'Activo':       '#A78BFA',  // morado suave
-    'Tranquilo':    '#5DD5C0',  // verde azulado
-    'Cariñoso':     '#FF9E7D',  // coral
-    'Independiente':'#FC9FAD',  // rosa suave
-    'Paciente':     '#FFC107',  // ámbar
-    'Recomendados': '#6C757D',  // gris oscuro
-  };
-  // fallback al primary si no coincide
-  return colors[profile] ?? '#A78BFA';
-}
-
+  getProfileColor(profile: string): string {
+    const colors: Record<string, string> = {
+      Activo: '#A78BFA', // morado suave
+      Tranquilo: '#5DD5C0', // verde azulado
+      Cariñoso: '#FF9E7D', // coral
+      Independiente: '#FC9FAD', // rosa suave
+      Paciente: '#FFC107', // ámbar
+      Recomendados: '#6C757D', // gris oscuro
+    };
+    // fallback al primary si no coincide
+    return colors[profile] ?? '#A78BFA';
+  }
 
   /**
    * Navega a la página de detalles de la mascota.

@@ -44,7 +44,7 @@ export class AdopcionesService {
   private getAuthHeaders(token: string): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 
@@ -54,7 +54,9 @@ export class AdopcionesService {
    * @returns Un Observable de un array de objetos Adopcion.
    */
   getAllAdopciones(token: string): Observable<Adopcion[]> {
-    return this.http.get<Adopcion[]>(this.apiUrl, { headers: this.getAuthHeaders(token) });
+    return this.http.get<Adopcion[]>(this.apiUrl, {
+      headers: this.getAuthHeaders(token),
+    });
   }
 
   /**
@@ -63,7 +65,9 @@ export class AdopcionesService {
    * @returns Un Observable de un array de objetos Adopcion.
    */
   getMyAdopciones(token: string): Observable<Adopcion[]> {
-    return this.http.get<Adopcion[]>(`${this.apiUrl}/my`, { headers: this.getAuthHeaders(token) });
+    return this.http.get<Adopcion[]>(`${this.apiUrl}/my`, {
+      headers: this.getAuthHeaders(token),
+    });
   }
 
   /**
@@ -73,7 +77,9 @@ export class AdopcionesService {
    * @returns Un Observable de un objeto Adopcion.
    */
   getAdopcionById(id: number, token: string): Observable<Adopcion> {
-    return this.http.get<Adopcion>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders(token) });
+    return this.http.get<Adopcion>(`${this.apiUrl}/${id}`, {
+      headers: this.getAuthHeaders(token),
+    });
   }
 
   /**
@@ -83,8 +89,14 @@ export class AdopcionesService {
    * @param token El token JWT del usuario administrador.
    * @returns Un Observable del registro de adopción actualizado.
    */
-  updateAdopcion(id: number, adopcion: Partial<Adopcion>, token: string): Observable<Adopcion> {
-    return this.http.put<Adopcion>(`${this.apiUrl}/${id}`, adopcion, { headers: this.getAuthHeaders(token) });
+  updateAdopcion(
+    id: number,
+    adopcion: Partial<Adopcion>,
+    token: string
+  ): Observable<Adopcion> {
+    return this.http.put<Adopcion>(`${this.apiUrl}/${id}`, adopcion, {
+      headers: this.getAuthHeaders(token),
+    });
   }
 
   /**
@@ -94,6 +106,8 @@ export class AdopcionesService {
    * @returns Un Observable de cualquier tipo (para 204 No Content).
    */
   deleteAdopcion(id: number, token: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders(token) });
+    return this.http.delete(`${this.apiUrl}/${id}`, {
+      headers: this.getAuthHeaders(token),
+    });
   }
 }

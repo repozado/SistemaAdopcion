@@ -1,17 +1,17 @@
 /* IMPORTACIÓN DE FUENTE */
 /* IMPORTACIÓN DE FUENTE */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap");
 
 /* VARIABLES CSS CENTRALIZADAS */
 :host {
-  --primary: #A78BFA;
-  --secondary: #FCAFAF;
-  --accent: #5DD5C0;
-  --light: #FFF7EC;
-  --dark: #292F36;
-  --text: #5E5E5E;
-  --border: #E0E0E0;
-  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --primary: #a78bfa;
+  --secondary: #fcafaf;
+  --accent: #5dd5c0;
+  --light: #fff7ec;
+  --dark: #292f36;
+  --text: #5e5e5e;
+  --border: #e0e0e0;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   --radius: 12px;
   --transition: all 0.3s ease;
   display: block;
@@ -24,7 +24,8 @@
   padding: 0;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   overflow-x: hidden; /* Elimina scroll horizontal global */
@@ -45,7 +46,7 @@ html, body {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   height: 90vh; /* Cambiado de min-height a height fijo */
   width: 90vw; /* Ancho del viewport completo */
- /* Espacio superior e inferior para evitar corte de contenido */
+  /* Espacio superior e inferior para evitar corte de contenido */
 
   /* Centrado perfecto vertical y horizontal */
   display: flex;
@@ -59,12 +60,11 @@ html, body {
   /* SOLUCIÓN: Elimina cualquier margen o padding del body que pueda afectar */
   margin-left: calc(-50vw + 50%);
   width: 100vw;
-
 }
 
 /* Animación de fondo dinámico */
 .hero-section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -72,7 +72,11 @@ html, body {
   bottom: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent 70%);
+  background: radial-gradient(
+    circle at top left,
+    rgba(255, 255, 255, 0.05),
+    transparent 70%
+  );
   animation: float 6s ease-in-out infinite;
   z-index: 0;
 }
@@ -87,7 +91,6 @@ html, body {
   justify-content: center;
   z-index: 1;
 }
-
 
 /* === NAVBAR SOULPET - CENTRADA Y OPTIMIZADA === */
 .soulpet-navbar {
@@ -118,28 +121,24 @@ html, body {
 .Soulpet {
   font-size: 4rem; /* Reducido de 4rem para mejor proporción */
   font-weight: 900;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   color: white;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
   margin-bottom: 0px;
   animation: textGlow 2s ease-in-out infinite alternate;
-
 }
 
 .hero-content {
   width: 100%;
-  max-width: 960px;       /* evita que se expanda más de la cuenta */
-  padding: 0 20px;         /* espacio lateral para móviles */
+  max-width: 960px; /* evita que se expanda más de la cuenta */
+  padding: 0 20px; /* espacio lateral para móviles */
   display: flex;
   flex-direction: column;
-  align-items: center;     /* centra horizontalmente */
+  align-items: center; /* centra horizontalmente */
   justify-content: center; /* centra verticalmente dentro de .hero-wrapper */
   text-align: center;
   z-index: 2;
-
 }
-
-
 
 .hero-subtitle {
   color: #ffffff;
@@ -160,7 +159,8 @@ html, body {
 }
 
 /* === BOTONES HERO === */
-.btn-hero-primary, .btn-hero-secondary {
+.btn-hero-primary,
+.btn-hero-secondary {
   padding: 16px 32px;
   border-radius: 50px;
   font-weight: 600;
@@ -177,23 +177,23 @@ html, body {
 .btn-hero-primary {
   background: white;
   color: var(--primary);
-  box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
 }
 
 .btn-hero-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255,255,255,0.4);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.4);
 }
 
 .btn-hero-secondary {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   color: white;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
 }
 
 .btn-hero-secondary:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* === VALUE PROPOSITION - FONDO COMPLETO === */
@@ -247,7 +247,7 @@ html, body {
 
 .value-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .value-card-icon {
@@ -360,7 +360,7 @@ html, body {
 
 .pet-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .pet-image {
@@ -375,7 +375,7 @@ html, body {
 /* Estilos para la imagen de la mascota */
 .mascota-image {
   width: 100%;
-  height: 180px;     /* mismo alto que .mascota-header */
+  height: 180px; /* mismo alto que .mascota-header */
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -397,7 +397,6 @@ html, body {
   font-size: 4rem;
   opacity: 0.9;
 }
-
 
 /* Cuando hay imagen, ocultamos el icono */
 .pet-image.has-image i {
@@ -463,7 +462,8 @@ html, body {
   flex-wrap: wrap;
 }
 
-.btn-info, .btn-adopt {
+.btn-info,
+.btn-adopt {
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 0.9rem;
@@ -505,7 +505,7 @@ html, body {
   .pets-grid {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
-  
+
   .pet-image {
     height: 100px;
   }
@@ -515,12 +515,13 @@ html, body {
   .pets-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .pet-actions {
     flex-direction: column;
   }
-  
-  .btn-info, .btn-adopt {
+
+  .btn-info,
+  .btn-adopt {
     width: 100%;
     justify-content: center;
   }
@@ -598,17 +599,29 @@ html, body {
 
 /* === ANIMACIONES === */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes logoFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   50% {
@@ -618,15 +631,17 @@ html, body {
 
 @keyframes textGlow {
   0% {
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
   }
   100% {
-    text-shadow: 2px 2px 12px rgba(255,255,255,0.4), 0 0 20px rgba(255,255,255,0.2);
+    text-shadow: 2px 2px 12px rgba(255, 255, 255, 0.4),
+      0 0 20px rgba(255, 255, 255, 0.2);
   }
 }
 
 @keyframes containerPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -703,7 +718,8 @@ html, body {
     grid-template-columns: 1fr;
   }
 
-  .btn-hero-primary, .btn-hero-secondary {
+  .btn-hero-primary,
+  .btn-hero-secondary {
     padding: 14px 24px;
     font-size: 0.95rem;
   }

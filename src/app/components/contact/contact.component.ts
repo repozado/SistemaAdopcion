@@ -4,8 +4,9 @@ import { Component } from '@angular/core';
   selector: 'app-contact',
   standalone: false,
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css']
+  styleUrls: ['./contact.component.css'],
 })
+
 export class ContactComponent {
   // Datos del formulario (para two-way binding)
   contactForm = {
@@ -13,7 +14,7 @@ export class ContactComponent {
     email: '',
     phone: '',
     subject: '',
-    message: ''
+    message: '',
   };
 
   // Lista de asuntos para el select
@@ -23,7 +24,7 @@ export class ContactComponent {
     'Reportar problema',
     'Donaciones',
     'Voluntariado',
-    'Otro'
+    'Otro',
   ];
 
   // Método para enviar el formulario

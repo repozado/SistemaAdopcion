@@ -4,7 +4,7 @@
     <!-- Navbar personalizada con isotipo - COMPLETAMENTE CENTRADA -->
     <nav class="soulpet-navbar">
       <div class="navbar-container" routerLink="/home">
-        <img src="logosoulpet.png" alt="SoulPet Logo" class="logo">
+        <img src="logosoulpet.png" alt="SoulPet Logo" class="logo" />
         <span class="Soulpet">Soulpet</span>
       </div>
     </nav>
@@ -12,13 +12,17 @@
     <!-- Contenido hero centrado -->
     <div class="hero-content">
       <p class="hero-subtitle">
-        El primer sistema de matching emocional que conecta tu alma con la mascota perfecta
+        El primer sistema de matching emocional que conecta tu alma con la
+        mascota perfecta
       </p>
       <div class="hero-cta">
         <a (click)="scrollToSection('encuesta')" class="btn-hero-primary">
           <i class="fas fa-heart"></i> Encuentra tu Match
         </a>
-        <a (click)="scrollToSection('como-funciona')" class="btn-hero-secondary">
+        <a
+          (click)="scrollToSection('como-funciona')"
+          class="btn-hero-secondary"
+        >
           <i class="fas fa-play-circle"></i> Ver cómo funciona
         </a>
       </div>
@@ -31,18 +35,50 @@
   <div class="container">
     <div class="section-title">
       <h2>¿Por qué SoulPet es diferente?</h2>
-      <p>No solo conectamos personas con mascotas, creamos vínculos emocionales duraderos</p>
+      <p>
+        No solo conectamos personas con mascotas, creamos vínculos emocionales
+        duraderos
+      </p>
     </div>
 
     <div class="value-cards">
-      <div class="value-card" *ngFor="let valor of [
-        { icon: 'fa-brain', titulo: 'Inteligencia Emocional', desc: 'Analizamos tu personalidad y estilo de vida para encontrar el match ideal.' },
-        { icon: 'fa-shield-heart', titulo: 'Adopciones Exitosas', desc: '97% de éxito gracias a la compatibilidad emocional.' },
-        { icon: 'fa-hands-helping', titulo: 'Seguimiento Integral', desc: 'Acompañamiento post-adopción para ti y tu mascota.' },
-        { icon: 'fa-certificate', titulo: 'Proceso Certificado', desc: 'Evaluaciones veterinarias y de comportamiento incluidas.' },
-        { icon: 'fa-mobile-alt', titulo: 'Experiencia Digital', desc: 'Fácil, moderna, transparente y emocionante.' },
-        { icon: 'fa-heart-pulse', titulo: 'Bienestar Animal', desc: 'Trabajamos con refugios certificados.' }
-      ]">
+      <div
+        class="value-card"
+        *ngFor="
+          let valor of [
+            {
+              icon: 'fa-brain',
+              titulo: 'Inteligencia Emocional',
+              desc: 'Analizamos tu personalidad y estilo de vida para encontrar el match ideal.'
+            },
+            {
+              icon: 'fa-shield-heart',
+              titulo: 'Adopciones Exitosas',
+              desc: '97% de éxito gracias a la compatibilidad emocional.'
+            },
+            {
+              icon: 'fa-hands-helping',
+              titulo: 'Seguimiento Integral',
+              desc: 'Acompañamiento post-adopción para ti y tu mascota.'
+            },
+            {
+              icon: 'fa-certificate',
+              titulo: 'Proceso Certificado',
+              desc: 'Evaluaciones veterinarias y de comportamiento incluidas.'
+            },
+            {
+              icon: 'fa-mobile-alt',
+              titulo: 'Experiencia Digital',
+              desc: 'Fácil, moderna, transparente y emocionante.'
+            },
+            {
+              icon: 'fa-heart-pulse',
+              titulo: 'Bienestar Animal',
+              desc: 'Trabajamos con refugios certificados.'
+            }
+          ]
+        "
+      >
         <div class="value-card-icon">
           <i class="fas" [ngClass]="valor.icon"></i>
         </div>
@@ -62,12 +98,33 @@
     </div>
 
     <div class="steps-container">
-      <div class="step" *ngFor="let paso of [
-        { n: 1, t: 'Completa tu perfil emocional', d: 'Responde un cuestionario gratuito que analiza tu personalidad, experiencia y estilo de vida.' },
-        { n: 2, t: 'Nuestro algoritmo trabaja por ti', d: 'Usamos IA y psicología animal para identificar coincidencias reales.' },
-        { n: 3, t: 'Recibe tus matches personalizados', d: 'Te mostramos mascotas compatibles contigo, con explicaciones detalladas.' },
-        { n: 4, t: 'Conecta y adopta', d: 'Agenda un encuentro y completa la adopción con acompañamiento especializado.' }
-      ]">
+      <div
+        class="step"
+        *ngFor="
+          let paso of [
+            {
+              n: 1,
+              t: 'Completa tu perfil emocional',
+              d: 'Responde un cuestionario gratuito que analiza tu personalidad, experiencia y estilo de vida.'
+            },
+            {
+              n: 2,
+              t: 'Nuestro algoritmo trabaja por ti',
+              d: 'Usamos IA y psicología animal para identificar coincidencias reales.'
+            },
+            {
+              n: 3,
+              t: 'Recibe tus matches personalizados',
+              d: 'Te mostramos mascotas compatibles contigo, con explicaciones detalladas.'
+            },
+            {
+              n: 4,
+              t: 'Conecta y adopta',
+              d: 'Agenda un encuentro y completa la adopción con acompañamiento especializado.'
+            }
+          ]
+        "
+      >
         <div class="step-number">{{ paso.n }}</div>
         <div class="step-content">
           <h3>{{ paso.t }}</h3>
@@ -90,10 +147,16 @@
       <div class="pet-card" *ngFor="let mascota of mascotasDestacadas">
         <div class="pet-image">
           <ng-container *ngIf="mascota.imagen; else fallbackIcon">
-            <img [src]="'data:image/jpeg;base64,' + mascota.imagen" [alt]="mascota.nombre" />
+            <img
+              [src]="'data:image/jpeg;base64,' + mascota.imagen"
+              [alt]="mascota.nombre"
+            />
           </ng-container>
           <ng-template #fallbackIcon>
-            <i class="fas" [ngClass]="mascota.especie === 'Gato' ? 'fa-cat' : 'fa-dog'"></i>
+            <i
+              class="fas"
+              [ngClass]="mascota.especie === 'Gato' ? 'fa-cat' : 'fa-dog'"
+            ></i>
           </ng-template>
           <div class="pet-badge">{{ mascota.perfil_emocional }}</div>
         </div>
@@ -105,7 +168,7 @@
             <span>{{ mascota.especie }}</span>
           </div>
           <p class="pet-description">
-            {{ mascota.descripcion | slice:0:100 }}...
+            {{ mascota.descripcion | slice : 0 : 100 }}...
           </p>
           <div class="pet-actions">
             <a [routerLink]="['/mascota', mascota.id_mascota]" class="btn-info">
@@ -156,7 +219,10 @@
   <div class="cta-wrapper">
     <div class="cta-content">
       <h2>¿Listo para encontrar a tu alma gemela perruna?</h2>
-      <p>Comienza tu viaje hacia una adopción perfecta con nuestro cuestionario emocional gratuito</p>
+      <p>
+        Comienza tu viaje hacia una adopción perfecta con nuestro cuestionario
+        emocional gratuito
+      </p>
       <div class="hero-cta">
         <a routerLink="/cuestionario" class="btn-hero-primary">
           <i class="fas fa-clipboard-list"></i> Comenzar Encuesta Gratis
@@ -168,4 +234,3 @@
     </div>
   </div>
 </section>
-

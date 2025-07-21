@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service'; // Asume que tienes u
   selector: 'app-adopcion',
   standalone: false, // Este componente NO es standalone
   templateUrl: './adopcion.component.html',
-  styleUrls: ['./adopcion.component.css']
+  styleUrls: ['./adopcion.component.css'],
 })
 export class AdopcionComponent implements OnInit {
   // Inyección de servicios utilizando `inject`
@@ -65,7 +65,7 @@ export class AdopcionComponent implements OnInit {
         console.error('Error al cargar adopciones:', err);
         this.error = 'Error al cargar los registros de adopción.';
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -79,12 +79,15 @@ export class AdopcionComponent implements OnInit {
     }
 
     const lowerCaseSearchTerm = this.searchTerm.toLowerCase();
-    this.filteredAdopciones = this.adopciones.filter(adopcion => {
+    this.filteredAdopciones = this.adopciones.filter((adopcion) => {
       // Puedes ajustar los campos por los que quieres buscar
       return (
         adopcion.nombre_adoptante.toLowerCase().includes(lowerCaseSearchTerm) ||
-        adopcion.nombre_mascota_adoptada.toLowerCase().includes(lowerCaseSearchTerm) ||
-        (adopcion.observaciones && adopcion.observaciones.toLowerCase().includes(lowerCaseSearchTerm)) ||
+        adopcion.nombre_mascota_adoptada
+          .toLowerCase()
+          .includes(lowerCaseSearchTerm) ||
+        (adopcion.observaciones &&
+          adopcion.observaciones.toLowerCase().includes(lowerCaseSearchTerm)) ||
         adopcion.id_adopcion.toString().includes(lowerCaseSearchTerm) ||
         adopcion.id_solicitud.toString().includes(lowerCaseSearchTerm)
       );
@@ -110,10 +113,18 @@ export class AdopcionComponent implements OnInit {
     this.selectedAdopcion = { ...adopcion }; // Crea una copia para evitar modificar el objeto original directamente
     // Formatear las fechas a YYYY-MM-DD para input[type="date"]
     if (this.selectedAdopcion.fecha_adopcion) {
-      this.selectedAdopcion.fecha_adopcion = new Date(this.selectedAdopcion.fecha_adopcion).toISOString().split('T')[0];
+      this.selectedAdopcion.fecha_adopcion = new Date(
+        this.selectedAdopcion.fecha_adopcion
+      )
+        .toISOString()
+        .split('T')[0];
     }
     if (this.selectedAdopcion.fecha_entrega_prevista) {
-      this.selectedAdopcion.fecha_entrega_prevista = new Date(this.selectedAdopcion.fecha_entrega_prevista).toISOString().split('T')[0];
+      this.selectedAdopcion.fecha_entrega_prevista = new Date(
+        this.selectedAdopcion.fecha_entrega_prevista
+      )
+        .toISOString()
+        .split('T')[0];
     }
     this.editFormData = { ...this.selectedAdopcion }; // Inicializa el formulario con los datos de la adopción seleccionada
     this.isEditing = true; // Muestra el formulario de edición
@@ -140,22 +151,24 @@ export class AdopcionComponent implements OnInit {
       observaciones: this.editFormData.observaciones,
       entregado_por: this.editFormData.entregado_por,
       fecha_entrega_prevista: this.editFormData.fecha_entrega_prevista,
-      fecha_adopcion: this.editFormData.fecha_adopcion
+      fecha_adopcion: this.editFormData.fecha_adopcion,
     };
 
-    this.adopcionesService.updateAdopcion(this.selectedAdopcion.id_adopcion, updates, token).subscribe({
-      next: (updatedAdopcion) => {
-        console.log('Adopción actualizada con éxito:', updatedAdopcion);
-        this.isEditing = false; // Oculta el formulario de edición
-        this.selectedAdopcion = null; // Limpia el registro seleccionado
-        this.editFormData = {}; // Limpia los datos del formulario
-        this.loadAdopciones(); // Recarga la lista para mostrar los cambios
-      },
-      error: (err) => {
-        console.error('Error al guardar cambios de adopción:', err);
-        this.error = 'Error al guardar los cambios del registro de adopción.';
-      }
-    });
+    this.adopcionesService
+      .updateAdopcion(this.selectedAdopcion.id_adopcion, updates, token)
+      .subscribe({
+        next: (updatedAdopcion) => {
+          console.log('Adopción actualizada con éxito:', updatedAdopcion);
+          this.isEditing = false; // Oculta el formulario de edición
+          this.selectedAdopcion = null; // Limpia el registro seleccionado
+          this.editFormData = {}; // Limpia los datos del formulario
+          this.loadAdopciones(); // Recarga la lista para mostrar los cambios
+        },
+        error: (err) => {
+          console.error('Error al guardar cambios de adopción:', err);
+          this.error = 'Error al guardar los cambios del registro de adopción.';
+        },
+      });
   }
 
   /**
@@ -177,7 +190,11 @@ export class AdopcionComponent implements OnInit {
       this.error = 'No tienes permisos para eliminar registros de adopción.';
       return;
     }
-    if (confirm('¿Estás seguro de que quieres eliminar este registro de adopción? Esta acción es irreversible.')) {
+    if (
+      confirm(
+        '¿Estás seguro de que quieres eliminar este registro de adopción? Esta acción es irreversible.'
+      )
+    ) {
       const token = this.authService.getToken();
       if (!token) {
         this.error = 'No autenticado para eliminar.';
@@ -191,7 +208,7 @@ export class AdopcionComponent implements OnInit {
         error: (err) => {
           console.error('Error al eliminar adopción:', err);
           this.error = 'Error al eliminar el registro de adopción.';
-        }
+        },
       });
     }
   }

@@ -31,7 +31,12 @@
 
       <div class="status-filter-container">
         <label for="statusFilter">Filtrar por Estado:</label>
-        <select id="statusFilter" [(ngModel)]="selectedStatusFilter" (change)="onStatusFilterChange()" class="status-select">
+        <select
+          id="statusFilter"
+          [(ngModel)]="selectedStatusFilter"
+          (change)="onStatusFilterChange()"
+          class="status-select"
+        >
           <option value="todas">Todas</option>
           <option value="en_revision">En Revisión</option>
           <option value="aceptada">Aceptada</option>
@@ -44,17 +49,36 @@
     <div class="solicitudes-grid">
       <div *ngFor="let solicitud of filteredSolicitudes" class="solicitud-card">
         <div class="card-header">
-          <span class="solicitud-id">Solicitud #{{ solicitud.id_solicitud }}</span>
-          <span class="status-badge" [ngClass]="getStatusClass(solicitud.estado_solicitud)">
+          <span class="solicitud-id"
+            >Solicitud #{{ solicitud.id_solicitud }}</span
+          >
+          <span
+            class="status-badge"
+            [ngClass]="getStatusClass(solicitud.estado_solicitud)"
+          >
             {{ solicitud.estado_solicitud | uppercase }}
           </span>
         </div>
         <div class="card-body">
-          <p><strong>Usuario:</strong> {{ solicitud.nombre_usuario }} (ID: {{ solicitud.id_usuario }})</p>
-          <p><strong>Mascota:</strong> {{ solicitud.nombre_mascota }} (ID: {{ solicitud.id_mascota }})</p>
-          <p><strong>Fecha Solicitud:</strong> {{ solicitud.fecha_solicitud | date:'shortDate' }}</p>
-          <p *ngIf="solicitud.fecha_revision"><strong>Fecha Revisión:</strong> {{ solicitud.fecha_revision | date:'shortDate' }}</p>
-          <p *ngIf="solicitud.motivo_rechazo"><strong>Motivo Rechazo:</strong> {{ solicitud.motivo_rechazo }}</p>
+          <p>
+            <strong>Usuario:</strong> {{ solicitud.nombre_usuario }} (ID:
+            {{ solicitud.id_usuario }})
+          </p>
+          <p>
+            <strong>Mascota:</strong> {{ solicitud.nombre_mascota }} (ID:
+            {{ solicitud.id_mascota }})
+          </p>
+          <p>
+            <strong>Fecha Solicitud:</strong>
+            {{ solicitud.fecha_solicitud | date : "shortDate" }}
+          </p>
+          <p *ngIf="solicitud.fecha_revision">
+            <strong>Fecha Revisión:</strong>
+            {{ solicitud.fecha_revision | date : "shortDate" }}
+          </p>
+          <p *ngIf="solicitud.motivo_rechazo">
+            <strong>Motivo Rechazo:</strong> {{ solicitud.motivo_rechazo }}
+          </p>
         </div>
         <div class="card-actions">
           <button
@@ -72,10 +96,16 @@
             <i class="fas fa-times-circle"></i> Rechazar
           </button>
           <!-- NUEVO BOTÓN: Ver Adoptante -->
-          <button class="btn-action btn-view-applicant" (click)="viewApplicantInfo(solicitud)">
+          <button
+            class="btn-action btn-view-applicant"
+            (click)="viewApplicantInfo(solicitud)"
+          >
             <i class="fas fa-user"></i> Ver Adoptante
           </button>
-          <button class="btn-action btn-delete" (click)="deleteSolicitud(solicitud.id_solicitud)">
+          <button
+            class="btn-action btn-delete"
+            (click)="deleteSolicitud(solicitud.id_solicitud)"
+          >
             <i class="fas fa-trash-alt"></i> Eliminar
           </button>
         </div>
@@ -91,21 +121,35 @@
   <div class="custom-modal-overlay" *ngIf="showRejectModal">
     <div class="custom-modal-content">
       <div class="modal-header">
-        <h3>Rechazar Solicitud #{{ currentSolicitudToReject?.id_solicitud }}</h3>
-        <button class="close-button" (click)="closeRejectModal()">&times;</button>
+        <h3>
+          Rechazar Solicitud #{{ currentSolicitudToReject?.id_solicitud }}
+        </h3>
+        <button class="close-button" (click)="closeRejectModal()">
+          &times;
+        </button>
       </div>
       <div class="modal-body">
-        <p>Por favor, especifica el motivo del rechazo para la solicitud de {{ currentSolicitudToReject?.nombre_usuario }} para {{ currentSolicitudToReject?.nombre_mascota }}:</p>
+        <p>
+          Por favor, especifica el motivo del rechazo para la solicitud de
+          {{ currentSolicitudToReject?.nombre_usuario }} para
+          {{ currentSolicitudToReject?.nombre_mascota }}:
+        </p>
         <textarea
           [(ngModel)]="motivoRechazo"
           placeholder="Escribe el motivo del rechazo aquí..."
           rows="4"
         ></textarea>
-        <div *ngIf="error && showRejectModal" class="modal-error-message">{{ error }}</div>
+        <div *ngIf="error && showRejectModal" class="modal-error-message">
+          {{ error }}
+        </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-cancel" (click)="closeRejectModal()">Cancelar</button>
-        <button class="btn-confirm" (click)="confirmReject()">Confirmar Rechazo</button>
+        <button class="btn-cancel" (click)="closeRejectModal()">
+          Cancelar
+        </button>
+        <button class="btn-confirm" (click)="confirmReject()">
+          Confirmar Rechazo
+        </button>
       </div>
     </div>
   </div>
@@ -115,38 +159,73 @@
     <div class="custom-modal-content">
       <div class="modal-header">
         <h3>Información del Adoptante</h3>
-        <button class="close-button" (click)="closeApplicantInfoModal()">&times;</button>
+        <button class="close-button" (click)="closeApplicantInfoModal()">
+          &times;
+        </button>
       </div>
       <div class="modal-body">
         <div *ngIf="isFetchingApplicantDetails" class="loading-message-small">
-          <p><i class="fas fa-spinner fa-spin"></i> Cargando detalles del usuario...</p>
+          <p>
+            <i class="fas fa-spinner fa-spin"></i> Cargando detalles del
+            usuario...
+          </p>
         </div>
         <div *ngIf="applicantDetailsError" class="error-message-small">
-          <p><i class="fas fa-exclamation-triangle"></i> {{ applicantDetailsError }}</p>
+          <p>
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ applicantDetailsError }}
+          </p>
         </div>
 
-        <ng-container *ngIf="currentApplicantInfo && !isFetchingApplicantDetails && !applicantDetailsError">
-          <p><strong>Nombre:</strong> {{ currentApplicantInfo.nombre_usuario }}</p>
-          <p><strong>ID de Usuario:</strong> {{ currentApplicantInfo.id_usuario }}</p>
+        <ng-container
+          *ngIf="
+            currentApplicantInfo &&
+            !isFetchingApplicantDetails &&
+            !applicantDetailsError
+          "
+        >
+          <p>
+            <strong>Nombre:</strong> {{ currentApplicantInfo.nombre_usuario }}
+          </p>
+          <p>
+            <strong>ID de Usuario:</strong>
+            {{ currentApplicantInfo.id_usuario }}
+          </p>
           <ng-container *ngIf="fullApplicantDetails">
             <p><strong>Email:</strong> {{ fullApplicantDetails.email }}</p>
-            <p *ngIf="fullApplicantDetails.telefono"><strong>Teléfono:</strong> {{ fullApplicantDetails.telefono }}</p>
-            <p *ngIf="fullApplicantDetails.direccion"><strong>Dirección:</strong> {{ fullApplicantDetails.direccion }}</p>
-            <p><strong>Rol:</strong> {{ fullApplicantDetails.role | uppercase }}</p>
-            <p *ngIf="fullApplicantDetails.created_at"><strong>Miembro desde:</strong> {{ fullApplicantDetails.created_at | date:'shortDate' }}</p>
+            <p *ngIf="fullApplicantDetails.telefono">
+              <strong>Teléfono:</strong> {{ fullApplicantDetails.telefono }}
+            </p>
+            <p *ngIf="fullApplicantDetails.direccion">
+              <strong>Dirección:</strong> {{ fullApplicantDetails.direccion }}
+            </p>
+            <p>
+              <strong>Rol:</strong> {{ fullApplicantDetails.role | uppercase }}
+            </p>
+            <p *ngIf="fullApplicantDetails.created_at">
+              <strong>Miembro desde:</strong>
+              {{ fullApplicantDetails.created_at | date : "shortDate" }}
+            </p>
           </ng-container>
           <ng-container *ngIf="!fullApplicantDetails">
             <p>No se pudieron cargar los detalles completos del adoptante.</p>
           </ng-container>
         </ng-container>
-        <ng-container *ngIf="!currentApplicantInfo && !isFetchingApplicantDetails && !applicantDetailsError">
+        <ng-container
+          *ngIf="
+            !currentApplicantInfo &&
+            !isFetchingApplicantDetails &&
+            !applicantDetailsError
+          "
+        >
           <p>No se pudo cargar la información del adoptante.</p>
         </ng-container>
       </div>
       <div class="modal-footer">
-        <button class="btn-cancel" (click)="closeApplicantInfoModal()">Cerrar</button>
+        <button class="btn-cancel" (click)="closeApplicantInfoModal()">
+          Cerrar
+        </button>
       </div>
     </div>
   </div>
 </div>
-

@@ -302,9 +302,9 @@
                 class="image-preview"
                 *ngFor="let img of existingImages; let i = index"
               >
-                <button 
-                  type="button" 
-                  class="remove-btn" 
+                <button
+                  type="button"
+                  class="remove-btn"
                   (click)="removeExistingImage(i); $event.stopPropagation()"
                 >
                   ✕
@@ -316,7 +316,11 @@
                 class="image-preview"
                 *ngFor="let img of newPreviews; let j = index"
               >
-                <button type="button" class="remove-btn" (click)="removeNewImage(j); $event.stopPropagation()">
+                <button
+                  type="button"
+                  class="remove-btn"
+                  (click)="removeNewImage(j); $event.stopPropagation()"
+                >
                   ✕
                 </button>
                 <img [src]="img.data" />

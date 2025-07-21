@@ -221,7 +221,7 @@ export class CuestionarioComponent implements OnInit {
       },
     });
   }
-  
+
   anteriorPregunta(): void {
     if (this.currentQuestionId > 1) {
       this.currentQuestionId--;

@@ -32,13 +32,16 @@
   <!-- Contenido principal si no hay carga ni error -->
   <ng-container *ngIf="!isLoading && !error">
     <div class="mascotas-grid">
-      <div *ngFor="let adopcion of filteredAdopciones" class="mascota-card"> <!-- ¡Aquí se usa filteredAdopciones! -->
+      <div *ngFor="let adopcion of filteredAdopciones" class="mascota-card">
+        <!-- ¡Aquí se usa filteredAdopciones! -->
         <div class="mascota-header">
           <div class="mascota-image">
             <!-- Condición para mostrar la imagen o el fallback icon -->
             <ng-container *ngIf="adopcion.imagen_mascota; else fallbackIcon">
-              <img [src]="'data:image/jpeg;base64,' + adopcion.imagen_mascota"
-                   [alt]="adopcion.nombre_mascota_adoptada" />
+              <img
+                [src]="'data:image/jpeg;base64,' + adopcion.imagen_mascota"
+                [alt]="adopcion.nombre_mascota_adoptada"
+              />
             </ng-container>
             <ng-template #fallbackIcon>
               <i class="fas fa-paw"></i>
@@ -51,13 +54,23 @@
           <h3>{{ adopcion.nombre_mascota_adoptada }}</h3>
 
           <div class="mascota-meta">
-            <span><i class="fas fa-calendar-alt"></i> Fecha de Adopción: {{ adopcion.fecha_adopcion | date:'shortDate' }}</span>
-            <span *ngIf="adopcion.fecha_entrega_prevista"><i class="fas fa-calendar-check"></i> Entrega Prevista: {{ adopcion.fecha_entrega_prevista | date:'shortDate' }}</span>
-            <span *ngIf="adopcion.nombre_entregado_por"><i class="fas fa-user-tie"></i> Entregado Por: {{ adopcion.nombre_entregado_por }}</span>
+            <span
+              ><i class="fas fa-calendar-alt"></i> Fecha de Adopción:
+              {{ adopcion.fecha_adopcion | date : "shortDate" }}</span
+            >
+            <span *ngIf="adopcion.fecha_entrega_prevista"
+              ><i class="fas fa-calendar-check"></i> Entrega Prevista:
+              {{ adopcion.fecha_entrega_prevista | date : "shortDate" }}</span
+            >
+            <span *ngIf="adopcion.nombre_entregado_por"
+              ><i class="fas fa-user-tie"></i> Entregado Por:
+              {{ adopcion.nombre_entregado_por }}</span
+            >
           </div>
 
           <p class="mascota-description">
-            Observaciones: {{ adopcion.observaciones || 'No hay observaciones adicionales.' }}
+            Observaciones:
+            {{ adopcion.observaciones || "No hay observaciones adicionales." }}
           </p>
           <p class="mascota-description">
             ID Solicitud: {{ adopcion.id_solicitud }}
@@ -66,9 +79,10 @@
       </div>
 
       <div *ngIf="filteredAdopciones.length === 0" class="no-data-message">
-        <p>Aún no tienes adopciones registradas que coincidan con la búsqueda.</p>
+        <p>
+          Aún no tienes adopciones registradas que coincidan con la búsqueda.
+        </p>
       </div>
     </div>
   </ng-container>
 </div>
-

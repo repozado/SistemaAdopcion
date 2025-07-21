@@ -2,21 +2,21 @@
 
 /* Variables CSS - Reutilizadas de tu estilo general */
 :host {
-  --primary: #A78BFA;
-  --secondary: #FCAFAF;
-  --accent: #5DD5C0;
-  --light: #FFF7EC;
-  --dark: #292F36;
-  --text: #5E5E5E;
+  --primary: #a78bfa;
+  --secondary: #fcafaf;
+  --accent: #5dd5c0;
+  --light: #fff7ec;
+  --dark: #292f36;
+  --text: #5e5e5e;
   --radius: 12px;
-  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .mis-adopciones-container {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Arial', sans-serif; /* Asegura una fuente base */
+  font-family: "Arial", sans-serif; /* Asegura una fuente base */
 }
 
 h2 {
@@ -26,7 +26,9 @@ h2 {
 }
 
 /* Mensajes de estado (carga, error, sin datos) */
-.loading-message, .error-message, .no-data-message {
+.loading-message,
+.error-message,
+.no-data-message {
   text-align: center;
   padding: 20px;
   border-radius: var(--radius);
@@ -34,7 +36,7 @@ h2 {
   font-size: 1.1rem;
   color: var(--text);
   background-color: var(--light);
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .error-message {
@@ -78,7 +80,7 @@ h2 {
 
 .mascota-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .mascota-header {
@@ -88,7 +90,9 @@ h2 {
   color: white;
   border-top-left-radius: var(--radius);
   border-top-right-radius: var(--radius);
-  background-color: var(--primary); /* Color de fondo para el header de la tarjeta de adopción */
+  background-color: var(
+    --primary
+  ); /* Color de fondo para el header de la tarjeta de adopción */
 }
 
 .mascota-badge {
@@ -231,5 +235,3 @@ h2 {
     grid-template-columns: 1fr;
   }
 }
-
-

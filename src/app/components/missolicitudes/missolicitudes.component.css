@@ -2,15 +2,15 @@
 
 /* Variables CSS - Reutilizadas de tu estilo general */
 :host {
-  --primary: #A78BFA;
-  --secondary: #FCAFAF;
-  --accent: #5DD5C0;
-  --light: #FFF7EC;
-  --dark: #292F36;
-  --text: #5E5E5E;
-  --border: #E0E0E0;
+  --primary: #a78bfa;
+  --secondary: #fcafaf;
+  --accent: #5dd5c0;
+  --light: #fff7ec;
+  --dark: #292f36;
+  --text: #5e5e5e;
+  --border: #e0e0e0;
   --radius: 12px;
-  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   --transition: all 0.3s ease;
 }
 
@@ -18,7 +18,7 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 h2 {
@@ -73,7 +73,9 @@ h2 {
 }
 
 /* Mensajes de estado (carga, error, sin datos) */
-.loading-message, .error-message, .no-data-message {
+.loading-message,
+.error-message,
+.no-data-message {
   text-align: center;
   padding: 20px;
   border-radius: var(--radius);
@@ -81,7 +83,7 @@ h2 {
   font-size: 1.1rem;
   color: var(--text);
   background-color: var(--light);
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -135,7 +137,7 @@ h2 {
 
 .solicitud-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* --- CONTENEDOR PRINCIPAL DE IMAGEN Y TEXTO --- */
@@ -189,7 +191,7 @@ h2 {
   position: absolute;
   top: 15px;
   left: 15px;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
   color: white;
   padding: 5px 10px;
   border-radius: 10px;
@@ -385,7 +387,8 @@ h2 {
   margin-top: 15px;
 }
 
-.btn-confirm, .btn-cancel {
+.btn-confirm,
+.btn-cancel {
   padding: 10px 20px;
   border: none;
   border-radius: var(--radius);
@@ -417,23 +420,35 @@ h2 {
 
 /* Animaciones para el modal */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideIn {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* --- Responsive --- */
-@media (max-width: 992px) { /* Ajuste para que en pantallas más pequeñas de 992px sea una columna */
+@media (max-width: 992px) {
+  /* Ajuste para que en pantallas más pequeñas de 992px sea una columna */
   .solicitudes-grid {
     grid-template-columns: 1fr;
   }
 }
 
-@media (min-width: 993px) { /* Para pantallas más grandes, dos columnas */
+@media (min-width: 993px) {
+  /* Para pantallas más grandes, dos columnas */
   .solicitudes-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -482,11 +497,9 @@ h2 {
     flex-direction: column;
     gap: 8px;
   }
-  .btn-confirm, .btn-cancel {
+  .btn-confirm,
+  .btn-cancel {
     width: 100%;
     justify-content: center;
   }
 }
-
-
-

@@ -3,16 +3,20 @@
     <i class="fas fa-question-circle"></i>
     <h3>Preguntas Frecuentes (FAQ)</h3>
   </div>
-  
+
   <div class="faq-list">
-    <div 
-      *ngFor="let item of faqItems; let i = index" 
-      class="faq-item" 
+    <div
+      *ngFor="let item of faqItems; let i = index"
+      class="faq-item"
       [class.active]="item.isOpen"
     >
       <div class="faq-question" (click)="toggleItem(i)">
         <h4>{{ item.question }}</h4>
-        <i class="fas" [class.fa-chevron-down]="!item.isOpen" [class.fa-chevron-up]="item.isOpen"></i>
+        <i
+          class="fas"
+          [class.fa-chevron-down]="!item.isOpen"
+          [class.fa-chevron-up]="item.isOpen"
+        ></i>
       </div>
       <div class="faq-answer" [class.open]="item.isOpen">
         <p>{{ item.answer }}</p>

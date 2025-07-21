@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-encuesta',
   standalone: false,
   templateUrl: './encuesta.component.html',
-  styleUrl: './encuesta.component.css'
+  styleUrl: './encuesta.component.css',
 })
 export class EncuestaComponent implements OnInit {
   resultado: any = null;
@@ -22,7 +22,7 @@ export class EncuestaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-            this.userEmail = this.auth.getUserEmail();
+    this.userEmail = this.auth.getUserEmail();
     this.encuestaService.obtenerMiResultado().subscribe({
       next: (data) => {
         this.resultado = data;
@@ -32,7 +32,7 @@ export class EncuestaComponent implements OnInit {
         this.error = 'No se pudo obtener el resultado emocional.';
         this.cargando = false;
         console.error(err);
-      }
+      },
     });
   }
 }

@@ -3,7 +3,7 @@
   padding: 30px;
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .card-header {
@@ -15,7 +15,7 @@
 
 .card-header i {
   font-size: 1.8rem;
-  color: #A78BFA;
+  color: #a78bfa;
 }
 
 /* Grid de contacto */
@@ -53,13 +53,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #A78BFA;
+  color: #a78bfa;
   flex-shrink: 0;
 }
 
 .info-content h4 {
   margin: 0 0 5px 0;
-  color: #292F36;
+  color: #292f36;
 }
 
 .info-content p {
@@ -79,12 +79,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #5E5E5E;
+  color: #5e5e5e;
   transition: all 0.3s ease;
 }
 
 .social-links a:hover {
-  background-color: #A78BFA;
+  background-color: #a78bfa;
   color: white;
 }
 
@@ -92,12 +92,12 @@
   background-color: white;
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .contact-form h3 {
   margin-top: 0;
-  color: #292F36;
+  color: #292f36;
 }
 
 .form-group {
@@ -108,20 +108,20 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #292F36;
+  color: #292f36;
 }
 
 .form-control {
   width: 100%;
   padding: 12px 15px;
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 .form-control:focus {
-  border-color: #A78BFA;
+  border-color: #a78bfa;
   outline: none;
   box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
 }
@@ -136,7 +136,7 @@
 }
 
 .btn-primary {
-  background-color: #A78BFA;
+  background-color: #a78bfa;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -148,7 +148,7 @@
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .map-section {
@@ -161,17 +161,16 @@
 
 .map-placeholder {
   height: 300px;
-  background-color: #FFF7EC;
+  background-color: #fff7ec;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #A78BFA;
+  color: #a78bfa;
 }
 
 .map-placeholder i {
   font-size: 3rem;
   margin-bottom: 15px;
 }
-

@@ -1,7 +1,10 @@
 // frontend/src/app/components/solicitudes/solicitudes.component.ts
 
 import { Component, OnInit, inject } from '@angular/core';
-import { SolicitudesService, Solicitud } from '../../services/solicitudes.service';
+import {
+  SolicitudesService,
+  Solicitud,
+} from '../../services/solicitudes.service';
 import { AuthService } from '../../services/auth.service';
 import { UsersService, Usuario } from '../../services/users.service';
 import { EncuestaService } from '../../services/encuesta.service'; // ¡NUEVO! Importa el servicio de encuestas
@@ -10,7 +13,7 @@ import { EncuestaService } from '../../services/encuesta.service'; // ¡NUEVO! I
   selector: 'app-solicitudes',
   standalone: false,
   templateUrl: './solicitudes.component.html',
-  styleUrls: ['./solicitudes.component.css']
+  styleUrls: ['./solicitudes.component.css'],
 })
 export class SolicitudesComponent implements OnInit {
   private solicitudesService = inject(SolicitudesService);
@@ -52,7 +55,8 @@ export class SolicitudesComponent implements OnInit {
     const token = this.authService.getToken();
 
     if (!token) {
-      this.error = 'No autenticado. Por favor, inicia sesión como administrador.';
+      this.error =
+        'No autenticado. Por favor, inicia sesión como administrador.';
       this.isLoading = false;
       return;
     }
@@ -73,7 +77,7 @@ export class SolicitudesComponent implements OnInit {
         console.error('Error al cargar solicitudes:', err);
         this.error = 'Error al cargar las solicitudes de adopción.';
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -82,20 +86,29 @@ export class SolicitudesComponent implements OnInit {
 
     if (this.searchTerm) {
       const lowerCaseSearchTerm = this.searchTerm.toLowerCase();
-      tempFiltered = tempFiltered.filter(solicitud => {
+      tempFiltered = tempFiltered.filter((solicitud) => {
         return (
-          solicitud.nombre_usuario.toLowerCase().includes(lowerCaseSearchTerm) ||
-          solicitud.nombre_mascota.toLowerCase().includes(lowerCaseSearchTerm) ||
-          solicitud.estado_solicitud.toLowerCase().includes(lowerCaseSearchTerm) ||
+          solicitud.nombre_usuario
+            .toLowerCase()
+            .includes(lowerCaseSearchTerm) ||
+          solicitud.nombre_mascota
+            .toLowerCase()
+            .includes(lowerCaseSearchTerm) ||
+          solicitud.estado_solicitud
+            .toLowerCase()
+            .includes(lowerCaseSearchTerm) ||
           solicitud.id_solicitud.toString().includes(lowerCaseSearchTerm) ||
-          (solicitud.motivo_rechazo && solicitud.motivo_rechazo.toLowerCase().includes(lowerCaseSearchTerm))
+          (solicitud.motivo_rechazo &&
+            solicitud.motivo_rechazo
+              .toLowerCase()
+              .includes(lowerCaseSearchTerm))
         );
       });
     }
 
     if (this.selectedStatusFilter !== 'todas') {
-      tempFiltered = tempFiltered.filter(solicitud =>
-        solicitud.estado_solicitud === this.selectedStatusFilter
+      tempFiltered = tempFiltered.filter(
+        (solicitud) => solicitud.estado_solicitud === this.selectedStatusFilter
       );
     }
 
@@ -134,21 +147,23 @@ export class SolicitudesComponent implements OnInit {
       return;
     }
 
-    this.solicitudesService.updateSolicitudStatus(
-      this.currentSolicitudToReject.id_solicitud,
-      'rechazada',
-      this.motivoRechazo,
-      token
-    ).subscribe({
-      next: () => {
-        this.closeRejectModal();
-        this.loadSolicitudes();
-      },
-      error: (err) => {
-        console.error('Error al rechazar solicitud:', err);
-        this.error = 'Error al rechazar la solicitud.';
-      }
-    });
+    this.solicitudesService
+      .updateSolicitudStatus(
+        this.currentSolicitudToReject.id_solicitud,
+        'rechazada',
+        this.motivoRechazo,
+        token
+      )
+      .subscribe({
+        next: () => {
+          this.closeRejectModal();
+          this.loadSolicitudes();
+        },
+        error: (err) => {
+          console.error('Error al rechazar solicitud:', err);
+          this.error = 'Error al rechazar la solicitud.';
+        },
+      });
   }
 
   acceptSolicitud(solicitud: Solicitud): void {
@@ -156,26 +171,27 @@ export class SolicitudesComponent implements OnInit {
       this.error = 'No tienes permisos para aceptar solicitudes.';
       return;
     }
-    if (confirm(`¿Estás seguro de aceptar la solicitud de ${solicitud.nombre_usuario} para ${solicitud.nombre_mascota}?`)) {
+    if (
+      confirm(
+        `¿Estás seguro de aceptar la solicitud de ${solicitud.nombre_usuario} para ${solicitud.nombre_mascota}?`
+      )
+    ) {
       const token = this.authService.getToken();
       if (!token) {
         this.error = 'No autenticado para aceptar la solicitud.';
         return;
       }
-      this.solicitudesService.updateSolicitudStatus(
-        solicitud.id_solicitud,
-        'aceptada',
-        null,
-        token
-      ).subscribe({
-        next: () => {
-          this.loadSolicitudes();
-        },
-        error: (err) => {
-          console.error('Error al aceptar solicitud:', err);
-          this.error = 'Error al aceptar la solicitud.';
-        }
-      });
+      this.solicitudesService
+        .updateSolicitudStatus(solicitud.id_solicitud, 'aceptada', null, token)
+        .subscribe({
+          next: () => {
+            this.loadSolicitudes();
+          },
+          error: (err) => {
+            console.error('Error al aceptar solicitud:', err);
+            this.error = 'Error al aceptar la solicitud.';
+          },
+        });
     }
   }
 
@@ -184,7 +200,11 @@ export class SolicitudesComponent implements OnInit {
       this.error = 'No tienes permisos para eliminar solicitudes.';
       return;
     }
-    if (confirm('¿Estás seguro de que quieres eliminar esta solicitud? Esta acción es irreversible.')) {
+    if (
+      confirm(
+        '¿Estás seguro de que quieres eliminar esta solicitud? Esta acción es irreversible.'
+      )
+    ) {
       const token = this.authService.getToken();
       if (!token) {
         this.error = 'No autenticado para eliminar.';
@@ -197,7 +217,7 @@ export class SolicitudesComponent implements OnInit {
         error: (err) => {
           console.error('Error al eliminar solicitud:', err);
           this.error = 'Error al eliminar la solicitud.';
-        }
+        },
       });
     }
   }
@@ -233,9 +253,11 @@ export class SolicitudesComponent implements OnInit {
     const token = this.authService.getToken();
 
     if (!token) {
-      this.applicantDetailsError = 'No autenticado para ver los detalles del usuario.';
+      this.applicantDetailsError =
+        'No autenticado para ver los detalles del usuario.';
       this.isFetchingApplicantDetails = false;
-      this.surveyResultError = 'No autenticado para ver el resultado de la encuesta.';
+      this.surveyResultError =
+        'No autenticado para ver el resultado de la encuesta.';
       this.isFetchingSurveyResult = false;
       return;
     }
@@ -248,23 +270,27 @@ export class SolicitudesComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al obtener detalles del usuario:', err);
-        this.applicantDetailsError = 'No se pudieron cargar los detalles completos del adoptante.';
+        this.applicantDetailsError =
+          'No se pudieron cargar los detalles completos del adoptante.';
         this.isFetchingApplicantDetails = false;
-      }
+      },
     });
 
     // Cargar resultado de la encuesta del usuario
-    this.encuestaService.obtenerResultadoPorUsuarioId(solicitud.id_usuario, token).subscribe({
-      next: (surveyResult) => {
-        this.applicantSurveyResult = surveyResult;
-        this.isFetchingSurveyResult = false;
-      },
-      error: (err) => {
-        console.error('Error al obtener resultado de la encuesta:', err);
-        this.surveyResultError = 'No se pudo cargar el resultado de la encuesta.';
-        this.isFetchingSurveyResult = false;
-      }
-    });
+    this.encuestaService
+      .obtenerResultadoPorUsuarioId(solicitud.id_usuario, token)
+      .subscribe({
+        next: (surveyResult) => {
+          this.applicantSurveyResult = surveyResult;
+          this.isFetchingSurveyResult = false;
+        },
+        error: (err) => {
+          console.error('Error al obtener resultado de la encuesta:', err);
+          this.surveyResultError =
+            'No se pudo cargar el resultado de la encuesta.';
+          this.isFetchingSurveyResult = false;
+        },
+      });
   }
 
   /**

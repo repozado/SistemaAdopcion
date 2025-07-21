@@ -5,10 +5,19 @@
 
   <!-- 🔍 BARRA DE BÚSQUEDA -->
   <div class="filtro-container">
-    <input type="text" class="form-control buscador-input" placeholder="Buscar mascotas por nombre, especie, lugar..."
-      [(ngModel)]="searchText" (input)="applyFilters()" />
+    <input
+      type="text"
+      class="form-control buscador-input"
+      placeholder="Buscar mascotas por nombre, especie, lugar..."
+      [(ngModel)]="searchText"
+      (input)="applyFilters()"
+    />
 
-    <select [(ngModel)]="selectedEmotionalProfile" (change)="applyFilters()" class="combo-emocional estilizado">
+    <select
+      [(ngModel)]="selectedEmotionalProfile"
+      (change)="applyFilters()"
+      class="combo-emocional estilizado"
+    >
       <option value="">Todos los perfiles</option>
       <option value="Activo">Activo</option>
       <option value="Tranquilo">Tranquilo</option>
@@ -34,19 +43,35 @@
     <button (click)="loadMascotas()">Reintentar</button>
   </div>
 
-  <div *ngIf="!isLoading && !error && filteredMascotas.length === 0" class="no-results-message">
+  <div
+    *ngIf="!isLoading && !error && filteredMascotas.length === 0"
+    class="no-results-message"
+  >
     <p>No se encontraron mascotas que coincidan con tu búsqueda y filtros.</p>
-    <p *ngIf="mascotas.length === 0">Actualmente no hay mascotas registradas en el sistema.</p>
+    <p *ngIf="mascotas.length === 0">
+      Actualmente no hay mascotas registradas en el sistema.
+    </p>
   </div>
 
   <div class="mascotas-grid">
-    <div class="mascota-card" *ngFor="let mascota of filteredMascotas; let i = index" (click)="verDetalle(mascota)">
-      <div class="mascota-header" 
-      [style.backgroundColor]="getProfileColor(mascota.perfil_emocional)"
-      >
-        <div class="mascota-badge" 
+    <div
+      class="mascota-card"
+      *ngFor="let mascota of filteredMascotas; let i = index"
+      (click)="verDetalle(mascota)"
+    >
+      <div
+        class="mascota-header"
         [style.backgroundColor]="getProfileColor(mascota.perfil_emocional)"
-        [style.color]="getProfileColor(mascota.perfil_emocional).toLowerCase() === '#ffc107' ? '#000' : '#fff'"
+      >
+        <div
+          class="mascota-badge"
+          [style.backgroundColor]="getProfileColor(mascota.perfil_emocional)"
+          [style.color]="
+            getProfileColor(mascota.perfil_emocional).toLowerCase() ===
+            '#ffc107'
+              ? '#000'
+              : '#fff'
+          "
         >
           {{ mascota.perfil_emocional }}
         </div>
@@ -54,21 +79,30 @@
         <!-- El div .mascota-image ahora es el contenedor principal de la imagen y el overlay -->
         <div class="mascota-image">
           <ng-container *ngIf="mascota.imagen; else fallbackIcon">
-            <img [src]="'data:image/jpeg;base64,' + mascota.imagen" [alt]="mascota.nombre"
-              class="mascota-actual-image" />
+            <img
+              [src]="'data:image/jpeg;base64,' + mascota.imagen"
+              [alt]="mascota.nombre"
+              class="mascota-actual-image"
+            />
           </ng-container>
           <ng-template #fallbackIcon>
             <i class="fas fa-paw mascota-fallback-icon"></i>
           </ng-template>
 
           <!---->
-          <div *ngIf="mascota.estado_adopcion === 'adoptado'" class="adopted-overlay">
+          <div
+            *ngIf="mascota.estado_adopcion === 'adoptado'"
+            class="adopted-overlay"
+          >
             <span class="adopted-text">ADOPTADO</span>
           </div>
         </div>
       </div>
-      
-      <div class="profile-bar" [style.backgroundColor]="getProfileColor(mascota.perfil_emocional)"></div>
+
+      <div
+        class="profile-bar"
+        [style.backgroundColor]="getProfileColor(mascota.perfil_emocional)"
+      ></div>
 
       <div class="mascota-body">
         <h3>{{ mascota.nombre }}</h3>
@@ -89,17 +123,26 @@
         </div>
 
         <!-- Badge de estado de adopción -->
-        <p class="status-badge" [ngClass]="getStatusClass(mascota.estado_adopcion)">
+        <p
+          class="status-badge"
+          [ngClass]="getStatusClass(mascota.estado_adopcion)"
+        >
           {{ mascota.estado_adopcion | uppercase }}
         </p>
 
         <p class="mascota-description">{{ mascota.descripcion }}</p>
 
-        <div class="mascota-match" *ngIf="mascota.perfil_emocional === tipoEmocionalUsuario">
+        <div
+          class="mascota-match"
+          *ngIf="mascota.perfil_emocional === tipoEmocionalUsuario"
+        >
           <span>Compatibilidad:</span>
           <div class="compat-stars">
-            <i class="fas fa-paw" *ngFor="let _ of [0, 1, 2]; let idx = index"
-              [class.filled]="idx < compatibilidadUsuario"></i>
+            <i
+              class="fas fa-paw"
+              *ngFor="let _ of [0, 1, 2]; let idx = index"
+              [class.filled]="idx < compatibilidadUsuario"
+            ></i>
           </div>
         </div>
 

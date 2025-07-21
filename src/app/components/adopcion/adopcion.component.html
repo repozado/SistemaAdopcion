@@ -32,27 +32,54 @@
   <!-- Formulario de Edición (visible solo si isEditing es true y es admin) -->
   <div *ngIf="isEditing && authService.isAdmin()" class="edit-form-overlay">
     <div class="edit-form-card">
-      <h3>Editar Registro de Adopción (ID: {{ selectedAdopcion?.id_adopcion }})</h3>
+      <h3>
+        Editar Registro de Adopción (ID: {{ selectedAdopcion?.id_adopcion }})
+      </h3>
       <form (ngSubmit)="saveAdopcionChanges()">
         <div class="form-group">
           <label for="observaciones">Observaciones:</label>
-          <textarea id="observaciones" [(ngModel)]="editFormData.observaciones" name="observaciones" rows="3"></textarea>
+          <textarea
+            id="observaciones"
+            [(ngModel)]="editFormData.observaciones"
+            name="observaciones"
+            rows="3"
+          ></textarea>
         </div>
         <div class="form-group">
           <label for="entregado_por">ID Entregado Por:</label>
-          <input type="number" id="entregado_por" [(ngModel)]="editFormData.entregado_por" name="entregado_por" placeholder="ID del usuario que entregó" />
+          <input
+            type="number"
+            id="entregado_por"
+            [(ngModel)]="editFormData.entregado_por"
+            name="entregado_por"
+            placeholder="ID del usuario que entregó"
+          />
         </div>
         <div class="form-group">
           <label for="fecha_adopcion">Fecha de Adopción:</label>
-          <input type="date" id="fecha_adopcion" [(ngModel)]="editFormData.fecha_adopcion" name="fecha_adopcion" />
+          <input
+            type="date"
+            id="fecha_adopcion"
+            [(ngModel)]="editFormData.fecha_adopcion"
+            name="fecha_adopcion"
+          />
         </div>
         <div class="form-group">
           <label for="fecha_entrega_prevista">Fecha de Entrega Prevista:</label>
-          <input type="date" id="fecha_entrega_prevista" [(ngModel)]="editFormData.fecha_entrega_prevista" name="fecha_entrega_prevista" />
+          <input
+            type="date"
+            id="fecha_entrega_prevista"
+            [(ngModel)]="editFormData.fecha_entrega_prevista"
+            name="fecha_entrega_prevista"
+          />
         </div>
         <div class="form-actions">
-          <button type="submit" class="btn-save"><i class="fas fa-save"></i> Guardar Cambios</button>
-          <button type="button" class="btn-cancel" (click)="cancelEdit()"><i class="fas fa-times-circle"></i> Cancelar</button>
+          <button type="submit" class="btn-save">
+            <i class="fas fa-save"></i> Guardar Cambios
+          </button>
+          <button type="button" class="btn-cancel" (click)="cancelEdit()">
+            <i class="fas fa-times-circle"></i> Cancelar
+          </button>
         </div>
       </form>
     </div>
@@ -78,26 +105,52 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let adopcion of filteredAdopciones"> <!-- Usar filteredAdopciones aquí -->
+          <tr *ngFor="let adopcion of filteredAdopciones">
+            <!-- Usar filteredAdopciones aquí -->
             <td>{{ adopcion.id_adopcion }}</td>
             <td>{{ adopcion.id_solicitud }}</td>
-            <td>{{ adopcion.nombre_adoptante }} (ID: {{ adopcion.id_adoptante }})</td>
-            <td>{{ adopcion.nombre_mascota_adoptada }} (ID: {{ adopcion.id_mascota_adoptada }})</td>
-            <td>{{ adopcion.fecha_adopcion | date:'shortDate' }}</td>
-            <td>{{ adopcion.observaciones || 'N/A' }}</td>
-            <td>{{ adopcion.nombre_entregado_por || 'N/A' }} (ID: {{ adopcion.entregado_por || 'N/A' }})</td>
-            <td>{{ adopcion.fecha_entrega_prevista ? (adopcion.fecha_entrega_prevista | date:'shortDate') : 'No programada' }}</td>
+            <td>
+              {{ adopcion.nombre_adoptante }} (ID: {{ adopcion.id_adoptante }})
+            </td>
+            <td>
+              {{ adopcion.nombre_mascota_adoptada }} (ID:
+              {{ adopcion.id_mascota_adoptada }})
+            </td>
+            <td>{{ adopcion.fecha_adopcion | date : "shortDate" }}</td>
+            <td>{{ adopcion.observaciones || "N/A" }}</td>
+            <td>
+              {{ adopcion.nombre_entregado_por || "N/A" }} (ID:
+              {{ adopcion.entregado_por || "N/A" }})
+            </td>
+            <td>
+              {{
+                adopcion.fecha_entrega_prevista
+                  ? (adopcion.fecha_entrega_prevista | date : "shortDate")
+                  : "No programada"
+              }}
+            </td>
             <td class="table-actions">
-              <button class="btn-edit" (click)="onUpdateAdopcion(adopcion)" title="Editar Adopción">
+              <button
+                class="btn-edit"
+                (click)="onUpdateAdopcion(adopcion)"
+                title="Editar Adopción"
+              >
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn-delete" (click)="onDeleteAdopcion(adopcion.id_adopcion)" title="Eliminar Adopción">
+              <button
+                class="btn-delete"
+                (click)="onDeleteAdopcion(adopcion.id_adopcion)"
+                title="Eliminar Adopción"
+              >
                 <i class="fas fa-trash-alt"></i>
               </button>
             </td>
           </tr>
           <tr *ngIf="filteredAdopciones.length === 0">
-            <td colspan="9" class="no-data-message">No hay registros de adopción disponibles que coincidan con la búsqueda.</td>
+            <td colspan="9" class="no-data-message">
+              No hay registros de adopción disponibles que coincidan con la
+              búsqueda.
+            </td>
           </tr>
         </tbody>
       </table>
@@ -106,7 +159,8 @@
     <!-- Si el usuario es normal, muestra sus adopciones en un formato de tarjeta más simple -->
     <div *ngIf="!authService.isAdmin()" class="mascotas-grid">
       <h3>Mis Adopciones</h3>
-      <div *ngFor="let adopcion of filteredAdopciones" class="mascota-card"> <!-- Usar filteredAdopciones aquí -->
+      <div *ngFor="let adopcion of filteredAdopciones" class="mascota-card">
+        <!-- Usar filteredAdopciones aquí -->
         <div class="mascota-header">
           <div class="mascota-image">
             <i class="fas fa-paw"></i>
@@ -116,12 +170,22 @@
         <div class="mascota-body">
           <h3>{{ adopcion.nombre_mascota_adoptada }}</h3>
           <div class="mascota-meta">
-            <span><i class="fas fa-calendar-alt"></i> Fecha de Adopción: {{ adopcion.fecha_adopcion | date:'shortDate' }}</span>
-            <span *ngIf="adopcion.fecha_entrega_prevista"><i class="fas fa-calendar-check"></i> Entrega Prevista: {{ adopcion.fecha_entrega_prevista | date:'shortDate' }}</span>
-            <span *ngIf="adopcion.nombre_entregado_por"><i class="fas fa-user-tie"></i> Entregado Por: {{ adopcion.nombre_entregado_por }}</span>
+            <span
+              ><i class="fas fa-calendar-alt"></i> Fecha de Adopción:
+              {{ adopcion.fecha_adopcion | date : "shortDate" }}</span
+            >
+            <span *ngIf="adopcion.fecha_entrega_prevista"
+              ><i class="fas fa-calendar-check"></i> Entrega Prevista:
+              {{ adopcion.fecha_entrega_prevista | date : "shortDate" }}</span
+            >
+            <span *ngIf="adopcion.nombre_entregado_por"
+              ><i class="fas fa-user-tie"></i> Entregado Por:
+              {{ adopcion.nombre_entregado_por }}</span
+            >
           </div>
           <p class="mascota-description">
-            Observaciones: {{ adopcion.observaciones || 'No hay observaciones.' }}
+            Observaciones:
+            {{ adopcion.observaciones || "No hay observaciones." }}
           </p>
           <p class="mascota-description">
             ID Solicitud: {{ adopcion.id_solicitud }}
@@ -129,7 +193,9 @@
         </div>
       </div>
       <div *ngIf="filteredAdopciones.length === 0" class="no-data-message">
-        <p>Aún no tienes adopciones registradas que coincidan con la búsqueda.</p>
+        <p>
+          Aún no tienes adopciones registradas que coincidan con la búsqueda.
+        </p>
       </div>
     </div>
   </ng-container>

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EncuestaService {
   private apiUrl = `${environment.apiUrl}/resultados`;
@@ -29,7 +29,7 @@ export class EncuestaService {
   obtenerResultadoPorUsuarioId(userId: number, token: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
     // Asumo que el backend tiene un endpoint como /api/resultados/user/:id_usuario
     return this.http.get(`${this.apiUrl}/user/${userId}`, { headers });

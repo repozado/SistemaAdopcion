@@ -1,10 +1,10 @@
 /* Contenedor principal */
 .admin-container {
- margin: 20px auto;
+  margin: 20px auto;
   padding: 30px;
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .card-header {
@@ -13,12 +13,12 @@
   gap: 15px;
   margin-bottom: 40px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #FFF7EC;
+  border-bottom: 2px solid #fff7ec;
 }
 
 .card-header i {
   font-size: 1.8rem;
-  color: #A78BFA;
+  color: #a78bfa;
   background-color: rgba(167, 139, 250, 0.1);
   width: 50px;
   height: 50px;
@@ -29,9 +29,9 @@
 }
 
 .card-header h3 {
-  margin: 0; 
-  line-height: 1; 
-  align-self: center; 
+  margin: 0;
+  line-height: 1;
+  align-self: center;
 }
 
 /* Barra de herramientas */
@@ -66,15 +66,16 @@
   margin-top: 20px;
 }
 
-.admin-table th, .admin-table td {
+.admin-table th,
+.admin-table td {
   padding: 15px;
   text-align: left;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .admin-table th {
-  background-color: #FFF7EC;
-  color: #292F36;
+  background-color: #fff7ec;
+  color: #292f36;
   font-weight: 600;
 }
 
@@ -100,11 +101,11 @@
 }
 
 .pet-avatar.dog {
-  background-color: #FCAFAF;
+  background-color: #fcafaf;
 }
 
 .pet-avatar.cat {
-  background-color: #A78BFA;
+  background-color: #a78bfa;
 }
 
 .pet-info-cell small {
@@ -127,20 +128,19 @@
   border: 1px solid #c3e6cb;
 }
 
-
 /* Estados */
 .status-available {
-  color: #FCAFAF;
+  color: #fcafaf;
   font-weight: 600;
 }
 
 .status-pending {
-  color: #FF9800;
+  color: #ff9800;
   font-weight: 600;
 }
 
 .status-adopted {
-  color: #4CAF50;
+  color: #4caf50;
   font-weight: 600;
 }
 
@@ -169,7 +169,7 @@
 
 .delete-btn {
   background-color: rgba(252, 175, 175, 0.2);
-  color: #FCAFAF;
+  color: #fcafaf;
 }
 
 .action-btn:hover {
@@ -192,7 +192,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -206,7 +206,7 @@
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .confirm-modal {
@@ -215,7 +215,7 @@
 
 .modal-header {
   padding: 20px;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid #e0e0e0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -239,14 +239,14 @@
 
 .modal-footer {
   padding: 20px;
-  border-top: 1px solid #E0E0E0;
+  border-top: 1px solid #e0e0e0;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
 .btn-danger {
-  background-color: #FCAFAF;
+  background-color: #fcafaf;
   color: white;
 }
 
@@ -262,12 +262,14 @@
   .admin-toolbar {
     flex-direction: column;
   }
-  
-  .search-group, .filter-group {
+
+  .search-group,
+  .filter-group {
     width: 100%;
   }
-  
-  .admin-table th, .admin-table td {
+
+  .admin-table th,
+  .admin-table td {
     padding: 10px 5px;
     font-size: 0.9rem;
   }
@@ -395,7 +397,7 @@ textarea.form-control {
   position: absolute;
   top: 2px;
   right: 2px;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;
   border-radius: 50%;

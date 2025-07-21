@@ -2,30 +2,33 @@
 
 /* Variables CSS */
 :host {
-  --primary: #A78BFA;
-  --secondary: #FCAFAF;
-  --accent: #5DD5C0;
-  --light: #FFF7EC;
-  --dark: #292F36;
-  --text: #5E5E5E;
+  --primary: #a78bfa;
+  --secondary: #fcafaf;
+  --accent: #5dd5c0;
+  --light: #fff7ec;
+  --dark: #292f36;
+  --text: #5e5e5e;
   --radius: 12px;
-  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .adopciones-container {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Arial', sans-serif; /* Asegura una fuente base */
+  font-family: "Arial", sans-serif; /* Asegura una fuente base */
 }
 
-h2, h3 {
+h2,
+h3 {
   color: var(--dark);
   text-align: center;
   margin-bottom: 1.5rem;
 }
 
-.loading-message, .error-message, .no-data-message {
+.loading-message,
+.error-message,
+.no-data-message {
   text-align: center;
   padding: 20px;
   border-radius: var(--radius);
@@ -33,7 +36,7 @@ h2, h3 {
   font-size: 1.1rem;
   color: var(--text);
   background-color: var(--light);
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .error-message {
@@ -73,7 +76,8 @@ h2, h3 {
   margin-top: 15px;
 }
 
-.adopciones-table th, .adopciones-table td {
+.adopciones-table th,
+.adopciones-table td {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
@@ -106,7 +110,7 @@ h2, h3 {
 }
 
 .btn-edit:hover {
-  color: #4CAF50; /* Un verde más oscuro */
+  color: #4caf50; /* Un verde más oscuro */
 }
 
 .btn-delete {
@@ -137,7 +141,7 @@ h2, h3 {
 
 .mascota-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .mascota-header {
@@ -286,7 +290,8 @@ h2, h3 {
   margin-top: 25px;
 }
 
-.btn-save, .btn-cancel {
+.btn-save,
+.btn-cancel {
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
@@ -317,8 +322,14 @@ h2, h3 {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* --- Nuevos estilos para la barra de búsqueda --- */
@@ -366,13 +377,13 @@ h2, h3 {
   transform: translateY(-2px);
 }
 
-
 /* Responsive */
 @media (max-width: 768px) {
   .mascotas-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
-  .adopciones-table th, .adopciones-table td {
+  .adopciones-table th,
+  .adopciones-table td {
     padding: 8px 10px; /* Reducir padding en tablas */
     font-size: 0.8rem;
   }

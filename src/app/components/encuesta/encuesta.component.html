@@ -1,18 +1,27 @@
 <div class="encuesta-wrapper">
-  <div class="encuesta-card" *ngIf="!cargando && resultado; else cargandoTemplate">
+  <div
+    class="encuesta-card"
+    *ngIf="!cargando && resultado; else cargandoTemplate"
+  >
     <h2 class="encuesta-titulo">Resultado de tu Encuesta Emocional</h2>
 
     <div class="encuesta-info">
       <p *ngIf="userEmail" class="usuario-info">👤 Usuario: {{ userEmail }}</p>
       <p><strong>Tipo emocional:</strong> {{ resultado.descripcion }}</p>
-      <p><strong>Fecha:</strong> {{ resultado.fecha_resultado | date: 'fullDate' }}</p>
+      <p>
+        <strong>Fecha:</strong>
+        {{ resultado.fecha_resultado | date : "fullDate" }}
+      </p>
       <p><strong>Compatibilidad:</strong> {{ resultado.compatibilidad }}</p>
     </div>
 
-    <div class="encuesta-recomendacion" [ngClass]="{
-      'alta': resultado.compatibilidad >= 3,
-      'baja': resultado.compatibilidad < 3
-    }">
+    <div
+      class="encuesta-recomendacion"
+      [ngClass]="{
+        alta: resultado.compatibilidad >= 3,
+        baja: resultado.compatibilidad < 3
+      }"
+    >
       <p *ngIf="resultado.compatibilidad >= 3">
         ¡Eres altamente compatible con varias mascotas de tu tipo emocional!
       </p>

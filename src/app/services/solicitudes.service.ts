@@ -23,13 +23,13 @@ export interface Solicitud {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SolicitudesService {
   private apiUrl = `${environment.apiUrl}/solicitudes`;
   private http = inject(HttpClient);
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Crea una nueva solicitud de adopción.
@@ -40,7 +40,7 @@ export class SolicitudesService {
   createSolicitud(id_mascota: number, token: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
     // Asumimos que el backend obtiene el id_usuario del token
     return this.http.post<any>(this.apiUrl, { id_mascota }, { headers });
@@ -53,7 +53,7 @@ export class SolicitudesService {
    */
   getAllSolicitudes(token: string): Observable<Solicitud[]> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
     return this.http.get<Solicitud[]>(this.apiUrl, { headers });
   }
@@ -65,7 +65,7 @@ export class SolicitudesService {
    */
   getMySolicitudes(token: string): Observable<Solicitud[]> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
     return this.http.get<Solicitud[]>(`${this.apiUrl}/my`, { headers });
   }
@@ -86,7 +86,7 @@ export class SolicitudesService {
   ): Observable<Solicitud> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
     return this.http.put<Solicitud>(
       `${this.apiUrl}/${id_solicitud}/status`,
@@ -103,7 +103,7 @@ export class SolicitudesService {
    */
   deleteSolicitud(id_solicitud: number, token: string): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
     return this.http.delete<any>(`${this.apiUrl}/${id_solicitud}`, { headers });
   }
