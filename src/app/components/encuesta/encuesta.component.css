@@ -6,6 +6,36 @@
   padding: 2rem 1rem;
 }
 
+.encuesta-historial {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-top: 2px solid #ccc;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+
+.historial-titulo {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.historial-lista {
+  list-style: none;
+  padding: 0;
+}
+
+.historial-lista li {
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #ccc;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.historial-lista li:last-child {
+  border-bottom: none;
+}
+
 .usuario-info {
   font-size: 1.3rem;
   font-weight: bold;
@@ -31,6 +61,10 @@
   font-size: 2rem;
   margin-bottom: 1.8rem;
   color: #4a4a4a;
+}
+
+.encuesta-historial {
+  scroll-margin-top: 300px; /* Ajusta según la altura de tu header */
 }
 
 .encuesta-info p {

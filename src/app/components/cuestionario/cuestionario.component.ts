@@ -20,6 +20,7 @@ export class CuestionarioComponent implements OnInit {
   private CuestionarioService = inject(CuestionarioService);
   currentQuestionId = 1;
   mensajeError: { titulo: string; texto: string } | null = null;
+  enviando: boolean = false;
 
   preguntas = [
     {
@@ -184,6 +185,7 @@ export class CuestionarioComponent implements OnInit {
   }
 
   enviarRespuestas(): void {
+    this.enviando = true;
     const todasRespondidas = this.preguntas.every((p) => this.respuestas[p.id]);
     if (!todasRespondidas) {
       this.mensajeError = {

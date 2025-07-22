@@ -6,13 +6,27 @@
     <h2 class="encuesta-titulo">Resultado de tu Encuesta Emocional</h2>
 
     <div class="encuesta-info">
-      <p *ngIf="userEmail" class="usuario-info">👤 Usuario: {{ userEmail }}</p>
+      <p *ngIf="userEmail" class="usuario-info">
+        <i class="fas fa-user-circle"></i> Usuario: {{ userEmail }}
+      </p>
+
       <p><strong>Tipo emocional:</strong> {{ resultado.descripcion }}</p>
       <p>
         <strong>Fecha:</strong>
         {{ resultado.fecha_resultado | date : "fullDate" }}
       </p>
       <p><strong>Compatibilidad:</strong> {{ resultado.compatibilidad }}</p>
+    </div>
+
+    <div #historialRef *ngIf="historial.length > 0" class="encuesta-historial">
+      <h3 class="historial-titulo">Historial de Resultados Emocionales</h3>
+      <ul class="historial-lista">
+        <li *ngFor="let item of historial">
+          <span>{{ item.fecha_historial | date : "fullDate" }}</span> -
+          <strong>{{ item.tipo_emocional }}</strong> - Compatibilidad:
+          {{ item.compatibilidad }}
+        </li>
+      </ul>
     </div>
 
     <div

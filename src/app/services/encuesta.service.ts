@@ -19,6 +19,10 @@ export class EncuestaService {
     return this.http.get(`${this.apiUrl}/mio`);
   }
 
+ obtenerHistorialEmocional() {
+  return this.http.get<any[]>(`${this.apiUrl}/historialemocional`);
+}
+
   /**
    * Obtiene el resultado de la encuesta de un usuario específico por su ID.
    * Requiere token de autenticación (presumiblemente de un admin).
@@ -31,7 +35,6 @@ export class EncuestaService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     });
-    // Asumo que el backend tiene un endpoint como /api/resultados/user/:id_usuario
     return this.http.get(`${this.apiUrl}/user/${userId}`, { headers });
   }
 }

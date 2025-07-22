@@ -58,8 +58,8 @@
     </div>
   </div>
 
-  <button class="submit-btn" (click)="enviarRespuestas()">
-    Enviar respuestas
+  <button class="submit-btn" (click)="enviarRespuestas()" [disabled]="enviando">
+    {{ enviando ? "Enviando..." : "Enviar respuestas" }}
     <i class="fas fa-paw"></i>
   </button>
 </div>
