@@ -1,4 +1,77 @@
 /* Main container */
+
+
+  .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(60, 60, 60, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(3px);
+}
+
+.modal-content.soulpet-modal {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px 25px;
+  text-align: center;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content.soulpet-modal h2 {
+  color: #7e57c2;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.modal-content.soulpet-modal p {
+  font-size: 15px;
+  margin: 8px 0;
+}
+
+.modal-content.soulpet-modal button {
+  margin-top: 20px;
+  background-color: #a66cff;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content.soulpet-modal button:hover {
+  background-color: #944dff;
+}
+
+.modal-icon {
+  font-size: 48px;
+  color: #a66cff;
+  margin-bottom: 10px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+
 .questionnaire-container {
   max-width: 800px;
   margin: 0 auto;

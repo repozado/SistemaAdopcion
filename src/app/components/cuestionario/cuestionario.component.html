@@ -62,4 +62,18 @@
     {{ enviando ? "Enviando..." : "Enviar respuestas" }}
     <i class="fas fa-paw"></i>
   </button>
+
+  
+</div>
+
+<!-- Modal fuera del flujo -->
+<div class="modal-overlay" *ngIf="mostrarModal">
+  <div class="modal-content soulpet-modal">
+    <i class="fas fa-paw modal-icon"></i>
+    <h2>¡Compatibilidad encontrada!</h2>
+    <p>Se te ha asignado un perfil emocional.</p>
+    <p>Ahora serás redirigido a tu perfil.</p>
+    <p>Para ver tus recomendaciones, entra a 'mascotas' y usa el filtro de <strong>Recomendadas</strong>.</p>
+    <button (click)="cerrarModalYRedirigir()">Ver mi perfil</button>
+  </div>
 </div>

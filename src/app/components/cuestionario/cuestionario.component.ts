@@ -22,6 +22,8 @@ export class CuestionarioComponent implements OnInit {
   mensajeError: { titulo: string; texto: string } | null = null;
   enviando: boolean = false;
 
+  mostrarModal: boolean = false;
+
   preguntas = [
     {
       id: 1,
@@ -211,7 +213,7 @@ export class CuestionarioComponent implements OnInit {
 
     this.CuestionarioService.enviarRespuestas(respuestasFormateadas).subscribe({
       next: (data) => {
-        this.router.navigate(['/perfilemocional']);
+        this.mostrarModal = true;
       },
       error: (err) => {
         console.error(err);
@@ -222,6 +224,11 @@ export class CuestionarioComponent implements OnInit {
         };
       },
     });
+  }
+
+  cerrarModalYRedirigir(): void {
+    this.mostrarModal = false;
+    this.router.navigate(['/perfilemocional']);
   }
 
   anteriorPregunta(): void {
