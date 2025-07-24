@@ -79,12 +79,7 @@ export class AdopcionComponent implements OnInit {
   loadUsers(): void {
     this.usersService.getAll().subscribe({
       next: (data) => {
-        // --- MODIFICACIÓN CLAVE AQUÍ ---
-        // Filtra los usuarios para incluir solo aquellos con rol 'admin'
-        // Puedes añadir más roles si es necesario, por ejemplo:
-        // this.users = data.filter(user => user.role === 'admin' || user.role === 'staff');
         this.users = data.filter((user) => user.role === 'admin');
-        // --- FIN DE LA MODIFICACIÓN ---
       },
       error: (err) => {
         console.error('Error al cargar usuarios para el dropdown:', err);
