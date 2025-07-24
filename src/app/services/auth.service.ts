@@ -96,8 +96,6 @@ export class AuthService {
     return this.getRole() === 'admin';
   }
 
-  // Métodos para obtener información del usuario desde el token (si es necesario)
-  // Estos métodos ya estaban en tu versión anterior o se pueden añadir si los necesitas
   getUserId(): number | null {
     const token = this.getToken();
     if (token) {

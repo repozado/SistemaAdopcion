@@ -4,7 +4,7 @@ import { Component, OnInit, inject } from '@angular/core';
 
 import { AdopcionesService, Adopcion } from '../../services/adopciones.service';
 import { AuthService } from '../../services/auth.service';
-import { UsersService, Usuario } from '../../services/users.service'; // Importa UsersService y Usuario
+import { UsersService, Usuario } from '../../services/users.service';
 
 @Component({
   selector: 'app-adopcion',
@@ -14,7 +14,7 @@ import { UsersService, Usuario } from '../../services/users.service'; // Importa
 })
 export class AdopcionComponent implements OnInit {
   private adopcionesService = inject(AdopcionesService);
-  private usersService = inject(UsersService); // Inyecta UsersService
+  private usersService = inject(UsersService);
   public authService = inject(AuthService);
 
   adopciones: Adopcion[] = [];
@@ -28,12 +28,12 @@ export class AdopcionComponent implements OnInit {
 
   searchTerm: string = '';
 
-  users: Usuario[] = []; // Nueva propiedad para almacenar todos los usuarios
+  users: Usuario[] = []; // Almacena los usuarios filtrados para el dropdown
 
   ngOnInit(): void {
     this.loadAdopciones();
     if (this.authService.isAdmin()) {
-      this.loadUsers(); // Carga los usuarios solo si es administrador
+      this.loadUsers(); // Carga la lista de usuarios solo si el usuario es administrador
     }
   }
 
@@ -72,25 +72,24 @@ export class AdopcionComponent implements OnInit {
   }
 
   /**
-   * Carga todos los usuarios.
-   * Este método solo se llama si el usuario actual es un administrador.
+   * Carga todos los usuarios y luego los filtra para incluir solo los roles deseados
+   * para el campo "Entregado Por".
+   * Se llama solo si el usuario actual es un administrador.
    */
   loadUsers(): void {
-    const token = this.authService.getToken();
-    if (!token) {
-      // Si no hay token, no se pueden cargar usuarios. Manejar según sea necesario.
-      console.warn('No token available to load users.');
-      return;
-    }
-
     this.usersService.getAll().subscribe({
       next: (data) => {
-        this.users = data;
+        // --- MODIFICACIÓN CLAVE AQUÍ ---
+        // Filtra los usuarios para incluir solo aquellos con rol 'admin'
+        // Puedes añadir más roles si es necesario, por ejemplo:
+        // this.users = data.filter(user => user.role === 'admin' || user.role === 'staff');
+        this.users = data.filter((user) => user.role === 'admin');
+        // --- FIN DE LA MODIFICACIÓN ---
       },
       error: (err) => {
-        console.error('Error al cargar usuarios:', err);
-        // Opcional: mostrar un error al usuario si la carga de usuarios falla
-        this.error = 'Error al cargar la lista de usuarios para la edición.';
+        console.error('Error al cargar usuarios para el dropdown:', err);
+        this.error =
+          'Error al cargar la lista de usuarios para la edición. Intenta recargar.';
       },
     });
   }
@@ -107,14 +106,22 @@ export class AdopcionComponent implements OnInit {
     const lowerCaseSearchTerm = this.searchTerm.toLowerCase();
     this.filteredAdopciones = this.adopciones.filter((adopcion) => {
       return (
-        adopcion.nombre_adoptante.toLowerCase().includes(lowerCaseSearchTerm) ||
-        adopcion.nombre_mascota_adoptada
-          .toLowerCase()
-          .includes(lowerCaseSearchTerm) ||
+        (adopcion.nombre_adoptante &&
+          adopcion.nombre_adoptante
+            .toLowerCase()
+            .includes(lowerCaseSearchTerm)) ||
+        (adopcion.nombre_mascota_adoptada &&
+          adopcion.nombre_mascota_adoptada
+            .toLowerCase()
+            .includes(lowerCaseSearchTerm)) ||
         (adopcion.observaciones &&
           adopcion.observaciones.toLowerCase().includes(lowerCaseSearchTerm)) ||
         adopcion.id_adopcion.toString().includes(lowerCaseSearchTerm) ||
-        adopcion.id_solicitud.toString().includes(lowerCaseSearchTerm)
+        adopcion.id_solicitud.toString().includes(lowerCaseSearchTerm) ||
+        (adopcion.nombre_entregado_por &&
+          adopcion.nombre_entregado_por
+            .toLowerCase()
+            .includes(lowerCaseSearchTerm))
       );
     });
   }
@@ -136,7 +143,6 @@ export class AdopcionComponent implements OnInit {
       return;
     }
     this.selectedAdopcion = { ...adopcion };
-    // Formatear las fechas a YYYY-MM-DD para input[type="date"]
     if (this.selectedAdopcion.fecha_adopcion) {
       this.selectedAdopcion.fecha_adopcion = new Date(
         this.selectedAdopcion.fecha_adopcion

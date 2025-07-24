@@ -47,7 +47,7 @@
           >
             <option [ngValue]="null">Selecciona un usuario</option>
             <option *ngFor="let user of users" [ngValue]="user.id_usuario">
-              {{ user.nombre }}
+              {{ user.nombre }} (ID: {{ user.role  }})
             </option>
           </select>
         </div>
