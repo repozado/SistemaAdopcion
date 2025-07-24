@@ -1,9 +1,6 @@
-<!-- frontend/src/app/components/adopcion/adopcion.component.html -->
-
 <div class="adopciones-container">
   <h2>Registros de Adopción</h2>
 
-  <!-- Sección de búsqueda (visible solo para administradores) -->
   <div *ngIf="authService.isAdmin()" class="search-bar-container">
     <input
       type="text"
@@ -17,19 +14,15 @@
     </button>
   </div>
 
-  <!-- Mensaje de carga -->
   <div *ngIf="isLoading" class="loading-message">
     <p>Cargando registros de adopción...</p>
-    <!-- Puedes añadir un spinner o animación aquí -->
-  </div>
+    </div>
 
-  <!-- Mensaje de error -->
   <div *ngIf="error" class="error-message">
     <p>{{ error }}</p>
     <button (click)="loadAdopciones()">Reintentar</button>
   </div>
 
-  <!-- Formulario de Edición (visible solo si isEditing es true y es admin) -->
   <div *ngIf="isEditing && authService.isAdmin()" class="edit-form-overlay">
     <div class="edit-form-card">
       <h3>
@@ -46,14 +39,17 @@
           ></textarea>
         </div>
         <div class="form-group">
-          <label for="entregado_por">ID Entregado Por:</label>
-          <input
-            type="number"
+          <label for="entregado_por">Entregado Por:</label>
+          <select
             id="entregado_por"
             [(ngModel)]="editFormData.entregado_por"
             name="entregado_por"
-            placeholder="ID del usuario que entregó"
-          />
+          >
+            <option [ngValue]="null">Selecciona un usuario</option>
+            <option *ngFor="let user of users" [ngValue]="user.id_usuario">
+              {{ user.nombre }} (ID: {{ user.id_usuario }})
+            </option>
+          </select>
         </div>
         <div class="form-group">
           <label for="fecha_adopcion">Fecha de Adopción:</label>
@@ -85,9 +81,7 @@
     </div>
   </div>
 
-  <!-- Contenido principal si no hay carga ni error -->
   <ng-container *ngIf="!isLoading && !error && !isEditing">
-    <!-- Si el usuario es administrador, muestra una tabla completa -->
     <div *ngIf="authService.isAdmin()" class="admin-table-container">
       <h3>Todas las Adopciones</h3>
       <table class="adopciones-table">
@@ -106,7 +100,6 @@
         </thead>
         <tbody>
           <tr *ngFor="let adopcion of filteredAdopciones">
-            <!-- Usar filteredAdopciones aquí -->
             <td>{{ adopcion.id_adopcion }}</td>
             <td>{{ adopcion.id_solicitud }}</td>
             <td>
@@ -156,11 +149,9 @@
       </table>
     </div>
 
-    <!-- Si el usuario es normal, muestra sus adopciones en un formato de tarjeta más simple -->
     <div *ngIf="!authService.isAdmin()" class="mascotas-grid">
       <h3>Mis Adopciones</h3>
       <div *ngFor="let adopcion of filteredAdopciones" class="mascota-card">
-        <!-- Usar filteredAdopciones aquí -->
         <div class="mascota-header">
           <div class="mascota-image">
             <i class="fas fa-paw"></i>

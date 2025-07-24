@@ -1,38 +1,40 @@
 // frontend/src/app/components/adopcion/adopcion.component.ts
 
 import { Component, OnInit, inject } from '@angular/core';
-// CommonModule y FormsModule ya NO se importan aquí porque el componente NO es standalone.
-// Deben importarse en el NgModule que declara este componente (ej. AppModule).
 
-import { AdopcionesService, Adopcion } from '../../services/adopciones.service'; // Importa el servicio y la interfaz
-import { AuthService } from '../../services/auth.service'; // Asume que tienes un AuthService para el token y rol
+import { AdopcionesService, Adopcion } from '../../services/adopciones.service';
+import { AuthService } from '../../services/auth.service';
+import { UsersService, Usuario } from '../../services/users.service'; // Importa UsersService y Usuario
 
 @Component({
   selector: 'app-adopcion',
-  standalone: false, // Este componente NO es standalone
+  standalone: false,
   templateUrl: './adopcion.component.html',
   styleUrls: ['./adopcion.component.css'],
 })
 export class AdopcionComponent implements OnInit {
-  // Inyección de servicios utilizando `inject`
   private adopcionesService = inject(AdopcionesService);
-  public authService = inject(AuthService); // authService es público para acceso desde la plantilla
+  private usersService = inject(UsersService); // Inyecta UsersService
+  public authService = inject(AuthService);
 
-  adopciones: Adopcion[] = []; // Array para almacenar los registros de adopción
-  filteredAdopciones: Adopcion[] = []; // Array para almacenar los registros de adopción filtrados
-  isLoading: boolean = true; // Indicador de carga
-  error: string | null = null; // Mensaje de error
+  adopciones: Adopcion[] = [];
+  filteredAdopciones: Adopcion[] = [];
+  isLoading: boolean = true;
+  error: string | null = null;
 
-  // --- NUEVAS PROPIEDADES PARA LA EDICIÓN Y BÚSQUEDA ---
-  isEditing: boolean = false; // Controla la visibilidad del formulario de edición
-  selectedAdopcion: Adopcion | null = null; // Almacena el registro de adopción que se está editando
-  editFormData: Partial<Adopcion> = {}; // Objeto temporal para los datos del formulario de edición
+  isEditing: boolean = false;
+  selectedAdopcion: Adopcion | null = null;
+  editFormData: Partial<Adopcion> = {};
 
-  searchTerm: string = ''; // Término de búsqueda para filtrar la lista
-  // ------------------------------------------
+  searchTerm: string = '';
+
+  users: Usuario[] = []; // Nueva propiedad para almacenar todos los usuarios
 
   ngOnInit(): void {
-    this.loadAdopciones(); // Carga las adopciones al inicializar el componente
+    this.loadAdopciones();
+    if (this.authService.isAdmin()) {
+      this.loadUsers(); // Carga los usuarios solo si es administrador
+    }
   }
 
   /**
@@ -43,7 +45,7 @@ export class AdopcionComponent implements OnInit {
   loadAdopciones(): void {
     this.isLoading = true;
     this.error = null;
-    const token = this.authService.getToken(); // Obtiene el token del usuario
+    const token = this.authService.getToken();
 
     if (!token) {
       this.error = 'No autenticado. Por favor, inicia sesión.';
@@ -58,7 +60,7 @@ export class AdopcionComponent implements OnInit {
     serviceCall.subscribe({
       next: (data) => {
         this.adopciones = data;
-        this.applyFilter(); // Aplica el filtro después de cargar los datos
+        this.applyFilter();
         this.isLoading = false;
       },
       error: (err) => {
@@ -70,17 +72,40 @@ export class AdopcionComponent implements OnInit {
   }
 
   /**
+   * Carga todos los usuarios.
+   * Este método solo se llama si el usuario actual es un administrador.
+   */
+  loadUsers(): void {
+    const token = this.authService.getToken();
+    if (!token) {
+      // Si no hay token, no se pueden cargar usuarios. Manejar según sea necesario.
+      console.warn('No token available to load users.');
+      return;
+    }
+
+    this.usersService.getAll().subscribe({
+      next: (data) => {
+        this.users = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar usuarios:', err);
+        // Opcional: mostrar un error al usuario si la carga de usuarios falla
+        this.error = 'Error al cargar la lista de usuarios para la edición.';
+      },
+    });
+  }
+
+  /**
    * Aplica el filtro de búsqueda a la lista de adopciones.
    */
   applyFilter(): void {
     if (!this.searchTerm) {
-      this.filteredAdopciones = [...this.adopciones]; // Si no hay término de búsqueda, muestra todas
+      this.filteredAdopciones = [...this.adopciones];
       return;
     }
 
     const lowerCaseSearchTerm = this.searchTerm.toLowerCase();
     this.filteredAdopciones = this.adopciones.filter((adopcion) => {
-      // Puedes ajustar los campos por los que quieres buscar
       return (
         adopcion.nombre_adoptante.toLowerCase().includes(lowerCaseSearchTerm) ||
         adopcion.nombre_mascota_adoptada
@@ -98,7 +123,7 @@ export class AdopcionComponent implements OnInit {
    * Se llama cuando el usuario presiona Enter o hace clic en el botón de búsqueda.
    */
   onSearch(): void {
-    this.applyFilter(); // Vuelve a aplicar el filtro con el nuevo término de búsqueda
+    this.applyFilter();
   }
 
   /**
@@ -110,7 +135,7 @@ export class AdopcionComponent implements OnInit {
       this.error = 'No tienes permisos para editar registros de adopción.';
       return;
     }
-    this.selectedAdopcion = { ...adopcion }; // Crea una copia para evitar modificar el objeto original directamente
+    this.selectedAdopcion = { ...adopcion };
     // Formatear las fechas a YYYY-MM-DD para input[type="date"]
     if (this.selectedAdopcion.fecha_adopcion) {
       this.selectedAdopcion.fecha_adopcion = new Date(
@@ -126,9 +151,9 @@ export class AdopcionComponent implements OnInit {
         .toISOString()
         .split('T')[0];
     }
-    this.editFormData = { ...this.selectedAdopcion }; // Inicializa el formulario con los datos de la adopción seleccionada
-    this.isEditing = true; // Muestra el formulario de edición
-    this.error = null; // Limpia cualquier error previo
+    this.editFormData = { ...this.selectedAdopcion };
+    this.isEditing = true;
+    this.error = null;
   }
 
   /**
@@ -146,7 +171,6 @@ export class AdopcionComponent implements OnInit {
       return;
     }
 
-    // Prepara los datos a enviar, solo los campos que pueden ser actualizados
     const updates: Partial<Adopcion> = {
       observaciones: this.editFormData.observaciones,
       entregado_por: this.editFormData.entregado_por,
@@ -159,10 +183,10 @@ export class AdopcionComponent implements OnInit {
       .subscribe({
         next: (updatedAdopcion) => {
           console.log('Adopción actualizada con éxito:', updatedAdopcion);
-          this.isEditing = false; // Oculta el formulario de edición
-          this.selectedAdopcion = null; // Limpia el registro seleccionado
-          this.editFormData = {}; // Limpia los datos del formulario
-          this.loadAdopciones(); // Recarga la lista para mostrar los cambios
+          this.isEditing = false;
+          this.selectedAdopcion = null;
+          this.editFormData = {};
+          this.loadAdopciones();
         },
         error: (err) => {
           console.error('Error al guardar cambios de adopción:', err);
@@ -178,7 +202,7 @@ export class AdopcionComponent implements OnInit {
     this.isEditing = false;
     this.selectedAdopcion = null;
     this.editFormData = {};
-    this.error = null; // Limpia cualquier error
+    this.error = null;
   }
 
   /**
@@ -203,7 +227,7 @@ export class AdopcionComponent implements OnInit {
       this.adopcionesService.deleteAdopcion(id_adopcion, token).subscribe({
         next: () => {
           console.log('Adopción eliminada con éxito:', id_adopcion);
-          this.loadAdopciones(); // Recargar la lista después de eliminar
+          this.loadAdopciones();
         },
         error: (err) => {
           console.error('Error al eliminar adopción:', err);

@@ -32,7 +32,6 @@ export interface Adopcion {
 export class AdopcionesService {
   private http = inject(HttpClient);
 
-  // URL base para el endpoint de adopciones en el backend
   private apiUrl = `${environment.apiUrl}/adopciones`;
   // private apiUrl = 'http://localhost:3000/api/adopciones'; // Para pruebas locales si environment.ts no está configurado
 
