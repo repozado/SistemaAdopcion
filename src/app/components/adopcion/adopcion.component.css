@@ -270,7 +270,9 @@ h3 {
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="date"],
-.form-group textarea {
+.form-group textarea,
+/* AÑADE ESTA LÍNEA PARA ESTILIZAR EL SELECT */
+.form-group select {
   width: calc(100% - 20px); /* Ajusta el padding */
   padding: 10px;
   border: 1px solid #ccc;
